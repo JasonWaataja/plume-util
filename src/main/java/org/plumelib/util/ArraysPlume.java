@@ -24,6 +24,7 @@ import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.framework.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Utilities for manipulating arrays and collections. This complements {@link java.util.Arrays} and
