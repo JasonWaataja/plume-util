@@ -9,6 +9,7 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 // TODO:  A better name would be LineNumberException.
 // And then it needn't really extend IOException.
@@ -101,7 +102,7 @@ public class FileIOException extends IOException {
    * @param lineNumber the line number to which the file has been read
    */
   public FileIOException(
-      /*@Nullable*/ String message, /*@Nullable*/ String fileName, int lineNumber) {
+      /*@Nullable*/ String message, /*@Nullable*/ @Det String fileName, @Det int lineNumber) {
     super(message);
     this.fileName = fileName;
     this.lineNumber = lineNumber;
@@ -118,8 +119,8 @@ public class FileIOException extends IOException {
   public FileIOException(
       /*@Nullable*/ String message,
       /*@Nullable*/ Throwable cause,
-      /*@Nullable*/ String fileName,
-      int lineNumber) {
+      /*@Nullable*/ @Det String fileName,
+      @Det int lineNumber) {
     // The "super(String, Throwable) constructor exists in Java 6 and later.
     // For backward compatibility, use the initCause method instead.
     super(message);
@@ -142,7 +143,7 @@ public class FileIOException extends IOException {
    *     is known)
    * @param cause the exception that occurred
    */
-  public FileIOException(/*@Nullable*/ LineNumberReader reader, /*@Nullable*/ Throwable cause) {
+  public FileIOException(/*@Nullable*/ @Det LineNumberReader reader, /*@Nullable*/ Throwable cause) {
     this(reader, /*fileName=*/ (/*@Nullable*/ String) null, cause);
   }
 
@@ -153,7 +154,7 @@ public class FileIOException extends IOException {
    * @param reader indicates the line number at which the exception occurred; there is no known file
    *     name
    */
-  public FileIOException(/*@Nullable*/ String message, /*@Nullable*/ LineNumberReader reader) {
+  public FileIOException(/*@Nullable*/ String message, /*@Nullable*/ @Det LineNumberReader reader) {
     this(message, reader, /*fileName=*/ (/*@Nullable*/ String) null);
   }
 
@@ -166,7 +167,7 @@ public class FileIOException extends IOException {
    */
   public FileIOException(
       /*@Nullable*/ String message,
-      /*@Nullable*/ LineNumberReader reader,
+      /*@Nullable*/ @Det LineNumberReader reader,
       /*@Nullable*/ Throwable cause) {
     this(message, reader, /*fileName=*/ (/*@Nullable*/ String) null, cause);
   }
@@ -184,8 +185,8 @@ public class FileIOException extends IOException {
    */
   public FileIOException(
       /*@Nullable*/ String message,
-      /*@Nullable*/ LineNumberReader reader,
-      /*@Nullable*/ String fileName) {
+      /*@Nullable*/ @Det LineNumberReader reader,
+      /*@Nullable*/ @Det String fileName) {
     super(message);
     this.fileName = fileName;
     this.lineNumber = getLineNumber(reader);
@@ -199,8 +200,8 @@ public class FileIOException extends IOException {
    * @param cause the exception that occurred
    */
   public FileIOException(
-      /*@Nullable*/ LineNumberReader reader,
-      /*@Nullable*/ String fileName,
+      /*@Nullable*/ @Det LineNumberReader reader,
+      /*@Nullable*/ @Det String fileName,
       /*@Nullable*/ Throwable cause) {
     // The "super(Throwable) constructor exists in Java 6 and later.
     // For backward compatibility, use the initCause method instead.
@@ -219,8 +220,8 @@ public class FileIOException extends IOException {
    */
   public FileIOException(
       /*@Nullable*/ String message,
-      /*@Nullable*/ LineNumberReader reader,
-      /*@Nullable*/ String fileName,
+      /*@Nullable*/ @Det LineNumberReader reader,
+      /*@Nullable*/ @Det String fileName,
       /*@Nullable*/ Throwable cause) {
     // The "super(String, Throwable) constructor exists in Java 6 and later.
     // For backward compatibility, use the initCause method instead.
@@ -242,7 +243,7 @@ public class FileIOException extends IOException {
    * @param file the file being read (used for its name only)
    */
   public FileIOException(
-      /*@Nullable*/ String message, /*@Nullable*/ LineNumberReader reader, File file) {
+      /*@Nullable*/ String message, /*@Nullable*/ @Det LineNumberReader reader, @Det File file) {
     this(message, reader, file.getName());
   }
 
@@ -256,8 +257,8 @@ public class FileIOException extends IOException {
    */
   public FileIOException(
       /*@Nullable*/ String message,
-      /*@Nullable*/ LineNumberReader reader,
-      File file,
+      /*@Nullable*/ @Det LineNumberReader reader,
+      @Det File file,
       /*@Nullable*/ Throwable cause) {
     this(message, reader, file.getName(), cause);
   }
@@ -270,7 +271,7 @@ public class FileIOException extends IOException {
    * @param cause the exception that occurred
    */
   public FileIOException(
-      /*@Nullable*/ LineNumberReader reader, File file, /*@Nullable*/ Throwable cause) {
+      /*@Nullable*/ @Det LineNumberReader reader, @Det File file, /*@Nullable*/ Throwable cause) {
     // The "super(Throwable) constructor exists in Java 6 and later.
     // For backward compatibility, use the initCause method instead.
     initCause(cause);
