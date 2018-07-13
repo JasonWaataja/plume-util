@@ -315,8 +315,8 @@ public final class ArraysPlume {
       result_min = Math.min(result_min, a[i]);
       result_max = Math.max(result_max, a[i]);
     }
-    @PolyDet("down") int @PolyDet [] result =
-        new @PolyDet("down") int @PolyDet("down") [] {result_min, result_max};
+    @PolyDet int @PolyDet [] result =
+        new @PolyDet int @PolyDet [] {result_min, result_max};
     return result;
   }
 

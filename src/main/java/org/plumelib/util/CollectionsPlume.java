@@ -30,6 +30,7 @@ import org.checkerframework.checker.signature.qual.*;
 import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /** Utility functions for Collections, ArrayList, Iterator, and Map. */
 public final class CollectionsPlume {
@@ -39,7 +40,7 @@ public final class CollectionsPlume {
     throw new Error("do not instantiate");
   }
 
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final @NonDet String lineSep = System.getProperty("line.separator");
 
   ///////////////////////////////////////////////////////////////////////////
   /// Collections
@@ -363,7 +364,7 @@ public final class CollectionsPlume {
   public static final class EnumerationIterator<T> implements Iterator<T> {
     Enumeration<T> e;
 
-    public EnumerationIterator(Enumeration<T> e) {
+    public EnumerationIterator(@Det Enumeration<T> e) {
       this.e = e;
     }
 
@@ -373,7 +374,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public T next(/*>>>@GuardSatisfied EnumerationIterator<T> this*/) {
+    public @PolyDet("up") T next(/*>>>@GuardSatisfied EnumerationIterator<T> this*/) {
       return e.nextElement();
     }
 
@@ -388,17 +389,17 @@ public final class CollectionsPlume {
   public static final class IteratorEnumeration<T> implements Enumeration<T> {
     Iterator<T> itor;
 
-    public IteratorEnumeration(Iterator<T> itor) {
+    public IteratorEnumeration(@Det Iterator<T> itor) {
       this.itor = itor;
     }
 
     @Override
-    public boolean hasMoreElements() {
+    public @PolyDet("down") boolean hasMoreElements() {
       return itor.hasNext();
     }
 
     @Override
-    public T nextElement() {
+    public @PolyDet("up") T nextElement() {
       return itor.next();
     }
   }
@@ -412,18 +413,18 @@ public final class CollectionsPlume {
   public static final class MergedIterator2<T> implements Iterator<T> {
     Iterator<T> itor1, itor2;
 
-    public MergedIterator2(Iterator<T> itor1_, Iterator<T> itor2_) {
+    public MergedIterator2(@Det Iterator<T> itor1_, @Det Iterator<T> itor2_) {
       this.itor1 = itor1_;
       this.itor2 = itor2_;
     }
 
     @Override
-    public boolean hasNext(/*>>>@GuardSatisfied MergedIterator2<T> this*/) {
+    public @PolyDet("down") boolean hasNext(/*>>>@GuardSatisfied MergedIterator2<T> this*/) {
       return (itor1.hasNext() || itor2.hasNext());
     }
 
     @Override
-    public T next(/*>>>@GuardSatisfied MergedIterator2<T> this*/) {
+    public @PolyDet("up") T next(/*>>>@GuardSatisfied MergedIterator2<T> this*/) {
       if (itor1.hasNext()) {
         return itor1.next();
       } else if (itor2.hasNext()) {
@@ -448,7 +449,7 @@ public final class CollectionsPlume {
   public static final class MergedIterator<T> implements Iterator<T> {
     Iterator<Iterator<T>> itorOfItors;
 
-    public MergedIterator(Iterator<Iterator<T>> itorOfItors) {
+    public MergedIterator(@Det Iterator<Iterator<T>> itorOfItors) {
       this.itorOfItors = itorOfItors;
     }
 
@@ -456,7 +457,7 @@ public final class CollectionsPlume {
     Iterator<T> current = new ArrayList<T>().iterator();
 
     @Override
-    public boolean hasNext(/*>>>@GuardSatisfied MergedIterator<T> this*/) {
+    public @PolyDet("down") boolean hasNext(/*>>>@GuardSatisfied MergedIterator<T> this*/) {
       while ((!current.hasNext()) && (itorOfItors.hasNext())) {
         current = itorOfItors.next();
       }
@@ -464,7 +465,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public T next(/*>>>@GuardSatisfied MergedIterator<T> this*/) {
+    public @PolyDet("up") T next(/*>>>@GuardSatisfied MergedIterator<T> this*/) {
       hasNext(); // for side effect
       return current.next();
     }
@@ -489,11 +490,11 @@ public final class CollectionsPlume {
     @SuppressWarnings("unchecked")
     T invalid_t = (T) new Object();
 
-    T current = invalid_t;
+    @Det T current = invalid_t;
     boolean current_valid = false;
 
     @Override
-    public boolean hasNext(/*>>>@GuardSatisfied FilteredIterator<T> this*/) {
+    public @PolyDet("down") boolean hasNext(/*>>>@GuardSatisfied FilteredIterator<T> this*/) {
       while ((!current_valid) && itor.hasNext()) {
         current = itor.next();
         current_valid = filter.accept(current);
@@ -502,7 +503,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public T next(/*>>>@GuardSatisfied FilteredIterator<T> this*/) {
+    public @PolyDet("up") T next(/*>>>@GuardSatisfied FilteredIterator<T> this*/) {
       if (hasNext()) {
         current_valid = false;
         @SuppressWarnings("interning")
@@ -533,7 +534,7 @@ public final class CollectionsPlume {
     T nothing = (T) new Object();
 
     T first = nothing;
-    T current = nothing;
+    @Det T current = nothing;
 
     public RemoveFirstAndLastIterator(Iterator<T> itor) {
       this.itor = itor;
@@ -546,12 +547,12 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public boolean hasNext(/*>>>@GuardSatisfied RemoveFirstAndLastIterator<T> this*/) {
+    public @PolyDet("down") boolean hasNext(/*>>>@GuardSatisfied RemoveFirstAndLastIterator<T> this*/) {
       return itor.hasNext();
     }
 
     @Override
-    public T next(/*>>>@GuardSatisfied RemoveFirstAndLastIterator<T> this*/) {
+    public @PolyDet("up") T next(/*>>>@GuardSatisfied RemoveFirstAndLastIterator<T> this*/) {
       if (!itor.hasNext()) {
         throw new NoSuchElementException();
       }
@@ -595,11 +596,11 @@ public final class CollectionsPlume {
    * @param num_elts number of elements to select
    * @return list of num_elts elements from itor
    */
-  public static <T> List<T> randomElements(Iterator<T> itor, int num_elts) {
+  public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int num_elts) {
     return randomElements(itor, num_elts, r);
   }
 
-  private static Random r = new Random();
+  private static @NonDet Random r = new Random();
 
   /**
    * Return a List containing num_elts randomly chosen elements from the iterator, or all the
@@ -612,7 +613,7 @@ public final class CollectionsPlume {
    * @param random the Random instance to use to make selections
    * @return list of num_elts elements from itor
    */
-  public static <T> List<T> randomElements(Iterator<T> itor, int num_elts, Random random) {
+  public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int num_elts, Random random) {
     // The elements are chosen with the following probabilities,
     // where n == num_elts:
     //   n n/2 n/3 n/4 n/5 ...

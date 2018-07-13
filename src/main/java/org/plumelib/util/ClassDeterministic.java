@@ -13,6 +13,7 @@ import java.util.List;
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /** Deterministic versions of Class methods */
 public class ClassDeterministic {
@@ -27,8 +28,8 @@ public class ClassDeterministic {
    * @param c the Class whose annotations to return
    * @return the class's annotations
    */
-  public static Annotation[] getAnnotations(Class<?> c) {
-    Annotation[] result = c.getAnnotations();
+  public static @NonDet Annotation @NonDet [] getAnnotations(Class<?> c) {
+    @NonDet Annotation @NonDet [] result = c.getAnnotations();
     Arrays.sort(result, annotationComparator);
     return result;
   }
@@ -39,8 +40,8 @@ public class ClassDeterministic {
    * @param c the Class whose declared annotations to return
    * @return the class's declared annotations
    */
-  public static Annotation[] getDeclaredAnnotations(Class<?> c) {
-    Annotation[] result = c.getDeclaredAnnotations();
+  public static @NonDet Annotation @NonDet [] getDeclaredAnnotations(Class<?> c) {
+    @NonDet Annotation @NonDet [] result = c.getDeclaredAnnotations();
     Arrays.sort(result, annotationComparator);
     return result;
   }
@@ -51,8 +52,8 @@ public class ClassDeterministic {
    * @param c the Class whose member classes to return
    * @return the class's member classes
    */
-  public static Class<?>[] getClasses(Class<?> c) {
-    Class<?>[] result = c.getClasses();
+  public static @NonDet Class<?> @NonDet [] getClasses(Class<?> c) {
+    @NonDet Class<?> @NonDet [] result = c.getClasses();
     Arrays.sort(result, classComparator);
     return result;
   }
@@ -63,8 +64,8 @@ public class ClassDeterministic {
    * @param c the Class whose declared member classes to return
    * @return the class's declared member classes
    */
-  public static Class<?>[] getDeclaredClasses(Class<?> c) {
-    Class<?>[] result = c.getDeclaredClasses();
+  public static @NonDet Class<?> @NonDet [] getDeclaredClasses(Class<?> c) {
+    @NonDet Class<?> @NonDet [] result = c.getDeclaredClasses();
     Arrays.sort(result, classComparator);
     return result;
   }
@@ -92,8 +93,8 @@ public class ClassDeterministic {
    * @param c the Class whose constructors to return
    * @return the class's constructors
    */
-  public static Constructor<?>[] getConstructors(Class<?> c) {
-    Constructor<?>[] result = c.getConstructors();
+  public static @NonDet Constructor<?> @NonDet [] getConstructors(Class<?> c) {
+    @NonDet Constructor<?> @NonDet [] result = c.getConstructors();
     Arrays.sort(result, constructorComparator);
     return result;
   }
@@ -104,8 +105,8 @@ public class ClassDeterministic {
    * @param c the Class whose declared constructors to return
    * @return the class's declared constructors
    */
-  public static Constructor<?>[] getDeclaredConstructors(Class<?> c) {
-    Constructor<?>[] result = c.getDeclaredConstructors();
+  public static @NonDet Constructor<?> @NonDet [] getDeclaredConstructors(Class<?> c) {
+    @NonDet Constructor<?> @NonDet [] result = c.getDeclaredConstructors();
     Arrays.sort(result, constructorComparator);
     return result;
   }
@@ -116,8 +117,8 @@ public class ClassDeterministic {
    * @param c the Class whose fields to return
    * @return the class's fields
    */
-  public static Field[] getFields(Class<?> c) {
-    Field[] result = c.getFields();
+  public static @NonDet Field @NonDet [] getFields(Class<?> c) {
+    @NonDet Field @NonDet [] result = c.getFields();
     Arrays.sort(result, fieldComparator);
     return result;
   }
@@ -128,8 +129,8 @@ public class ClassDeterministic {
    * @param c the Class whose declared fields to return
    * @return the class's declared fields
    */
-  public static Field[] getDeclaredFields(Class<?> c) {
-    Field[] result = c.getDeclaredFields();
+  public static @NonDet Field @NonDet [] getDeclaredFields(Class<?> c) {
+    @NonDet Field @NonDet [] result = c.getDeclaredFields();
     Arrays.sort(result, fieldComparator);
     return result;
   }
@@ -140,8 +141,8 @@ public class ClassDeterministic {
    * @param c the Class whose methods to return
    * @return the class's methods
    */
-  public static Method[] getMethods(Class<?> c) {
-    Method[] result = c.getMethods();
+  public static @NonDet Method @NonDet [] getMethods(Class<?> c) {
+    @NonDet Method @NonDet [] result = c.getMethods();
     Arrays.sort(result, methodComparator);
     return result;
   }
@@ -152,8 +153,8 @@ public class ClassDeterministic {
    * @param c the Class whose declared methods to return
    * @return the class's declared methods
    */
-  public static Method[] getDeclaredMethods(Class<?> c) {
-    Method[] result = c.getDeclaredMethods();
+  public static @NonDet Method @NonDet [] getDeclaredMethods(Class<?> c) {
+    @NonDet Method @NonDet [] result = c.getDeclaredMethods();
     Arrays.sort(result, methodComparator);
     return result;
   }
@@ -178,7 +179,7 @@ public class ClassDeterministic {
   static AnnotationComparator annotationComparator = new AnnotationComparator();
 
   /** Compares Annotation objects by type name. */
-  private static class AnnotationComparator implements Comparator<Annotation> {
+  private static class AnnotationComparator implements Comparator<@NonDet Annotation> {
 
     @Override
     public int compare(Annotation a1, Annotation a2) {
@@ -189,7 +190,7 @@ public class ClassDeterministic {
   static ClassComparator classComparator = new ClassComparator();
 
   /** Compares Class objects by fully-qualified name. */
-  private static class ClassComparator implements Comparator<Class<?>> {
+  private static class ClassComparator implements Comparator<@NonDet Class<?>> {
 
     @Override
     public int compare(Class<?> c1, Class<?> c2) {
@@ -203,7 +204,7 @@ public class ClassDeterministic {
    * Compares Method objects by signature: compares name, number of parameters, parameter type
    * names, declaring class, and return type (which is necessary to distinguish bridge methods).
    */
-  private static class MethodComparator implements Comparator<Method> {
+  private static class MethodComparator implements Comparator<@NonDet Method> {
 
     @Override
     public int compare(Method m1, Method m2) {
@@ -248,7 +249,7 @@ public class ClassDeterministic {
    * Compares Constructor objects by signature: compares name, number of parameters, and parameter
    * type names.
    */
-  private static class ConstructorComparator implements Comparator<Constructor<?>> {
+  private static class ConstructorComparator implements Comparator<@NonDet Constructor<?>> {
 
     @Override
     public int compare(Constructor<?> c1, Constructor<?> c2) {
@@ -277,7 +278,7 @@ public class ClassDeterministic {
   static FieldComparator fieldComparator = new FieldComparator();
 
   /** Compares Field objects by name. */
-  private static class FieldComparator implements Comparator<Field> {
+  private static class FieldComparator implements Comparator<@NonDet Field> {
 
     @Override
     public int compare(Field f1, Field f2) {
