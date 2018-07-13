@@ -10,6 +10,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Routines for doing approximate ('fuzzy') floating point comparisons. Those are comparisons that
@@ -46,7 +47,7 @@ public class FuzzyFloat {
    *
    * @param rel_diff the relative diff to use
    */
-  public FuzzyFloat(double rel_diff) {
+  public FuzzyFloat(@Det double rel_diff) {
     set_rel_diff(rel_diff);
   }
 
@@ -56,7 +57,7 @@ public class FuzzyFloat {
    * @param rel_diff the new relative diff to use
    * @see #FuzzyFloat
    */
-  public void set_rel_diff(/*>>> @UnknownInitialization @Raw FuzzyFloat this,*/ double rel_diff) {
+  public void set_rel_diff(/*>>> @UnknownInitialization @Raw FuzzyFloat this,*/ @Det double rel_diff) {
     min_ratio = 1 - rel_diff;
     max_ratio = 1 + rel_diff;
     off = (rel_diff == 0.0);
