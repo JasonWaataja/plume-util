@@ -3,6 +3,7 @@ package org.plumelib.util;
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Interface for things that make boolean decisions. This is inspired by java.io.FilenameFilter.
@@ -16,5 +17,5 @@ public interface Filter<T extends /*@Nullable*/ Object> {
    * @param o the object to test
    * @return whether the object satisfies the filter
    */
-  boolean accept(T o);
+  @PolyDet boolean accept(@PolyDet T o);
 }
