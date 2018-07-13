@@ -11,6 +11,7 @@ import java.util.Set;
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /** Graph utility methods. This class does not model a graph: all methods are static. */
 public final class GraphPlume {
@@ -146,7 +147,7 @@ public final class GraphPlume {
    * @param ps the PrintStream to which to print the graph
    * @param indent the number of spaces by which to indent the printed representation
    */
-  public static <T> void print(Map<T, List<T>> graph, PrintStream ps, int indent) {
+  public static <T extends @Det Object> void print(Map<T, List<T>> graph, PrintStream ps, int indent) {
     String indentString = "";
     for (int i = 0; i < indent; i++) {
       indentString += " ";
