@@ -9,6 +9,7 @@ package org.plumelib.util;
 /*>>>
 import org.checkerframework.checker.lock.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * This is a deterministic version of the {@link Object} class. To remove one source of
@@ -38,7 +39,7 @@ public class DeterministicObject {
    * the second one has 1, and so forth.
    */
   @Override
-  public int hashCode(/*>>>@GuardSatisfied DeterministicObject this*/) {
+  public @Det int hashCode(/*>>>@GuardSatisfied DeterministicObject this*/) {
     return uid;
   }
 }
