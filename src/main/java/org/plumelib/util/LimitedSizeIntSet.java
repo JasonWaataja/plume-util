@@ -11,6 +11,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * LimitedSizeIntSet stores up to some maximum number of unique values. If more than that many
@@ -66,7 +67,7 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
     num_values = 0;
   }
 
-  public void add(int elt) {
+  public void add(@Det int elt) {
     if (repNulled()) {
       return;
     }
@@ -190,7 +191,9 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
   public LimitedSizeIntSet clone(/*>>>@GuardSatisfied LimitedSizeIntSet this*/) {
     LimitedSizeIntSet result;
     try {
-      result = (LimitedSizeIntSet) super.clone();
+      @SuppressWarnings("determinism")
+      @PolyDet LimitedSizeIntSet cloned = (LimitedSizeIntSet) super.clone();
+      result = cloned;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
     }

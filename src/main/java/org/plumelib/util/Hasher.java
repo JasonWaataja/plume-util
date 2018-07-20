@@ -1,5 +1,7 @@
 package org.plumelib.util;
 
+import org.checkerframework.checker.determinism.qual.*;
+
 /**
  * Hasher is intended to work like Comparable: it is an optional argument to a hashing data
  * structure (such as a HashSet, HashMap, or WeakHashMap) which specifies the hashCode() and
@@ -22,7 +24,7 @@ public interface Hasher {
    * @param o object whose hash code to compute
    * @return o's hash code
    */
-  int hashCode(Object o);
+  @NonDet int hashCode(Object o);
 
   /**
    * The equality function over the objects being hashed.

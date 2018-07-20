@@ -12,6 +12,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.common.value.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Utilities for interning objects. Interning is also known as canonicalization or hash-consing: it
@@ -119,7 +120,7 @@ public final class Intern {
     }
 
     @Override
-    public int hashCode(Object o) {
+    public @NonDet int hashCode(Object o) {
       Integer i = (Integer) o;
       return i.intValue();
     }
@@ -138,7 +139,7 @@ public final class Intern {
     }
 
     @Override
-    public int hashCode(Object o) {
+    public @NonDet int hashCode(Object o) {
       Long i = (Long) o;
       return i.intValue();
     }
@@ -157,7 +158,7 @@ public final class Intern {
     }
 
     @Override
-    public int hashCode(Object o) {
+    public @NonDet int hashCode(Object o) {
       return Arrays.hashCode((int[]) o);
     }
   }
@@ -175,7 +176,7 @@ public final class Intern {
     }
 
     @Override
-    public int hashCode(Object o) {
+    public @NonDet int hashCode(Object o) {
       return Arrays.hashCode((long[]) o);
     }
   }
@@ -196,7 +197,7 @@ public final class Intern {
     }
 
     @Override
-    public int hashCode(Object o) {
+    public @NonDet int hashCode(Object o) {
       Double d = (Double) o;
       return d.hashCode();
     }
@@ -228,7 +229,7 @@ public final class Intern {
     }
 
     @Override
-    public int hashCode(Object o) {
+    public @NonDet int hashCode(Object o) {
       double[] a = (double[]) o;
       // Not Arrays.hashCode(a), for consistency with equals method
       // immediately above.
@@ -256,7 +257,7 @@ public final class Intern {
     }
 
     @Override
-    public int hashCode(Object o) {
+    public @NonDet int hashCode(Object o) {
       return Arrays.hashCode((String[]) o);
     }
   }
@@ -274,7 +275,7 @@ public final class Intern {
     }
 
     @Override
-    public int hashCode(Object o) {
+    public @NonDet int hashCode(Object o) {
       return Arrays.hashCode((Object[]) o);
     }
   }
@@ -1056,7 +1057,7 @@ public final class Intern {
 
     /*@Pure*/
     @Override
-    public int hashCode(/*>>>@GuardSatisfied SequenceAndIndices<T> this*/) {
+    public @NonDet int hashCode(/*>>>@GuardSatisfied SequenceAndIndices<T> this*/) {
       return seq.hashCode() + start * 30 - end * 2;
     }
 
@@ -1086,7 +1087,7 @@ public final class Intern {
     }
 
     @Override
-    public int hashCode(Object o) {
+    public @NonDet int hashCode(Object o) {
       return o.hashCode();
     }
   }

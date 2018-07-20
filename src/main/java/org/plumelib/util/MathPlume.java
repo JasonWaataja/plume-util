@@ -15,6 +15,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /** Mathematical utilities. */
 public final class MathPlume {
@@ -594,7 +595,7 @@ public final class MathPlume {
    */
   /*@Pure*/
   /*@StaticallyExecutable*/
-  public static int gcd_differences(int[] a) {
+  public static int gcd_differences(@PolyDet int [] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;
@@ -801,7 +802,7 @@ public final class MathPlume {
    */
   /*@Pure*/
   /*@StaticallyExecutable*/
-  public static int /*@Nullable*/ /*@ArrayLen(2)*/[] modulus(int[] nums) {
+  public static @PolyDet int /*@Nullable*/ /*@ArrayLen(2)*/ [] modulus(int [] nums) {
     if (nums.length < 3) {
       return null;
     }
@@ -816,7 +817,7 @@ public final class MathPlume {
       remainder += modulus;
     }
 
-    return new int[] {remainder, modulus};
+    return new int @PolyDet [] {remainder, modulus};
   }
 
   /**
@@ -829,7 +830,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulus(int[])
    */
-  public static int /*@Nullable*/ /*@ArrayLen(2)*/[] modulus_int(Iterator<Integer> itor) {
+  public static @PolyDet int /*@Nullable*/ /*@ArrayLen(2)*/[] modulus_int(Iterator<Integer> itor) {
     if (!itor.hasNext()) {
       return null;
     }
@@ -856,7 +857,7 @@ public final class MathPlume {
     if (count < 3) {
       return null;
     }
-    return new int[] {MathPlume.mod_positive(avalue, modulus), modulus};
+    return new int @PolyDet [] {MathPlume.mod_positive(avalue, modulus), modulus};
   }
 
   /**
@@ -934,7 +935,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulus_strict(int[], boolean)
    */
-  public static int /*@Nullable*/ /*@ArrayLen(2)*/[] modulus_strict_int(
+  public static @PolyDet int /*@Nullable*/ /*@ArrayLen(2)*/[] modulus_strict_int(
       Iterator<Integer> itor, boolean nonstrict_ends) {
     if (!itor.hasNext()) {
       return null;
@@ -981,7 +982,7 @@ public final class MathPlume {
       }
     }
 
-    return new int[] {r, modulus};
+    return new int @PolyDet [] {r, modulus};
   }
 
   /// modulus for long (as opposed to int) values
@@ -1019,7 +1020,7 @@ public final class MathPlume {
    */
   /*@Pure*/
   /*@StaticallyExecutable*/
-  public static long /*@Nullable*/ /*@ArrayLen(2)*/[] modulus(long[] nums) {
+  public static @PolyDet long /*@Nullable*/ /*@ArrayLen(2)*/[] modulus(long[] nums) {
     if (nums.length < 3) {
       return null;
     }
@@ -1034,7 +1035,7 @@ public final class MathPlume {
       remainder += modulus;
     }
 
-    return new long[] {remainder, modulus};
+    return new long @PolyDet [] {remainder, modulus};
   }
 
   /**
@@ -1047,7 +1048,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulus(long[])
    */
-  public static long /*@Nullable*/ /*@ArrayLen(2)*/[] modulus_long(Iterator<Long> itor) {
+  public static @PolyDet long /*@Nullable*/ /*@ArrayLen(2)*/[] modulus_long(Iterator<Long> itor) {
     if (!itor.hasNext()) {
       return null;
     }
@@ -1074,7 +1075,7 @@ public final class MathPlume {
     if (count < 3) {
       return null;
     }
-    return new long[] {MathPlume.mod_positive(avalue, modulus), modulus};
+    return new long @PolyDet [] {MathPlume.mod_positive(avalue, modulus), modulus};
   }
 
   /**
@@ -1152,7 +1153,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulus_strict(int[], boolean)
    */
-  public static long /*@Nullable*/ /*@ArrayLen(2)*/[] modulus_strict_long(
+  public static @PolyDet long /*@Nullable*/ /*@ArrayLen(2)*/[] modulus_strict_long(
       Iterator<Long> itor, boolean nonstrict_ends) {
     if (!itor.hasNext()) {
       return null;
@@ -1199,7 +1200,7 @@ public final class MathPlume {
       }
     }
 
-    return new long[] {r, modulus};
+    return new long @PolyDet [] {r, modulus};
   }
 
   ///
@@ -1266,7 +1267,7 @@ public final class MathPlume {
      * @param nums a non-empty array
      * @param add_ends if true, include the bracketing endpoints
      */
-    MissingNumbersIteratorInt(int /*@MinLen(1)*/[] nums, boolean add_ends) {
+    MissingNumbersIteratorInt(int /*@MinLen(1)*/ @Det [] nums, @Det boolean add_ends) {
       this.add_ends = add_ends;
       { // avoid modifying parameter
         int[] nums_copy = new int[nums.length];
@@ -1285,7 +1286,7 @@ public final class MathPlume {
     }
 
     // The argument iterator must return the Integers in sorted order
-    MissingNumbersIteratorInt(Iterator<Integer> nums_itor, boolean add_ends) {
+    MissingNumbersIteratorInt(@Det Iterator<Integer> nums_itor, @Det boolean add_ends) {
       this.add_ends = add_ends;
       if (!nums_itor.hasNext()) {
         throw new Error("No elements in nums_itor");
@@ -1381,7 +1382,7 @@ public final class MathPlume {
   @SuppressWarnings({"purity", "lock"})
   /*@Pure*/
   /*@StaticallyExecutable*/
-  public static int /*@Nullable*/ /*@ArrayLen(2)*/[] nonmodulus_strict(int[] nums) {
+  public static @PolyDet int /*@Nullable*/ /*@ArrayLen(2)*/[] nonmodulus_strict(int @Det [] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
     // instead of all at once.

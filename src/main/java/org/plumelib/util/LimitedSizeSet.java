@@ -11,6 +11,7 @@ import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.common.value.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * LimitedSizeSet stores up to some maximum number of unique values. If more than that many elements
@@ -188,8 +189,8 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
   public LimitedSizeSet<T> clone(/*>>>@GuardSatisfied LimitedSizeSet<T> this*/) {
     LimitedSizeSet<T> result;
     try {
-      @SuppressWarnings("unchecked")
-      LimitedSizeSet<T> result_as_lss = (LimitedSizeSet<T>) super.clone();
+      @SuppressWarnings({"unchecked","determinism"})
+      @PolyDet LimitedSizeSet<T> result_as_lss = (LimitedSizeSet<T>) super.clone();
       result = result_as_lss;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
@@ -220,7 +221,8 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
 
   /*@SideEffectFree*/
   @Override
-  public String toString(/*>>>@GuardSatisfied LimitedSizeSet<T> this*/) {
+  // public String toString(@PolyDet LimitedSizeSet<T> this /*>>>@GuardSatisfied LimitedSizeSet<T> this*/) {
+  public @PolyDet("down") String toString(@PolyDet LimitedSizeSet<T> this) {
     return ("[size="
         + size()
         + "; "
