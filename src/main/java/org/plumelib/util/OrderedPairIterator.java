@@ -9,6 +9,7 @@ import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Given two sorted iterators, this class returns a new iterator that pairs equal elements of the
@@ -38,7 +39,7 @@ import org.checkerframework.checker.nullness.qual.*;
  */
 // T need not extend Comparable<T>, because a comparator can be passed in.
 @SuppressWarnings("deprecation") // an acceptable use of the Pair class
-public class OrderedPairIterator<T>
+public class OrderedPairIterator<T extends @Det Object>
     implements java.util.Iterator<Pair</*@Nullable*/ T, /*@Nullable*/ T>> {
 
   Iterator<T> itor1, itor2;
@@ -47,14 +48,14 @@ public class OrderedPairIterator<T>
 
   // For this constructor, the arg type is actually Iterator<T extends
   // Comparable<T>>, but T is already bound above and can't be changed.
-  public OrderedPairIterator(Iterator<T> itor1, Iterator<T> itor2) {
+  public OrderedPairIterator(@Det Iterator<T> itor1, @Det Iterator<T> itor2) {
     this.itor1 = itor1;
     this.itor2 = itor2;
     setnext1();
     setnext2();
   }
 
-  public OrderedPairIterator(Iterator<T> itor1, Iterator<T> itor2, Comparator<T> comparator) {
+  public OrderedPairIterator(@Det Iterator<T> itor1, @Det Iterator<T> itor2, @Det Comparator<T> comparator) {
     this(itor1, itor2);
     this.comparator = comparator;
   }

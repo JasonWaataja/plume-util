@@ -329,7 +329,7 @@ public final class ArraysPlume {
    */
   /*@Pure*/
   /*@StaticallyExecutable*/
-  public static @PolyDet("down") long /*@ArrayLen(2)*/@PolyDet("down") [] min_max(long[] a) {
+  public static @PolyDet("down") long /*@ArrayLen(2)*/@PolyDet("down") [] min_max(@PolyDet long @PolyDet [] a) {
     if (a.length == 0) {
       // return null;
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(long[])");
@@ -340,8 +340,8 @@ public final class ArraysPlume {
       result_min = Math.min(result_min, a[i]);
       result_max = Math.max(result_max, a[i]);
     }
-    @PolyDet("down") long @PolyDet [] result =
-        new @PolyDet("down") long @PolyDet("down") [] {result_min, result_max};
+    @PolyDet long @PolyDet [] result =
+        new @PolyDet long @PolyDet [] {result_min, result_max};
     return result;
   }
 
@@ -359,7 +359,7 @@ public final class ArraysPlume {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(int[])");
     }
     @SuppressWarnings("purity.not.deterministic.call") // use deterministic parts of object
-    @PolyDet("down") int @PolyDet [] min_max = min_max(a);
+    @PolyDet int @PolyDet [] min_max = min_max(a);
     return min_max[1] - min_max[0];
   }
 
@@ -372,12 +372,12 @@ public final class ArraysPlume {
    */
   /*@Pure*/
   /*@StaticallyExecutable*/
-  public static @PolyDet("down") long element_range(long[] a) {
+  public static @PolyDet("down") long element_range(@PolyDet long @PolyDet [] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(long[])");
     }
     @SuppressWarnings("purity.not.deterministic.call") // use deterministic parts of object
-    @PolyDet("down") long @PolyDet [] min_max = min_max(a);
+    @PolyDet long @PolyDet [] min_max = min_max(a);
     return min_max[1] - min_max[0];
   }
 
@@ -818,7 +818,7 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   /*@Pure*/
-  public static @PolyDet("up") int indexOf(/*@PolyAll*/ Object[] a, Object[] sub) {
+  public static @PolyDet("up") int indexOf(Object[] a, Object[] sub) {
     int a_index_max = a.length - sub.length + 1;
     for (int i = 0; i <= a_index_max; i++) {
       if (isSubarray(a, sub, i)) {

@@ -1,4 +1,5 @@
 // MultiRandSelector.java
+
 package org.plumelib.util;
 
 import java.util.ArrayList;
@@ -6,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Performs uniform random selection over an iterator, where the objects in the iteration may be
@@ -30,7 +32,7 @@ public class MultiRandSelector<T> {
   private int num_elts = -1;
   private boolean coin_toss_mode;
   private double keep_probability = -1.0;
-  private Random seed;
+  private @NonDet Random seed;
   private Partitioner<T, T> eq;
 
   private HashMap<T, RandomSelector<T>> map;
@@ -39,15 +41,15 @@ public class MultiRandSelector<T> {
    * @param num_elts the number of elements to select from each bucket
    * @param eq partioner that determines how to partition the objects from the iteration
    */
-  public MultiRandSelector(int num_elts, Partitioner<T, T> eq) {
+  public MultiRandSelector(@Det int num_elts, @Det Partitioner<T, T> eq) {
     this(num_elts, new Random(), eq);
   }
 
-  public MultiRandSelector(double keep_prob, Partitioner<T, T> eq) {
+  public MultiRandSelector(@Det double keep_prob, @Det Partitioner<T, T> eq) {
     this(keep_prob, new Random(), eq);
   }
 
-  public MultiRandSelector(int num_elts, Random r, Partitioner<T, T> eq) {
+  public MultiRandSelector(@Det int num_elts, @NonDet Random r, @Det Partitioner<T, T> eq) {
     coin_toss_mode = false;
     this.num_elts = num_elts;
     seed = r;
@@ -55,7 +57,7 @@ public class MultiRandSelector<T> {
     map = new HashMap<T, RandomSelector<T>>();
   }
 
-  public MultiRandSelector(double keep_prob, Random r, Partitioner<T, T> eq) {
+  public MultiRandSelector(@Det double keep_prob, @NonDet Random r, @Det Partitioner<T, T> eq) {
     this.keep_probability = keep_prob;
     coin_toss_mode = true;
     seed = r;
@@ -96,7 +98,7 @@ public class MultiRandSelector<T> {
    *
    * @return an iterator of all objects selected
    */
-  public Iterator<T> valuesIter() {
+  public @NonDet Iterator<T> valuesIter() {
     ArrayList<T> ret = new ArrayList<T>();
     for (RandomSelector<T> rs : map.values()) {
       ret.addAll(rs.getValues());

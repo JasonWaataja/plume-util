@@ -1431,7 +1431,7 @@ public final class MathPlume {
    * @param nums the list of operands
    * @return a (remainder, modulus) pair that fails to match elements of nums
    */
-  public static int /*@Nullable*/ /*@ArrayLen(2)*/[] nonmodulus_strict_int(Iterator<Integer> nums) {
+  public static int /*@Nullable*/ /*@ArrayLen(2)*/[] nonmodulus_strict_int(@Det Iterator<Integer> nums) {
     return nonmodulus_strict_int_internal(new MissingNumbersIteratorInt(nums, true));
   }
 
@@ -1565,7 +1565,7 @@ public final class MathPlume {
      * @param nums a non-empty array
      * @param add_ends if true, include the bracketing endpoints
      */
-    MissingNumbersIteratorLong(long /*@MinLen(1)*/[] nums, boolean add_ends) {
+    MissingNumbersIteratorLong(long /*@MinLen(1)*/[] nums, @Det boolean add_ends) {
       this.add_ends = add_ends;
       { // avoid modifying parameter
         long[] nums_copy = new long[nums.length];
@@ -1584,7 +1584,7 @@ public final class MathPlume {
     }
 
     // The argument iterator must return the Integers in sorted order
-    MissingNumbersIteratorLong(Iterator<Long> nums_itor, boolean add_ends) {
+    MissingNumbersIteratorLong(@Det Iterator<Long> nums_itor, @Det boolean add_ends) {
       this.add_ends = add_ends;
       if (!nums_itor.hasNext()) {
         throw new Error("No elements in nums_itor");
@@ -1729,7 +1729,7 @@ public final class MathPlume {
    * @param nums the list of operands
    * @return a (remainder, modulus) pair that fails to match elements of nums
    */
-  public static long /*@Nullable*/ /*@ArrayLen(2)*/[] nonmodulus_strict_long(Iterator<Long> nums) {
+  public static long /*@Nullable*/ /*@ArrayLen(2)*/[] nonmodulus_strict_long(@Det Iterator<Long> nums) {
     return nonmodulus_strict_long_internal(new MissingNumbersIteratorLong(nums, true));
   }
 

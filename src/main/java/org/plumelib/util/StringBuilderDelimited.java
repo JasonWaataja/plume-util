@@ -6,6 +6,7 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 // NEEDS DOCUMENTATION!
 // (Probably mostly Javadoc "see" directives, possibly with first line of relevant method doc.)
@@ -35,7 +36,7 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
    *
    * @param delimiter the delimiter to be put between strings that are appended to this
    */
-  public StringBuilderDelimited(String delimiter) {
+  public StringBuilderDelimited(@Det String delimiter) {
     this.delimiter = delimiter;
   }
 

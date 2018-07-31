@@ -13,6 +13,7 @@ import org.checkerframework.checker.regex.qual.*;
 import org.checkerframework.dataflow.qual.*;
 import org.checkerframework.framework.qual.EnsuresQualifierIf;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -78,7 +79,7 @@ public final class RegexUtil {
      *
      * @param pse the PatternSyntaxException to be wrapped
      */
-    public CheckedPatternSyntaxException(PatternSyntaxException pse) {
+    public CheckedPatternSyntaxException(@Det PatternSyntaxException pse) {
       this.pse = pse;
     }
 

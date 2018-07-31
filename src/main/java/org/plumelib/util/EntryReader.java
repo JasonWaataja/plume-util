@@ -520,7 +520,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @return the string that was read, or null at end of file
    */
   @Override
-  public /*@Nullable*/ String readLine(
+  public /*@Nullable*/ @NonDet String readLine(
       /*>>>@GuardSatisfied EntryReader this*/) throws IOException {
 
     // System.out.printf ("Entering size = %d%n", readers.size());
@@ -717,7 +717,9 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         putback(line);
       }
 
-      entry = new Entry(description, body.toString(), filename, line_number, false);
+      @SuppressWarnings("determinism")
+      @PolyDet Entry newEntry = new Entry(description, body.toString(), filename, line_number, false);
+      entry = newEntry;
 
     } else { // blank-separated entry
 
@@ -736,7 +738,9 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         putback(line);
       }
 
-      entry = new Entry(description, body.toString(), filename, line_number, true);
+      @SuppressWarnings("determinism")
+      Entry newEntry = new Entry(description, body.toString(), filename, line_number, true);
+      entry = newEntry;
     }
 
     return (entry);

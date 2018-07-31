@@ -5,6 +5,7 @@ import org.checkerframework.checker.lock.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Mutable pair class: type-safely holds two objects of possibly-different types. Defines toStrng(),
@@ -14,7 +15,7 @@ import org.checkerframework.dataflow.qual.*;
  * @param <T1> the type of the first element of the pair
  * @param <T2> the type of the second element of the pair
  */
-public class Pair<T1 extends /*@Nullable*/ Object, T2 extends /*@Nullable*/ Object> {
+public class Pair<T1 extends @Det /*@Nullable*/ Object, T2 extends @Det /*@Nullable*/ Object> {
   /** The first element of the pair. */
   public T1 a;
   /** The second element of the pair. */
@@ -71,7 +72,7 @@ public class Pair<T1 extends /*@Nullable*/ Object, T2 extends /*@Nullable*/ Obje
   // But then the class would not be useful for mutable pairs.
   @Override
   /*@Pure*/
-  public int hashCode(/*>>>@GuardSatisfied Pair<T1,T2> this*/) {
+  public @NonDet int hashCode(/*>>>@GuardSatisfied Pair<T1,T2> this*/) {
     return (((a == null) ? 0 : a.hashCode()) + ((b == null) ? 0 : b.hashCode()));
   }
 }

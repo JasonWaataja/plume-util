@@ -28,8 +28,8 @@ public class ClassDeterministic {
    * @param c the Class whose annotations to return
    * @return the class's annotations
    */
-  public static @NonDet Annotation @NonDet [] getAnnotations(Class<?> c) {
-    @NonDet Annotation @NonDet [] result = c.getAnnotations();
+  public static Annotation [] getAnnotations(Class<?> c) {
+    Annotation [] result = c.getAnnotations();
     Arrays.sort(result, annotationComparator);
     return result;
   }

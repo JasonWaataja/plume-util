@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.checkerframework.checker.determinism.qual.*;
+
 /**
  * RandomSelector selects k elements uniformly at random from an arbitrary iterator, using O(k)
  * space. A naive algorithm would use O(n) space. For example, selecting 1 element from a FileStream
@@ -62,8 +64,8 @@ public class RandomSelector<T> {
 
   private int num_elts = -1;
   private int observed;
-  private Random generator;
-  private ArrayList<T> values;
+  private @NonDet Random generator;
+  private @NonDet ArrayList<T> values;
   private boolean coin_toss_mode = false;
   private double keep_probability = -1.0;
 
@@ -71,7 +73,7 @@ public class RandomSelector<T> {
    * @param num_elts the number of elements intended to be selected from the input elements
    *     <p>Sets 'number_to_take' = num_elts
    */
-  public RandomSelector(int num_elts) {
+  public RandomSelector(@Det int num_elts) {
     this(num_elts, new Random());
   }
 
@@ -80,7 +82,7 @@ public class RandomSelector<T> {
    * @param r the seed to give for random number generation.
    *     <p>Sets 'number_to_take' = num_elts.
    */
-  public RandomSelector(int num_elts, Random r) {
+  public RandomSelector(@Det int num_elts, @NonDet Random r) {
     values = new ArrayList<T>();
     this.num_elts = num_elts;
     observed = 0;
@@ -92,7 +94,7 @@ public class RandomSelector<T> {
    *     Iteration
    * @param r the seed to give for random number generation
    */
-  public RandomSelector(double keep_probability, Random r) {
+  public RandomSelector(@Det double keep_probability, @NonDet Random r) {
     values = new ArrayList<T>();
     this.keep_probability = keep_probability;
     coin_toss_mode = true;
@@ -145,9 +147,9 @@ public class RandomSelector<T> {
    *
    * @return current_values
    */
-  public List<T> getValues() {
+  public @NonDet List<T> getValues() {
     // avoid concurrent mod errors and rep exposure
-    ArrayList<T> ret = new ArrayList<T>();
+    @NonDet ArrayList<T> ret = new ArrayList<T>();
     ret.addAll(values);
     return ret;
   }
