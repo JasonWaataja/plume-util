@@ -45,6 +45,8 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.checkerframework.checker.determinism.qual.*;
+
 /*>>>
 import org.checkerframework.checker.index.qual.*;
 import org.checkerframework.checker.lock.qual.*;
@@ -1571,7 +1573,8 @@ public final class UtilPlume {
       case '\r':
         return "\\r";
       default:
-        return new String(new char[] {c});
+        @PolyDet char @PolyDet [] arr = new @PolyDet char @PolyDet [] { c};
+        return new String(arr);
     }
   }
 
