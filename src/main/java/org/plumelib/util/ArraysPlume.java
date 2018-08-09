@@ -304,7 +304,7 @@ public final class ArraysPlume {
    */
   /*@Pure*/
   /*@StaticallyExecutable*/
-  public static @PolyDet("down") int /*@ArrayLen(2)*/ @PolyDet("down") [] min_max(@PolyDet int @PolyDet [] a) {
+  public static @PolyDet("down") int /*@ArrayLen(2)*/ @PolyDet("down") [] min_max(int[] a) {
     if (a.length == 0) {
       // return null;
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(int[])");
@@ -329,7 +329,7 @@ public final class ArraysPlume {
    */
   /*@Pure*/
   /*@StaticallyExecutable*/
-  public static @PolyDet("down") long /*@ArrayLen(2)*/@PolyDet("down") [] min_max(@PolyDet long @PolyDet [] a) {
+  public static @PolyDet("down") long /*@ArrayLen(2)*/@PolyDet("down") [] min_max(long[] a) {
     if (a.length == 0) {
       // return null;
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(long[])");
@@ -372,7 +372,7 @@ public final class ArraysPlume {
    */
   /*@Pure*/
   /*@StaticallyExecutable*/
-  public static @PolyDet("down") long element_range(@PolyDet long @PolyDet [] a) {
+  public static @PolyDet("down") long element_range(long[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(long[])");
     }
@@ -469,7 +469,7 @@ public final class ArraysPlume {
    * @see java.util.List#indexOf(java.lang.Object)
    */
   /*@Pure*/
-  public static <T> @PolyDet("up") int indexOf(@PolyDet T @PolyDet [] a, /*@Nullable*/ Object elt) {
+  public static <T> @PolyDet("up") int indexOf(T[] a, /*@Nullable*/ Object elt) {
     if (elt == null) {
       return indexOfEq(a, elt);
     }
@@ -496,7 +496,7 @@ public final class ArraysPlume {
    */
   /*@Pure*/
   public static <T> @PolyDet("up") int indexOf(
-      @PolyDet T @PolyDet [] a,
+      T[] a,
       /*@Nullable*/ Object elt,
       /*@IndexFor("#1")*/ int minindex,
       /*@IndexOrHigh("#1")*/ int indexlimit) {
@@ -568,7 +568,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
   /*@Pure*/
-  public static @PolyDet("up") int indexOfEq(/*@PolyAll*/ @PolyDet Object @PolyDet [] a,
+  public static @PolyDet("up") int indexOfEq(/*@PolyAll*/ Object[] a,
       /*@Nullable*/ Object elt) {
     for (int i = 0; i < a.length; i++) {
       if (elt == a[i]) {
@@ -592,7 +592,7 @@ public final class ArraysPlume {
    */
   /*@Pure*/
   public static @PolyDet("up") int indexOfEq(
-      /*@PolyNull*/ @PolyDet Object @PolyDet [] a,
+      /*@PolyNull*/ Object[] a,
       /*@Nullable*/ Object elt,
       /*@IndexFor("#1")*/ int minindex,
       /*@IndexOrHigh("#1")*/ int indexlimit) {
@@ -615,7 +615,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
   /*@Pure*/
-  public static @PolyDet("up") int indexOfEq(List<? extends /*@PolyNull*/ Object> a,
+  public static @PolyDet("up") int indexOfEq(List<? extends /*@PolyNull*/ @NonDet Object> a,
       /*@Nullable*/ Object elt) {
     for (int i = 0; i < a.size(); i++) {
       if (elt == a.get(i)) {
@@ -1097,7 +1097,7 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    */
   /*@SideEffectFree*/
-  public static /*@PolyAll*/ @PolyDet Object @PolyDet [] subarray(
+  public static /*@PolyAll*/ @PolyDet("up") Object @PolyDet("up") [] subarray(
       /*@PolyAll*/ Object[] a,
       /*@NonNegative*/ int startindex,
       /*@NonNegative*/ /*@LTLengthOf(value="#1", offset="#2 - 1")*/ int length) {
@@ -1133,7 +1133,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   /*@SideEffectFree*/
-  public static /*@PolyAll*/ @PolyDet String @PolyDet [] subarray(
+  public static /*@PolyAll*/ @PolyDet("up") String @PolyDet("up") [] subarray(
       /*@PolyAll*/ String[] a,
       /*@NonNegative*/ int startindex,
       /*@NonNegative*/ /*@LTLengthOf(value="#1", offset="#2 - 1")*/ int length) {
@@ -1153,7 +1153,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   /*@SideEffectFree*/
-  public static @PolyDet byte @PolyDet [] subarray(
+  public static @PolyDet("up") byte @PolyDet("up") [] subarray(
       byte[] a,
       /*@NonNegative*/ int startindex,
       /*@NonNegative*/ /*@LTLengthOf(value="#1", offset="#2 - 1")*/ int length) {
@@ -1173,7 +1173,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   /*@SideEffectFree*/
-  public static @PolyDet boolean @PolyDet [] subarray(
+  public static @PolyDet("up") boolean @PolyDet("up") [] subarray(
       boolean[] a,
       /*@NonNegative*/ int startindex,
       /*@NonNegative*/ /*@LTLengthOf(value="#1", offset="#2 - 1")*/ int length) {
@@ -1193,7 +1193,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   /*@SideEffectFree*/
-  public static @PolyDet char @PolyDet [] subarray(
+  public static @PolyDet("up") char @PolyDet("up") [] subarray(
       char[] a,
       /*@NonNegative*/ int startindex,
       /*@NonNegative*/ /*@LTLengthOf(value="#1", offset="#2 - 1")*/ int length) {
@@ -1213,7 +1213,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   /*@SideEffectFree*/
-  public static @PolyDet double @PolyDet [] subarray(
+  public static @PolyDet("up") double @PolyDet("up") [] subarray(
       double[] a,
       /*@NonNegative*/ int startindex,
       /*@NonNegative*/ /*@LTLengthOf(value="#1", offset="#2 - 1")*/ int length) {
@@ -1233,7 +1233,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   /*@SideEffectFree*/
-  public static @PolyDet float @PolyDet [] subarray(
+  public static @PolyDet("up") float @PolyDet("up") [] subarray(
       float[] a,
       /*@NonNegative*/ int startindex,
       /*@NonNegative*/ /*@LTLengthOf(value="#1", offset="#2 - 1")*/ int length) {
@@ -1253,7 +1253,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   /*@SideEffectFree*/
-  public static @PolyDet int @PolyDet [] subarray(
+  public static @PolyDet("up") int @PolyDet("up") [] subarray(
       int[] a,
       /*@NonNegative*/ int startindex,
       /*@NonNegative*/ /*@LTLengthOf(value="#1", offset="#2 - 1")*/ int length) {
@@ -1273,7 +1273,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   /*@SideEffectFree*/
-  public static @PolyDet long @PolyDet [] subarray(
+  public static @PolyDet("up") long @PolyDet("up") [] subarray(
       long[] a,
       /*@NonNegative*/ int startindex,
       /*@NonNegative*/ /*@LTLengthOf(value="#1", offset="#2 - 1")*/ int length) {
@@ -1293,7 +1293,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   /*@SideEffectFree*/
-  public static @PolyDet short @PolyDet [] subarray(
+  public static @PolyDet("up") short @PolyDet("up") [] subarray(
       short[] a,
       /*@NonNegative*/ int startindex,
       /*@NonNegative*/ /*@LTLengthOf(value="#1", offset="#2 - 1")*/ int length) {
@@ -1606,6 +1606,7 @@ public final class ArraysPlume {
    * @param lst the list to convert to an array
    * @return the result of lst.toArray, casted to a more precise type than Object[]
    */
+  @SuppressWarnings("determinism") // Extra upper bound on type parameter.
   private static <T> T[] toTArray(List<T> lst) {
     @SuppressWarnings("unchecked")
     T[] asArray = (T[]) lst.toArray();
@@ -1653,6 +1654,7 @@ public final class ArraysPlume {
       }
     }
 
+    @SuppressWarnings("determinism") // Extra upper bound on type parameter.
     T[] toArray() {
       if (theArray != null) {
         return theArray;
@@ -1683,6 +1685,7 @@ public final class ArraysPlume {
      *
      * @return the least upper bound of the classes of the elements of this
      */
+    @SuppressWarnings("determinism") // leastUpperBound returns, possible error.
     /*@Nullable*/ Class<?> leastUpperBound() {
       if (theArray != null) {
         return ReflectionPlume.leastUpperBound(theArray);
@@ -1703,6 +1706,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
+  @SuppressWarnings("determinism") // Constructor parameters.
   public static <T> T[] concat(T /*@Nullable*/ [] a, T /*@Nullable*/ [] b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
@@ -1716,6 +1720,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
+  @SuppressWarnings("determinism") // Constructor parameters.
   public static <T> T[] concat(T /*@Nullable*/ [] a, /*@Nullable*/ List<T> b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
@@ -1729,6 +1734,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
+  @SuppressWarnings("determinism") // Constructor parameters.
   public static <T> T[] concat(/*@Nullable*/ List<T> a, T /*@Nullable*/ [] b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
@@ -1741,6 +1747,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
+  @SuppressWarnings("determinism") // Constructor parameters.
   public static <T> T[] concat(/*@Nullable*/ List<T> a, /*@Nullable*/ List<T> b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
@@ -1753,6 +1760,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
+  @SuppressWarnings("determinism") // Extra upper bound on generic type.
   private static <T> T[] concat(ListOrArray<T> a, ListOrArray<T> b) {
     if (a.isNull() && b.isNull()) {
       @SuppressWarnings("unchecked")
@@ -1803,7 +1811,7 @@ public final class ArraysPlume {
       /*@PolyAll*/ String /*@Nullable*/ [] a, /*@PolyAll*/ String /*@Nullable*/ [] b) {
     if (a == null) {
       if (b == null) {
-        return new String[0];
+        return new @PolyDet String @PolyDet [0];
       } else {
         return b;
       }
@@ -1811,8 +1819,7 @@ public final class ArraysPlume {
       if (b == null) {
         return a;
       } else {
-        /*@PolyAll*/ @Det String @PolyDet [] result =
-            new @Det String @PolyDet [a.length + b.length];
+        /*@PolyAll*/ @PolyDet String @PolyDet [] result = new @PolyDet String @PolyDet [a.length + b.length];
 
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
@@ -1832,7 +1839,7 @@ public final class ArraysPlume {
   public static byte[] concat(byte /*@Nullable*/ [] a, byte /*@Nullable*/ [] b) {
     if (a == null) {
       if (b == null) {
-        return new byte[0];
+        return new @PolyDet byte @PolyDet [0];
       } else {
         return b;
       }
@@ -1840,8 +1847,7 @@ public final class ArraysPlume {
       if (b == null) {
         return a;
       } else {
-        /*@PolyAll*/ @Det byte @PolyDet [] result =
-            new @Det byte @PolyDet [a.length + b.length];
+        /*@PolyAll*/ @PolyDet byte @PolyDet [] result = new @PolyDet byte @PolyDet [a.length + b.length];
 
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
@@ -1861,7 +1867,7 @@ public final class ArraysPlume {
   public static boolean[] concat(boolean /*@Nullable*/ [] a, boolean /*@Nullable*/ [] b) {
     if (a == null) {
       if (b == null) {
-        return new boolean[0];
+        return new @PolyDet boolean @PolyDet [0];
       } else {
         return b;
       }
@@ -1869,8 +1875,7 @@ public final class ArraysPlume {
       if (b == null) {
         return a;
       } else {
-        /*@PolyAll*/ @Det boolean @PolyDet [] result =
-            new @Det boolean @PolyDet [a.length + b.length];
+        /*@PolyAll*/ @PolyDet boolean @PolyDet [] result = new @PolyDet boolean @PolyDet [a.length + b.length];
 
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
@@ -1890,7 +1895,7 @@ public final class ArraysPlume {
   public static char[] concat(char /*@Nullable*/ [] a, char /*@Nullable*/ [] b) {
     if (a == null) {
       if (b == null) {
-        return new char[0];
+        return new @PolyDet char @PolyDet [0];
       } else {
         return b;
       }
@@ -1898,8 +1903,7 @@ public final class ArraysPlume {
       if (b == null) {
         return a;
       } else {
-        /*@PolyAll*/ @Det char @PolyDet [] result =
-            new @Det char @PolyDet [a.length + b.length];
+        /*@PolyAll*/ @PolyDet char @PolyDet [] result = new @PolyDet char @PolyDet [a.length + b.length];
 
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
@@ -1919,7 +1923,7 @@ public final class ArraysPlume {
   public static double[] concat(double /*@Nullable*/ [] a, double /*@Nullable*/ [] b) {
     if (a == null) {
       if (b == null) {
-        return new double[0];
+        return new @PolyDet double @PolyDet [0];
       } else {
         return b;
       }
@@ -1927,8 +1931,7 @@ public final class ArraysPlume {
       if (b == null) {
         return a;
       } else {
-        /*@PolyAll*/ @Det double @PolyDet [] result =
-            new @Det double @PolyDet [a.length + b.length];
+        /*@PolyAll*/ @PolyDet double @PolyDet [] result = new @PolyDet double @PolyDet [a.length + b.length];
 
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
@@ -1948,7 +1951,7 @@ public final class ArraysPlume {
   public static float[] concat(float /*@Nullable*/ [] a, float /*@Nullable*/ [] b) {
     if (a == null) {
       if (b == null) {
-        return new float[0];
+        return new @PolyDet float @PolyDet [0];
       } else {
         return b;
       }
@@ -1956,8 +1959,7 @@ public final class ArraysPlume {
       if (b == null) {
         return a;
       } else {
-        /*@PolyAll*/ @Det float @PolyDet [] result =
-            new @Det float @PolyDet [a.length + b.length];
+        /*@PolyAll*/ @PolyDet float @PolyDet [] result = new @PolyDet float @PolyDet [a.length + b.length];
 
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
@@ -1977,7 +1979,7 @@ public final class ArraysPlume {
   public static int[] concat(int /*@Nullable*/ [] a, int /*@Nullable*/ [] b) {
     if (a == null) {
       if (b == null) {
-        return new int[0];
+        return new @PolyDet int @PolyDet [0];
       } else {
         return b;
       }
@@ -1985,8 +1987,7 @@ public final class ArraysPlume {
       if (b == null) {
         return a;
       } else {
-        /*@PolyAll*/ @Det int @PolyDet [] result =
-            new @Det int @PolyDet [a.length + b.length];
+        /*@PolyAll*/ @PolyDet int @PolyDet [] result = new @PolyDet int @PolyDet [a.length + b.length];
 
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
@@ -2006,7 +2007,7 @@ public final class ArraysPlume {
   public static long[] concat(long /*@Nullable*/ [] a, long /*@Nullable*/ [] b) {
     if (a == null) {
       if (b == null) {
-        return new long[0];
+        return new @PolyDet long @PolyDet [0];
       } else {
         return b;
       }
@@ -2014,8 +2015,7 @@ public final class ArraysPlume {
       if (b == null) {
         return a;
       } else {
-        /*@PolyAll*/ @Det long @PolyDet [] result =
-            new @Det long @PolyDet [a.length + b.length];
+        /*@PolyAll*/ @PolyDet long @PolyDet [] result = new @PolyDet long @PolyDet [a.length + b.length];
 
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
@@ -2035,7 +2035,7 @@ public final class ArraysPlume {
   public static short[] concat(short /*@Nullable*/ [] a, short /*@Nullable*/ [] b) {
     if (a == null) {
       if (b == null) {
-        return new short[0];
+        return new @PolyDet short @PolyDet [0];
       } else {
         return b;
       }
@@ -2043,8 +2043,7 @@ public final class ArraysPlume {
       if (b == null) {
         return a;
       } else {
-        /*@PolyAll*/ @Det short @PolyDet [] result =
-            new @Det short @PolyDet [a.length + b.length];
+        /*@PolyAll*/ @PolyDet short @PolyDet [] result = new @PolyDet short @PolyDet [a.length + b.length];
 
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
@@ -2334,7 +2333,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet), Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean noDuplicates(boolean[] a) {
     HashSet<Boolean> hs = new HashSet<Boolean>();
@@ -2358,7 +2357,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean noDuplicates(byte[] a) {
     HashSet<Byte> hs = new HashSet<Byte>();
@@ -2382,7 +2381,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean noDuplicates(char[] a) {
     HashSet<Character> hs = new HashSet<Character>();
@@ -2406,7 +2405,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean noDuplicates(float[] a) {
     HashSet<Float> hs = new HashSet<Float>();
@@ -2430,7 +2429,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean noDuplicates(short[] a) {
     HashSet<Short> hs = new HashSet<Short>();
@@ -2454,7 +2453,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean noDuplicates(int[] a) {
     HashSet<Integer> hs = new HashSet<Integer>();
@@ -2479,7 +2478,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean noDuplicates(double[] a) {
     HashSet<Double> hs = new HashSet<Double>();
@@ -2503,7 +2502,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean noDuplicates(long[] a) {
     HashSet<Long> hs = new HashSet<Long>();
@@ -2527,7 +2526,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean noDuplicates(String[] a) {
     HashSet<String> hs = new HashSet<String>();
@@ -2550,7 +2549,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean noDuplicates(Object[] a) {
     HashSet<Object> hs = new HashSet<Object>();
@@ -2574,7 +2573,7 @@ public final class ArraysPlume {
    * @param a a list
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static <T> @PolyDet("down") boolean noDuplicates(List<T> a) {
     HashSet<T> hs = new HashSet<T>();
@@ -2603,7 +2602,7 @@ public final class ArraysPlume {
   /*@Pure*/
   public static @PolyDet("down") boolean fn_is_permutation(int[] a) {
     // In the common case we expect to succeed, so use as few loops as possible
-    boolean[] see = new boolean[a.length];
+    @PolyDet boolean @PolyDet [] see = new @PolyDet boolean @PolyDet [a.length];
     for (int i = 0; i < a.length; i++) {
       int n = a[i];
       if (n < 0 || n >= a.length || see[n]) {
@@ -2660,8 +2659,9 @@ public final class ArraysPlume {
    * @throws IllegalArgumentException if a value of a is outside of arange
    * @exception UnsupportedOperationException when the function is not invertible
    */
+  @SuppressWarnings("determinism") // Constructor parameters.
   public static int[] fn_inverse(int[] a, /*@NonNegative*/ int arange) {
-    int[] result = new int[arange];
+    @PolyDet int @PolyDet [] result = new @PolyDet int @PolyDet [arange];
     Arrays.fill(result, -1);
     for (int i = 0; i < a.length; i++) {
       int ai = a[i];
@@ -2690,7 +2690,7 @@ public final class ArraysPlume {
   @SuppressWarnings("nullness") // https://tinyurl.com/cfissue/1654
   public static /*@PolyAll*/ int /*@SameLen("#1")*/[] fn_compose(
       /*@IndexFor("#2")*/ int[] a, /*@PolyAll*/ int[] b) {
-    /*@PolyAll*/ int[] result = new int[a.length];
+    /*@PolyAll*/ @PolyDet int @PolyDet [] result = new @PolyDet int @PolyDet [a.length];
     for (int i = 0; i < a.length; i++) {
       result[i] = b[a[i]];
     }
@@ -2708,7 +2708,7 @@ public final class ArraysPlume {
    */
   public static int /*@SameLen("#1")*/[] partial_fn_compose(
       /*@IndexOrLow("#2")*/ int[] a, int[] b) {
-    int[] result = new int[a.length];
+    @PolyDet int @PolyDet [] result = new @PolyDet int @PolyDet [a.length];
     for (int i = 0; i < a.length; i++) {
       int inner = a[i];
       if (inner == -1) {
@@ -2737,7 +2737,7 @@ public final class ArraysPlume {
    * @param bigger second set to test
    * @return true iff smaller is a subset of bigger
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean isSubset(long[] smaller, long[] bigger) {
     Set<Long> setBigger = new HashSet<Long>();
@@ -2769,7 +2769,7 @@ public final class ArraysPlume {
    * @param bigger second set to test
    * @return true iff smaller is a subset of bigger
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean isSubset(double[] smaller, double[] bigger) {
     Set<Double> setBigger = new HashSet<Double>();
@@ -2801,7 +2801,7 @@ public final class ArraysPlume {
    * @param bigger second set to test
    * @return true iff smaller is a subset of bigger
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet). Collections add issue.
   /*@Pure*/
   public static @PolyDet("down") boolean isSubset(String[] smaller, String[] bigger) {
     Set<String> setBigger = new HashSet<String>();
@@ -3004,7 +3004,7 @@ public final class ArraysPlume {
      */
     /*@Pure*/
     @SuppressWarnings(
-        "override.param.invalid") // CF bug: doesn't expand annotations on array elements with @Poly
+        {"override.param.invalid", "determinism"}) // Nested generic types. CF bug: doesn't expand annotations on array elements with @Poly
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyAll(1) T[], @PolyAll(2) T[]), but the
@@ -3184,7 +3184,7 @@ public final class ArraysPlume {
      */
     /*@Pure*/
     @SuppressWarnings(
-        "override.param.invalid") // CF bug: doesn't expand annotations on array elements with @Poly
+        {"override.param.invalid", "determinism"}) // Nested generic types. CF bug: doesn't expand annotations on array elements with @Poly
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyAll(1) T[], @PolyAll(2) T[]), but the
@@ -3389,6 +3389,7 @@ public final class ArraysPlume {
    */
   // "p.addToPart(i, ...)" is OK: i is < numNonemptyParts
   //  and p.size() = numNonemptyParts + numEmptyParts, both of which are non-negative.
+  @SuppressWarnings("determinism") // Collections add issue.
   public static <T extends /*@NonNull*/ Object> List<Partitioning<T>> partitionIntoHelper(
       Queue<T> elts,
       List</*@ LengthIs("#3")*/ Partitioning<T>> resultSoFar,
@@ -3449,6 +3450,7 @@ public final class ArraysPlume {
     }
 
     /** The set that has being partitioned. */
+    @SuppressWarnings("determinism") // Collections add issue.
     List<T> partitionedSet() {
       List<T> result = new ArrayList<T>();
       for (List<T> part : this) {
@@ -3465,6 +3467,7 @@ public final class ArraysPlume {
     }
 
     /** Returns a new partition just like this one, but with elt added to the ith part. */
+    @SuppressWarnings("determinism") // Collections add issue.
     Partitioning<T> addToPart(/*@NonNegative*/ int i, T elt) {
       Partitioning<T> result = new Partitioning<T>(this);
       if (size() == i) {
