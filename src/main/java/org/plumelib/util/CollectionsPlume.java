@@ -77,8 +77,9 @@ public final class CollectionsPlume {
   }
 
   /** All calls to deepEquals that are currently underway. */
-  private static HashSet<WeakIdentityPair<Object, Object>> deepEqualsUnderway =
-      new HashSet<WeakIdentityPair<Object, Object>>();
+  @SuppressWarnings("determinism") // Allows for local declarations in deepEquals methods to make sense.
+  private static HashSet<WeakIdentityPair<@PolyDet Object, @PolyDet Object>> deepEqualsUnderway =
+      new HashSet<WeakIdentityPair<@PolyDet Object, @PolyDet Object>>();
 
   /**
    * Determines deep equality for the elements.
@@ -132,8 +133,8 @@ public final class CollectionsPlume {
       return Arrays.equals((short[]) o1, (short[]) o2);
     }
 
-    @SuppressWarnings({"purity", "lock"}) // creates local state
-    WeakIdentityPair<Object, Object> mypair = new WeakIdentityPair<Object, Object>(o1, o2);
+    @SuppressWarnings({"purity", "lock", "determinism"}) // creates local state. Collections add issue.
+    WeakIdentityPair<@PolyDet Object, @PolyDet Object> mypair = new WeakIdentityPair<@PolyDet Object, @PolyDet Object>(o1, o2);
     if (deepEqualsUnderway.contains(mypair)) {
       return true;
     }
@@ -178,6 +179,7 @@ public final class CollectionsPlume {
    * @param e an enumeration to convert to a ArrayList
    * @return a vector containing the elements of the enumeration
    */
+  @SuppressWarnings("determinism") // Collections add bug.
   public static <T> ArrayList<T> makeArrayList(Enumeration<T> e) {
     ArrayList<T> result = new ArrayList<T>();
     while (e.hasMoreElements()) {
@@ -240,6 +242,7 @@ public final class CollectionsPlume {
    * @param objs list of elements to create combinations of
    * @return list of lists of length dims, each of which combines elements from objs
    */
+  @SuppressWarnings("determinism") // Collections add issue.
   public static <T> List<List<T>> create_combinations(
       /*@Positive*/ int dims, /*@NonNegative*/ int start, List<T> objs) {
 
@@ -296,6 +299,7 @@ public final class CollectionsPlume {
    * @param cnt maximum element value
    * @return list of lists of length arity, each of which combines integers from start to cnt
    */
+  @SuppressWarnings("determinism") // Collections add issue.
   public static ArrayList<ArrayList<Integer>> create_combinations(
       int arity, /*@NonNegative*/ int start, int cnt) {
 
@@ -613,11 +617,13 @@ public final class CollectionsPlume {
    * @param random the Random instance to use to make selections
    * @return list of num_elts elements from itor
    */
+  @SuppressWarnings("determinism") // Extra qualifier on genreic type.
   public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int num_elts, Random random) {
     // The elements are chosen with the following probabilities,
     // where n == num_elts:
     //   n n/2 n/3 n/4 n/5 ...
 
+    @SuppressWarnings("determinism") // Constructor parameters.
     RandomSelector<T> rs = new RandomSelector<T>(num_elts, random);
 
     while (itor.hasNext()) {
@@ -661,6 +667,7 @@ public final class CollectionsPlume {
    * @return the old value, before it was incremented
    * @throws Error if the key is in the Map but maps to a non-Integer
    */
+  @SuppressWarnings("determinism") // Collections add bug.
   public static <T> /*@Nullable*/ Integer incrementMap(Map<T, Integer> m, T key, int count) {
     Integer old = m.get(key);
     int new_total;
