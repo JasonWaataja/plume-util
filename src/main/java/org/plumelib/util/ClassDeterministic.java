@@ -29,7 +29,7 @@ public class ClassDeterministic {
    * @return the class's annotations
    */
   public static @Det Annotation @Det [] getAnnotations(Class<?> c) {
-    @Det Annotation @Det [] result = c.getAnnotations();
+    @Det Annotation @OrderNonDet [] result = c.getAnnotations();
     Arrays.sort(result, annotationComparator);
     return result;
   }
@@ -78,8 +78,8 @@ public class ClassDeterministic {
    * @return the class's enum constants
    */
   @SuppressWarnings("nullness:argument.type.incompatible") //  comparator handles null
-  public static <T> T /*@Nullable*/ [] getEnumConstants(Class<T> c) {
-    T[] result = c.getEnumConstants();
+  public static <@PolyDet T extends @PolyDet Object> T /*@Nullable*/ @PolyDet [] getEnumConstants(Class<T> c) {
+    T @PolyDet [] result = c.getEnumConstants();
     if (result == null) {
       return null;
     }
@@ -169,7 +169,7 @@ public class ClassDeterministic {
    * @param <T> the element type
    * @return the sorted list of elements of the given array
    */
-  private <T> List<T> toSortedList(T[] array, Comparator<T> comparator) {
+  private <T extends @Det Object> List<T> toSortedList(T @OrderNonDet [] array, @Det Comparator<T> comparator) {
     List<T> list = new ArrayList<>();
     Collections.addAll(list, array);
     Collections.sort(list, comparator);
@@ -213,8 +213,8 @@ public class ClassDeterministic {
       if (result != 0) {
         return result;
       }
-      Class<?>[] ptypes1 = m1.getParameterTypes();
-      Class<?>[] ptypes2 = m2.getParameterTypes();
+      @PolyDet Class<?> @PolyDet [] ptypes1 = m1.getParameterTypes();
+      @PolyDet Class<?> @PolyDet [] ptypes2 = m2.getParameterTypes();
       result = ptypes1.length - ptypes2.length;
       if (result != 0) {
         return result;
@@ -257,8 +257,8 @@ public class ClassDeterministic {
       if (result != 0) {
         return result;
       }
-      Class<?>[] ptypes1 = c1.getParameterTypes();
-      Class<?>[] ptypes2 = c2.getParameterTypes();
+      @PolyDet Class<?> @PolyDet [] ptypes1 = c1.getParameterTypes();
+      @PolyDet Class<?> @PolyDet [] ptypes2 = c2.getParameterTypes();
       result = ptypes1.length - ptypes2.length;
       if (result != 0) {
         return result;
