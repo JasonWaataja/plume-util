@@ -3003,8 +3003,6 @@ public final class ArraysPlume {
      *     argument is less than, equal to, or greater than the second argument
      */
     /*@Pure*/
-    @SuppressWarnings(
-        {"override.param.invalid", "determinism"}) // Nested generic types. CF bug: doesn't expand annotations on array elements with @Poly
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyAll(1) T[], @PolyAll(2) T[]), but the

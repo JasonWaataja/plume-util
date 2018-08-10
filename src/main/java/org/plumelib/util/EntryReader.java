@@ -520,14 +520,15 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @return the string that was read, or null at end of file
    */
   @Override
-  public /*@Nullable*/ @NonDet String readLine(
+  public /*@Nullable*/ String readLine(
       /*>>>@GuardSatisfied EntryReader this*/) throws IOException {
 
     // System.out.printf ("Entering size = %d%n", readers.size());
 
     // If a line has been pushed back, return it instead
     if (pushback_line != null) {
-      String line = pushback_line;
+      @SuppressWarnings("determinism") // Non-deterministic but forced to comply for overriding.
+      @PolyDet String line = pushback_line;
       pushback_line = null;
       return line;
     }
@@ -560,8 +561,9 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       if (m.matches()) {
         String filename_string = m.group(1);
         if (filename_string == null) {
-          throw new Error(
-              String.format("include_re (%s) does not capture group 1 in %s", include_re, line));
+          @SuppressWarnings("determinism") // Exception constructor parameters.
+          String message = String.format("include_re (%s) does not capture group 1 in %s", include_re, line);
+          throw new Error(message);
         }
         File filename = new File(UtilPlume.expandFilename(filename_string));
         // System.out.printf ("Trying to include filename %s%n", filename);
