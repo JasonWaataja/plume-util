@@ -719,7 +719,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         putback(line);
       }
 
-      @SuppressWarnings("determinism")
+      @SuppressWarnings("determinism") // Constructor parameters.
       @PolyDet Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, false);
       entry = newEntry;
 
@@ -740,7 +740,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         putback(line);
       }
 
-      @SuppressWarnings("determinism")
+      @SuppressWarnings("determinism") // Constructor parameters.
       Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, true);
       entry = newEntry;
     }
