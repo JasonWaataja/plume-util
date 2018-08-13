@@ -3,66 +3,71 @@ package org.plumelib.util;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
-
-/*>>>
-import org.checkerframework.checker.initialization.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Raw;
+import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.checker.determinism.qual.*;
 
 /**
- * Routines for doing approximate ('fuzzy') floating point comparisons. Those are comparisons that
- * only require the floating point numbers to be relatively close to one another to be equal, rather
+ * Routines for doing approximate ('fuzzy') floating-point comparisons. Those are comparisons that
+ * only require the floating-point numbers to be relatively close to one another to be equal, rather
  * than exactly equal.
  *
- * <p>Floating point numbers are compared for equality by dividing them by one another and comparing
- * the ratio. By default they must be within 0.0001 (0.01%) to be considered equal; supply this
- * value to the FuzzyFloat constructor, or set the value with the set_rel_diff method. Note that
- * zero is never equal to a non-zero number using this method.
+ * <p>Floating-point numbers are compared for equality by dividing them by one another and comparing
+ * the ratio. By default, they must be within 0.0001 (0.01%) to be considered equal.
+ *
+ * <p>Zero is never considered equal to a non-zero number, no matter how small its value.
  *
  * <p>Two NaN floats are not considered equal (consistent with the == operator).
  */
 public class FuzzyFloat {
 
-  /** Minimum ratio between two floats that will act as equal. */
-  double min_ratio = 0.9999;
-  /** Maximum ratio between two floats that will act as equal. */
-  double max_ratio = 1.0001;
+  /** Default relative difference between two values such that this class considers them equal. */
+  double DEFAULT_RELATIVE_RATIO = .0001;
+
+  /** Minimum ratio between two floats, such that this class considers them equal. */
+  double minRatio;
+  /** Maximum ratio between two floats, such that this class considers them equal. */
+  double maxRatio;
 
   /**
-   * True if ratio test turned off. This occurs exactly if the class is instantiated with the
-   * relative difference 0.
+   * True if this class does approximate (fuzzy) arithmetic comparisons. If false, this class does
+   * exact matching
+   *
+   * <p>ratio test turned off. This occurs exactly if the class is instantiated with the relative
+   * difference 0.
    */
-  boolean off = false;
+  boolean exactComparisons = false;
 
-  /** Creates a FuzzyFloat with the default rel_diff value of .0001. */
-  public FuzzyFloat() {}
+  /** Creates a FuzzyFloat with the default relativeRatio value of .0001. */
+  public FuzzyFloat() {
+    setRelativeRatio(DEFAULT_RELATIVE_RATIO);
+  }
 
   /**
    * Creates a FuzzyFloat. Specify the specific relative difference allowed between two floats in
-   * order for them to be equal. The default is 0.0001 a relative diff of zero, disables it (i.e.,
-   * only exact matches work).
+   * order for them to be equal. The default is 0.0001. A relative diff of zero, disables it (i.e.,
+   * this class's methods work just like regular Java arithmetic comparisons).
    *
-   * @param rel_diff the relative diff to use
+   * @param relativeRatio the relative diff to use; see {@link #setRelativeRatio}
    */
-  public FuzzyFloat(@Det double rel_diff) {
-    set_rel_diff(rel_diff);
+  public FuzzyFloat(@Det double relativeRatio) {
+    setRelativeRatio(relativeRatio);
   }
 
   /**
    * Set all the fields of this class.
    *
-   * @param rel_diff the new relative diff to use
+   * @param relativeRatio the new relative diff to use; a number near zero (zero is also permitted,
+   *     which requires exact matching rather than permitting fuzzy matching)
    * @see #FuzzyFloat
    */
-  public void set_rel_diff(/*>>> @UnknownInitialization @Raw FuzzyFloat this,*/ @Det double rel_diff) {
-    min_ratio = 1 - rel_diff;
-    max_ratio = 1 + rel_diff;
-    off = (rel_diff == 0.0);
-    // System.out.println ("min_ratio = " + min_ratio + ", max_ratio = "
-    //                    + max_ratio);
+  public void setRelativeRatio(@UnknownInitialization @Raw FuzzyFloat this, @Det double relativeRatio) {
+    minRatio = 1 - relativeRatio;
+    maxRatio = 1 + relativeRatio;
+    exactComparisons = (relativeRatio == 0.0);
+    // System.out.println ("minRatio = " + minRatio + ", maxRatio = "
+    //                    + maxRatio);
 
   }
 
@@ -71,14 +76,13 @@ public class FuzzyFloat {
    * (consistent with the == operator).
    *
    * <p>Note that if one of the numbers if 0.0, then the other number must be less than the square
-   * of the fuzzy ratio. This policy accommodates round off errors in floating point values.
+   * of the fuzzy ratio. This policy accommodates roundoff errors in floating-point values.
    *
    * @param d1 the first value to compare
    * @param d2 the second value to compare
    * @return true if d1 and d2 are considered equal, false otherwise
    */
-
-  /*@Pure*/
+  @Pure
   public boolean eq(double d1, double d2) {
 
     // NaNs are not considered equal.
@@ -88,7 +92,7 @@ public class FuzzyFloat {
 
     // if zero was specified for a ratio, don't do the divide.  You might
     // get slightly different answers.  And this should be faster.
-    if (off) {
+    if (exactComparisons) {
       return (d1 == d2);
     }
 
@@ -98,26 +102,25 @@ public class FuzzyFloat {
       return (true);
     }
 
-    // when one number is 0, check that the other is less than the square
-    // of the fuzzy ration (accommodates round off errors in floating point
-    // values)
+    // When one number is 0, require that the other is less than the square of the fuzzy ratio.
+    // This heuristic accommodates roundoff errors in floating-point values.
 
     if (d1 == 0.0 || d2 == 0.0) {
 
-      double zero_tolerance = Math.pow((max_ratio - 1), 2);
+      double zeroTolerance = Math.pow((maxRatio - 1), 2);
 
       if (d1 == 0.0) {
 
-        return (Math.abs(d2) < zero_tolerance);
+        return (Math.abs(d2) < zeroTolerance);
 
       } else {
 
-        return (Math.abs(d1) < zero_tolerance);
+        return (Math.abs(d1) < zeroTolerance);
       }
     }
 
     double ratio = d1 / d2;
-    return ((ratio >= min_ratio) && (ratio <= max_ratio));
+    return ((ratio >= minRatio) && (ratio <= maxRatio));
   }
 
   /**
@@ -128,7 +131,7 @@ public class FuzzyFloat {
    * @return whether d1 and d2 are non-equal
    * @see #eq
    */
-  /*@Pure*/
+  @Pure
   public boolean ne(double d1, double d2) {
     return (!eq(d1, d2));
   }
@@ -142,7 +145,7 @@ public class FuzzyFloat {
    * @return whether d1 &lt; d2
    * @see #eq
    */
-  /*@Pure*/
+  @Pure
   public boolean lt(double d1, double d2) {
     return ((d1 < d2) && ne(d1, d2));
   }
@@ -156,7 +159,7 @@ public class FuzzyFloat {
    * @return whether d1 &le; d2
    * @see #eq
    */
-  /*@Pure*/
+  @Pure
   public boolean lte(double d1, double d2) {
     return ((d1 <= d2) || eq(d1, d2));
   }
@@ -170,7 +173,7 @@ public class FuzzyFloat {
    * @return whether d1 &gt; d2
    * @see #eq
    */
-  /*@Pure*/
+  @Pure
   public boolean gt(double d1, double d2) {
     return ((d1 > d2) && ne(d1, d2));
   }
@@ -183,7 +186,7 @@ public class FuzzyFloat {
    * @return whether d1 &ge; d2
    * @see #eq
    */
-  /*@Pure*/
+  @Pure
   public boolean gte(double d1, double d2) {
     return ((d1 >= d2) || eq(d1, d2));
   }
@@ -198,7 +201,7 @@ public class FuzzyFloat {
    *     the array
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
-  /*@Pure*/
+  @Pure
   public int indexOf(double[] a, double elt) {
     for (int i = 0; i < a.length; i++) {
       if (eq(elt, a[i])) {
@@ -219,13 +222,13 @@ public class FuzzyFloat {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    * @see java.lang.String#indexOf(java.lang.String)
    */
-  /*@Pure*/
+  @Pure
   public int indexOf(double[] a, double[] sub) {
 
-    int a_index_max = a.length - sub.length;
+    int aIndexMax = a.length - sub.length;
 
     outer:
-    for (int i = 0; i <= a_index_max; i++) {
+    for (int i = 0; i <= aIndexMax; i++) {
       for (int j = 0; j < sub.length; j++) {
         if (ne(a[i + j], sub[j])) {
           continue outer;
@@ -248,7 +251,7 @@ public class FuzzyFloat {
    * @return true if a1 and a2 are set equivalent, false otherwise
    */
   @SuppressWarnings({"purity", "lock"}) // side effect to local state (arrays)
-  /*@Pure*/
+  @Pure
   public boolean isElemMatch(double[] a1, double[] a2) {
 
     // don't change our parameters
@@ -338,7 +341,7 @@ public class FuzzyFloat {
      * @param a2 the second array to compare
      * @return positive if o1 &gt; 02, 0 if o1 == o2, negative if o1 &lt; o2
      */
-    /*@Pure*/
+    @Pure
     @Override
     public int compare(double[] a1, double[] a2) {
       if (a1 == a2) {
@@ -366,7 +369,7 @@ public class FuzzyFloat {
    *     bigger, false otherwise
    */
   @SuppressWarnings({"purity", "lock"}) // side effect to local state (arrays)
-  /*@Pure*/
+  @Pure
   public boolean isSubset(double[] smaller, double[] bigger) {
 
     // don't change our parameters

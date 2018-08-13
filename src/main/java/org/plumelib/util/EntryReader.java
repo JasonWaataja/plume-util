@@ -17,13 +17,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.index.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.regex.qual.*;
-*/
+import org.checkerframework.checker.index.qual.GTENegativeOne;
+import org.checkerframework.checker.index.qual.IndexOrLow;
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.checker.determinism.qual.*;
 
 // TODO:
@@ -66,7 +67,7 @@ import org.checkerframework.checker.determinism.qual.*;
  * }
  * }</pre>
  *
- * @see #get_entry() and @see #set_entry_start_stop(String,String)
+ * @see #getEntry() and @see #setEntryStartStop(String,String)
  */
 @SuppressWarnings("IterableAndIterator")
 public class EntryReader extends LineNumberReader implements Iterable<String>, Iterator<String> {
@@ -76,25 +77,25 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
   ///
 
   /** Regular expression that specifies an include file. */
-  private final /*@Nullable*/ /*@Regex(1)*/ Pattern include_re;
+  private final @Nullable @Regex(1) Pattern includeRegex;
 
   /** Regular expression that matches a comment. */
-  private final /*@Nullable*/ Pattern comment_re;
+  private final @Nullable Pattern commentRegex;
 
   /**
    * Regular expression that starts a long entry.
    *
    * <p>If the first line of an entry matches this regexp, then the entry is terminated by: {@link
-   * #entry_stop_re}, another line that matches {@code entry_start_re} (even not following a
+   * #entryStopRegex}, another line that matches {@code entryStartRegex} (even not following a
    * newline), or the end of the current file.
    *
    * <p>Otherwise, the first line of an entry does NOT match this regexp (or the regexp is null), in
    * which case the entry is terminated by a blank line or the end of the current file.
    */
-  public /*@MonotonicNonNull*/ /*@Regex(1)*/ Pattern entry_start_re = null;
+  public @MonotonicNonNull @Regex(1) Pattern entryStartRegex = null;
 
-  /** @see #entry_start_re */
-  public /*@MonotonicNonNull*/ Pattern entry_stop_re = null;
+  /** @see #entryStartRegex */
+  public @MonotonicNonNull Pattern entryStopRegex = null;
 
   ///
   /// Internal implementation variables
@@ -104,7 +105,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
   private final ArrayDeque<FlnReader> readers = new ArrayDeque<FlnReader>();
 
   /** Line that is pushed back to be reread. */
-  /*@Nullable*/ @NonDet String pushback_line = null;
+  @Nullable @NonDet String pushbackLine = null;
 
   /** Platform-specific line separator. */
   private static final @NonDet String lineSep = System.getProperty("line.separator");
@@ -137,7 +138,9 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
      * Create a FlnReader.
      *
      * @param filename file from which to read
+     * @throws IOException if there is trobule reading the file
      */
+    // TODO: Fix above typo.
     public FlnReader(@Det String filename) throws IOException {
       super(UtilPlume.fileReader(filename));
       this.filename = filename;
@@ -147,52 +150,52 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
   /** Descriptor for an entry (record, paragraph, etc.). */
   public static class Entry {
     /** First line of the entry. */
-    public String first_line;
+    public final String firstLine;
     /** Complete body of the entry including the first line. */
-    public String body;
+    public final String body;
     /** True if this is a short entry (blank-line-separated). */
-    boolean short_entry;
+    public final boolean shortEntry;
     /** Filename in which the entry was found. */
-    String filename;
+    public final String filename;
     /** Line number of first line of entry. */
-    long line_number;
+    public final long lineNumber;
 
     /**
      * Create an entry.
      *
-     * @param first_line first line of the entry
+     * @param firstLine first line of the entry
      * @param body complete body of the entry including the first line
-     * @param short_entry true if this is a short entry (blank-line-separated)
+     * @param shortEntry true if this is a short entry (blank-line-separated)
      * @param filename filename in which the entry was found
-     * @param line_number line number of first line of entry
+     * @param lineNumber line number of first line of entry
      */
-    Entry(@Det String first_line, @Det String body, @Det String filename, @Det long line_number,
-        @Det boolean short_entry) {
-      this.first_line = first_line;
+    Entry(@Det String firstLine, @Det String body, @Det String filename, @Det long lineNumber,
+        @Det boolean shortEntry) {
+      this.firstLine = firstLine;
       this.body = body;
       this.filename = filename;
-      this.line_number = line_number;
-      this.short_entry = short_entry;
+      this.lineNumber = lineNumber;
+      this.shortEntry = shortEntry;
     }
 
     /**
      * Return a substring of the entry body that matches the specified regular expression. If no
-     * match is found, returns the first_line.
+     * match is found, returns the firstLine.
      *
      * @param re regex to match
      * @return a substring that matches re
      */
-    String get_description(/*@Nullable*/ Pattern re) {
+    public String getDescription(@Nullable Pattern re) {
 
       if (re == null) {
-        return first_line;
+        return firstLine;
       }
 
       Matcher descr = re.matcher(body);
       if (descr.find()) {
         return descr.group();
       } else {
-        return first_line;
+        return firstLine;
       }
     }
   }
@@ -210,9 +213,9 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @param in source from which to read entries
    * @param charsetName the character set to use
    * @param filename non-null file name for stream being read
-   * @param comment_re_string regular expression that matches comments. Any text that matches
-   *     comment_re is removed. A line that is entirely a comment is ignored.
-   * @param include_re_string regular expression that matches include directives. The expression
+   * @param commentRegexString regular expression that matches comments. Any text that matches
+   *     commentRegex is removed. A line that is entirely a comment is ignored.
+   * @param includeRegexString regular expression that matches include directives. The expression
    *     should define one group that contains the include file name.
    * @see #EntryReader(InputStream,String,String,String)
    */
@@ -220,10 +223,10 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       @Det InputStream in,
       @Det String charsetName,
       @Det String filename,
-      @Det /*@Nullable*/ /*@Regex*/ String comment_re_string,
-      @Det /*@Nullable*/ /*@Regex(1)*/ String include_re_string)
+      @Det @Nullable @Regex String commentRegexString,
+      @Det @Nullable @Regex(1) String includeRegexString)
       throws UnsupportedEncodingException {
-    this(new InputStreamReader(in, charsetName), filename, comment_re_string, include_re_string);
+    this(new InputStreamReader(in, charsetName), filename, commentRegexString, includeRegexString);
   }
 
   /**
@@ -247,17 +250,17 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    *
    * @param in source from which to read entries
    * @param filename non-null file name for stream being read
-   * @param comment_re_string regular expression that matches comments. Any text that matches
-   *     comment_re is removed. A line that is entirely a comment is ignored.
-   * @param include_re_string regular expression that matches include directives. The expression
+   * @param commentRegexString regular expression that matches comments. Any text that matches
+   *     commentRegex is removed. A line that is entirely a comment is ignored.
+   * @param includeRegexString regular expression that matches include directives. The expression
    *     should define one group that contains the include file name.
    */
   public EntryReader(
       @Det InputStream in,
       @Det String filename,
-      @Det /*@Nullable*/ /*@Regex*/ String comment_re_string,
-      @Det /*@Nullable*/ /*@Regex(1)*/ String include_re_string) {
-    this(new InputStreamReader(in, UTF_8), filename, comment_re_string, include_re_string);
+      @Det @Nullable @Regex String commentRegexString,
+      @Det @Nullable @Regex(1) String includeRegexString) {
+    this(new InputStreamReader(in, UTF_8), filename, commentRegexString, includeRegexString);
   }
 
   /**
@@ -285,13 +288,13 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
   /** A dummy Reader to be used when null is not acceptable. */
   private static class DummyReader extends Reader {
     @Override
-    public void close(/*>>>@GuardSatisfied DummyReader this*/) {
+    public void close(@GuardSatisfied DummyReader this) {
       // No error, because closing is OK if it appears in try-with-resources.
       // Later maybe create two versions (with and without exception here).
     }
 
     @Override
-    public void mark(/*>>>@GuardSatisfied DummyReader this, */ int readAheadLimit) {
+    public void mark(@GuardSatisfied DummyReader this, int readAheadLimit) {
       throw new Error("DummyReader");
     }
 
@@ -301,24 +304,23 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
     }
 
     @Override
-    public /*@GTENegativeOne*/ int read(/*>>>@GuardSatisfied DummyReader this*/) {
+    public @GTENegativeOne int read(@GuardSatisfied DummyReader this) {
       throw new Error("DummyReader");
     }
 
     @Override
-    public /*@IndexOrLow("#1")*/ int read(/*>>>@GuardSatisfied DummyReader this, */ char[] cbuf) {
+    public @IndexOrLow("#1") int read(@GuardSatisfied DummyReader this, char[] cbuf) {
       throw new Error("DummyReader");
     }
 
     @Override
-    public /*@IndexOrLow("#1")*/ int read(
-        /*>>>@GuardSatisfied DummyReader this, */ char[] cbuf, int off, int len) {
+    public @IndexOrLow("#1") int read(
+        @GuardSatisfied DummyReader this, char[] cbuf, int off, int len) {
       throw new Error("DummyReader");
     }
 
     @Override
-    public /*@GTENegativeOne*/ int read(
-        /*>>>@GuardSatisfied DummyReader this, */ CharBuffer target) {
+    public @GTENegativeOne int read(@GuardSatisfied DummyReader this, CharBuffer target) {
       throw new Error("DummyReader");
     }
 
@@ -328,12 +330,12 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
     }
 
     @Override
-    public void reset(/*>>>@GuardSatisfied DummyReader this*/) {
+    public void reset(@GuardSatisfied DummyReader this) {
       throw new Error("DummyReader");
     }
 
     @Override
-    public long skip(/*>>>@GuardSatisfied DummyReader this, */ long n) {
+    public long skip(@GuardSatisfied DummyReader this, long n) {
       throw new Error("DummyReader");
     }
   }
@@ -343,29 +345,29 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    *
    * @param reader source from which to read entries
    * @param filename file name corresponding to reader, for use in error messages
-   * @param comment_re_string regular expression that matches comments. Any text that matches
-   *     comment_re is removed. A line that is entirely a comment is ignored
-   * @param include_re_string regular expression that matches include directives. The expression
+   * @param commentRegexString regular expression that matches comments. Any text that matches
+   *     commentRegex is removed. A line that is entirely a comment is ignored
+   * @param includeRegexString regular expression that matches include directives. The expression
    *     should define one group that contains the include file name
    */
   public EntryReader(
       @Det Reader reader,
       @Det String filename,
-      @Det /*@Nullable*/ /*@Regex*/ String comment_re_string,
-      @Det /*@Nullable*/ /*@Regex(1)*/ String include_re_string) {
+      @Det @Nullable @Regex String commentRegexString,
+      @Det @Nullable @Regex(1) String includeRegexString) {
     // we won't use superclass methods, but passing null as an argument
     // leads to a NullPointerException.
     super(new DummyReader());
     readers.addFirst(new FlnReader(reader, filename));
-    if (comment_re_string == null) {
-      comment_re = null;
+    if (commentRegexString == null) {
+      commentRegex = null;
     } else {
-      comment_re = Pattern.compile(comment_re_string);
+      commentRegex = Pattern.compile(commentRegexString);
     }
-    if (include_re_string == null) {
-      include_re = null;
+    if (includeRegexString == null) {
+      includeRegex = null;
     } else {
-      include_re = Pattern.compile(include_re_string);
+      includeRegex = Pattern.compile(includeRegexString);
     }
   }
 
@@ -385,18 +387,18 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * Create an EntryReader.
    *
    * @param path initial file to read
-   * @param comment_re regular expression that matches comments. Any text that matches comment_re is
-   *     removed. A line that is entirely a comment is ignored.
-   * @param include_re regular expression that matches include directives. The expression should
+   * @param commentRegex regular expression that matches comments. Any text that matches
+   *     commentRegex is removed. A line that is entirely a comment is ignored.
+   * @param includeRegex regular expression that matches include directives. The expression should
    *     define one group that contains the include file name.
    * @throws IOException if there is a problem reading the file
    */
   public EntryReader(
       @Det Path path,
-      @Det /*@Nullable*/ /*@Regex*/ String comment_re,
-      @Det /*@Nullable*/ /*@Regex(1)*/ String include_re)
+      @Det @Nullable @Regex String commentRegex,
+      @Det @Nullable @Regex(1) String includeRegex)
       throws IOException {
-    this(UtilPlume.fileReader(path), path.toString(), comment_re, include_re);
+    this(UtilPlume.fileReader(path), path.toString(), commentRegex, includeRegex);
   }
 
   /**
@@ -428,18 +430,18 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * Create an EntryReader.
    *
    * @param file initial file to read
-   * @param comment_re regular expression that matches comments. Any text that matches comment_re is
-   *     removed. A line that is entirely a comment is ignored.
-   * @param include_re regular expression that matches include directives. The expression should
+   * @param commentRegex regular expression that matches comments. Any text that matches
+   *     commentRegex is removed. A line that is entirely a comment is ignored.
+   * @param includeRegex regular expression that matches include directives. The expression should
    *     define one group that contains the include file name.
    * @throws IOException if there is a problem reading the file
    */
   public EntryReader(
       @Det File file,
-      @Det /*@Nullable*/ /*@Regex*/ String comment_re,
-      @Det /*@Nullable*/ /*@Regex(1)*/ String include_re)
+      @Det @Nullable @Regex String commentRegex,
+      @Det @Nullable @Regex(1) String includeRegex)
       throws IOException {
-    this(UtilPlume.fileReader(file), file.toString(), comment_re, include_re);
+    this(UtilPlume.fileReader(file), file.toString(), commentRegex, includeRegex);
   }
 
   /**
@@ -471,19 +473,19 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * Create a new EntryReader starting with the specified file.
    *
    * @param filename initial file to read
-   * @param comment_re regular expression that matches comments. Any text that matches {@code
-   *     comment_re} is removed. A line that is entirely a comment is ignored.
-   * @param include_re regular expression that matches include directives. The expression should
+   * @param commentRegex regular expression that matches comments. Any text that matches {@code
+   *     commentRegex} is removed. A line that is entirely a comment is ignored.
+   * @param includeRegex regular expression that matches include directives. The expression should
    *     define one group that contains the include file name.
    * @throws IOException if there is a problem reading the file
    * @see #EntryReader(File,String,String)
    */
   public EntryReader(
       @Det String filename,
-      @Det /*@Nullable*/ /*@Regex*/ String comment_re,
-      @Det /*@Nullable*/ /*@Regex(1)*/ String include_re)
+      @Det @Nullable @Regex String commentRegex,
+      @Det @Nullable @Regex(1) String includeRegex)
       throws IOException {
-    this(new File(filename), comment_re, include_re);
+    this(new File(filename), commentRegex, includeRegex);
   }
 
   /**
@@ -520,23 +522,22 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @return the string that was read, or null at end of file
    */
   @Override
-  public /*@Nullable*/ String readLine(
-      /*>>>@GuardSatisfied EntryReader this*/) throws IOException {
+  public @Nullable String readLine(@GuardSatisfied EntryReader this) throws IOException {
 
     // System.out.printf ("Entering size = %d%n", readers.size());
 
     // If a line has been pushed back, return it instead
-    if (pushback_line != null) {
+    if (pushbackLine != null) {
       @SuppressWarnings("determinism") // Non-deterministic but forced to comply for overriding.
-      @PolyDet String line = pushback_line;
-      pushback_line = null;
+      @PolyDet String line = pushbackLine;
+      pushbackLine = null;
       return line;
     }
 
-    String line = get_next_line();
-    if (comment_re != null) {
+    String line = getNextLine();
+    if (commentRegex != null) {
       while (line != null) {
-        Matcher cmatch = comment_re.matcher(line);
+        Matcher cmatch = commentRegex.matcher(line);
         if (cmatch.find()) {
           line = cmatch.replaceFirst("");
           if (line.length() > 0) {
@@ -545,8 +546,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         } else {
           break;
         }
-        line = get_next_line();
-        // System.out.printf ("get_next_line = %s%n", line);
+        line = getNextLine();
+        // System.out.printf ("getNextLine = %s%n", line);
       }
     }
 
@@ -556,24 +557,24 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
 
     // Handle include files.  Non-absolute pathnames are relative
     // to the including file (the current file)
-    if (include_re != null) {
-      Matcher m = include_re.matcher(line);
+    if (includeRegex != null) {
+      Matcher m = includeRegex.matcher(line);
       if (m.matches()) {
-        String filename_string = m.group(1);
-        if (filename_string == null) {
+        String filenameString = m.group(1);
+        if (filenameString == null) {
           @SuppressWarnings("determinism") // Exception constructor parameters.
-          String message = String.format("include_re (%s) does not capture group 1 in %s", include_re, line);
+          String message = String.format("includeRegex (%s) does not capture group 1 in %s", includeRegex, line);
           throw new Error(message);
         }
-        File filename = new File(UtilPlume.expandFilename(filename_string));
+        File filename = new File(UtilPlume.expandFilename(filenameString));
         // System.out.printf ("Trying to include filename %s%n", filename);
         if (!filename.isAbsolute()) {
           FlnReader reader = readers.getFirst();
-          File current_filename = new File(reader.filename);
-          File current_parent = current_filename.getParentFile();
-          filename = new File(current_parent, filename.toString());
+          File currentFilename = new File(reader.filename);
+          File currentParent = currentFilename.getParentFile();
+          filename = new File(currentParent, filename.toString());
           // System.out.printf ("absolute filename = %s %s %s%n",
-          //                     current_filename, current_parent, filename);
+          //                     currentFilename, currentParent, filename);
         }
         readers.addFirst(new FlnReader(filename.getAbsolutePath()));
         return readLine();
@@ -605,8 +606,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @return whether there is another line to read
    */
   @Override
-  public boolean hasNext(/*>>>@GuardSatisfied EntryReader this*/) {
-    if (pushback_line != null) {
+  public boolean hasNext(@GuardSatisfied EntryReader this) {
+    if (pushbackLine != null) {
       return true;
     }
 
@@ -632,7 +633,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @throws NoSuchElementException at end of file
    */
   @Override
-  public String next(/*>>>@GuardSatisfied EntryReader this*/) {
+  public String next(@GuardSatisfied EntryReader this) {
     try {
       String result = readLine();
       if (result != null) {
@@ -647,20 +648,19 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
 
   /** remove() is not supported. */
   @Override
-  public void remove(/*>>>@GuardSatisfied EntryReader this*/) {
+  public void remove(@GuardSatisfied EntryReader this) {
     throw new UnsupportedOperationException("can't remove lines from file");
   }
 
   /**
    * Returns the next entry (paragraph) in the file. Entries are separated by blank lines unless the
-   * entry started with {@link #entry_start_re} (see {@link #set_entry_start_stop}). If no more
+   * entry started with {@link #entryStartRegex} (see {@link #setEntryStartStop}). If no more
    * entries are available, returns null.
    *
    * @return the next entry (paragraph) in the file
    * @throws IOException if there is a problem reading the file
    */
-  public /*@Nullable*/ @NonDet Entry get_entry(
-      /*>>>@GuardSatisfied EntryReader this*/) throws IOException {
+  public @Nullable @NonDet Entry getEntry(@GuardSatisfied EntryReader this) throws IOException {
 
     // Skip any preceding blank lines
     String line = readLine();
@@ -674,34 +674,34 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
     StringBuilder body = new StringBuilder(10000);
     @NonDet Entry entry = null;
     String filename = getFileName();
-    long line_number = getLineNumber();
+    long lineNumber = getLineNumber();
 
-    // If first line matches entry_start_re, this is a long entry.
-    /*@Regex(1)*/ Matcher entry_match = null;
-    if (entry_start_re != null) {
-      entry_match = entry_start_re.matcher(line);
+    // If first line matches entryStartRegex, this is a long entry.
+    @Regex(1) Matcher entryMatch = null;
+    if (entryStartRegex != null) {
+      entryMatch = entryStartRegex.matcher(line);
     }
-    if ((entry_match != null) && entry_match.find()) {
-      assert entry_start_re != null : "@AssumeAssertion(nullness): dependent: entry_match != null";
-      assert entry_stop_re != null
-          : "@AssumeAssertion(nullness): dependent: entry_start_re != null";
+    if ((entryMatch != null) && entryMatch.find()) {
+      assert entryStartRegex != null : "@AssumeAssertion(nullness): dependent: entryMatch != null";
+      assert entryStopRegex != null
+          : "@AssumeAssertion(nullness): dependent: entryStartRegex != null";
 
       // Remove entry match from the line
-      if (entry_match.groupCount() > 0) {
+      if (entryMatch.groupCount() > 0) {
         @SuppressWarnings(
             "nullness") // dependent: groupCount() checked group; https://tinyurl.com/cfissue/291
-        /*@NonNull*/ String match_group_1 = entry_match.group(1);
-        line = entry_match.replaceFirst(match_group_1);
+        @NonNull String matchGroup1 = entryMatch.group(1);
+        line = entryMatch.replaceFirst(matchGroup1);
       }
 
       // Description is the first line
       String description = line;
 
       // Read until we find the termination of the entry
-      Matcher end_entry_match = entry_stop_re.matcher(line);
+      Matcher endEntryMatch = entryStopRegex.matcher(line);
       while ((line != null)
-          && !entry_match.find()
-          && !end_entry_match.find()
+          && !entryMatch.find()
+          && !endEntryMatch.find()
           && filename.equals(getFileName())) {
         body.append(line);
         body.append(lineSep);
@@ -709,18 +709,18 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         if (line == null) {
           break; // end of file serves as entry terminator
         }
-        entry_match = entry_start_re.matcher(line);
-        end_entry_match = entry_stop_re.matcher(line);
+        entryMatch = entryStartRegex.matcher(line);
+        endEntryMatch = entryStopRegex.matcher(line);
       }
 
       // If this entry was terminated by the start of the next one,
       // put that line back
-      if ((line != null) && (entry_match.find(0) || !filename.equals(getFileName()))) {
+      if ((line != null) && (entryMatch.find(0) || !filename.equals(getFileName()))) {
         putback(line);
       }
 
       @SuppressWarnings("determinism")
-      @PolyDet Entry newEntry = new Entry(description, body.toString(), filename, line_number, false);
+      @PolyDet Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, false);
       entry = newEntry;
 
     } else { // blank-separated entry
@@ -741,7 +741,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       }
 
       @SuppressWarnings("determinism")
-      Entry newEntry = new Entry(description, body.toString(), filename, line_number, true);
+      Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, true);
       entry = newEntry;
     }
 
@@ -753,9 +753,9 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * Returns null if there is no more input.
    *
    * @return next line from the reader, or null if there is no more input
+   * @throws IOException if there is trouble with the reader
    */
-  private /*@Nullable*/ String get_next_line(
-      /*>>>@GuardSatisfied EntryReader this*/) throws IOException {
+  private @Nullable String getNextLine(@GuardSatisfied EntryReader this) throws IOException {
 
     if (readers.size() == 0) {
       return (null);
@@ -779,7 +779,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    *
    * @return the current filename
    */
-  public String getFileName(/*>>>@GuardSatisfied EntryReader this*/) {
+  public String getFileName(@GuardSatisfied EntryReader this) {
     FlnReader ri = readers.peekFirst();
     if (ri == null) {
       throw new Error("Past end of input");
@@ -793,7 +793,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @return the current line number
    */
   @Override
-  public /*@NonNegative*/ int getLineNumber(/*>>>@GuardSatisfied EntryReader this*/) {
+  public @NonNegative int getLineNumber(@GuardSatisfied EntryReader this) {
     FlnReader ri = readers.peekFirst();
     if (ri == null) {
       throw new Error("Past end of input");
@@ -807,9 +807,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @param lineNumber new line number for the current file
    */
   @Override
-  public void setLineNumber(
-      /*>>>@GuardSatisfied EntryReader this, */
-      /*@NonNegative*/ int lineNumber) {
+  public void setLineNumber(@GuardSatisfied EntryReader this, @NonNegative int lineNumber) {
     FlnReader ri = readers.peekFirst();
     if (ri == null) {
       throw new Error("Past end of input");
@@ -819,30 +817,31 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
 
   /**
    * Set the regular expressions for the start and stop of long entries (multiple lines that are
-   * read as a group by get_entry()).
+   * read as a group by getEntry()).
    *
-   * @param entry_start_re regular expression that starts a long entry
-   * @param entry_stop_re regular expression that ends a long entry
+   * @param entryStartRegex regular expression that starts a long entry
+   * @param entryStopRegex regular expression that ends a long entry
    */
-  public void set_entry_start_stop(
-      /*>>>@GuardSatisfied EntryReader this, */
-      /*@Regex(1)*/ @Det String entry_start_re, /*@Regex*/ @Det String entry_stop_re) {
-    this.entry_start_re = Pattern.compile(entry_start_re);
-    this.entry_stop_re = Pattern.compile(entry_stop_re);
+  public void setEntryStartStop(
+      @GuardSatisfied EntryReader this,
+      @Regex(1) @Det String entryStartRegex,
+      @Regex @Det String entryStopRegex) {
+    this.entryStartRegex = Pattern.compile(entryStartRegex);
+    this.entryStopRegex = Pattern.compile(entryStopRegex);
   }
 
   /**
    * Set the regular expressions for the start and stop of long entries (multiple lines that are
-   * read as a group by get_entry()).
+   * read as a group by getEntry()).
    *
-   * @param entry_start_re regular expression that starts a long entry
-   * @param entry_stop_re regular expression that ends a long entry
+   * @param entryStartRegex regular expression that starts a long entry
+   * @param entryStopRegex regular expression that ends a long entry
    */
-  public void set_entry_start_stop(
-      /*>>>@GuardSatisfied EntryReader this, */
-      /*@Regex(1)*/ @Det Pattern entry_start_re, @Det Pattern entry_stop_re) {
-    this.entry_start_re = entry_start_re;
-    this.entry_stop_re = entry_stop_re;
+  public void setEntryStartStop(
+      @GuardSatisfied EntryReader this,
+      @Regex(1) @Det Pattern entryStartRegex, @Det Pattern entryStopRegex) {
+    this.entryStartRegex = entryStartRegex;
+    this.entryStopRegex = entryStopRegex;
   }
 
   /**
@@ -852,78 +851,78 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    */
   // TODO:  This would probably be better implemented with the "mark" mechanism
   // of BufferedReader (which is also in LineNumberReader and FlnReader).
-  public void putback(/*>>>@GuardSatisfied EntryReader this, */ String line) {
-    assert pushback_line == null
-        : "push back '" + line + "' when '" + pushback_line + "' already back";
-    pushback_line = line;
+  public void putback(@GuardSatisfied EntryReader this, String line) {
+    assert pushbackLine == null
+        : "push back '" + line + "' when '" + pushbackLine + "' already back";
+    pushbackLine = line;
   }
 
   // No Javadoc on these methods, so the Javadoc is inherited.
   @Override
-  public void mark(/*>>>@GuardSatisfied EntryReader this, */ int readAheadLimit) {
+  public void mark(@GuardSatisfied EntryReader this, int readAheadLimit) {
     throw new Error("not yet implemented");
   }
 
   @Override
-  public /*@GTENegativeOne*/ int read(/*>>>@GuardSatisfied EntryReader this*/) {
+  public @GTENegativeOne int read(@GuardSatisfied EntryReader this) {
     throw new Error("not yet implemented");
   }
 
   @Override
-  public /*@IndexOrLow("#1")*/ int read(
-      /*>>>@GuardSatisfied EntryReader this, */ char[] cbuf, int off, int len) {
+  public @IndexOrLow("#1") int read(
+      @GuardSatisfied EntryReader this, char[] cbuf, int off, int len) {
     throw new Error("not yet implemented");
   }
 
   @Override
-  public void reset(/*>>>@GuardSatisfied EntryReader this*/) {
+  public void reset(@GuardSatisfied EntryReader this) {
     throw new Error("not yet implemented");
   }
 
   @Override
-  public long skip(/*>>>@GuardSatisfied EntryReader this, */ long n) {
+  public long skip(@GuardSatisfied EntryReader this, long n) {
     throw new Error("not yet implemented");
   }
 
   /**
    * Simple usage example.
    *
-   * @param args command-line arguments: filename [comment_re [include_re]]
+   * @param args command-line arguments: filename [commentRegex [includeRegex]]
    * @throws IOException if there is a problem reading a file
    */
   public static void main(String[] args) throws IOException {
 
     if (args.length < 1 || args.length > 3) {
       System.err.println(
-          "EntryReader sample program requires 1-3 args: filename [comment_re [include_re]]");
+          "EntryReader sample program requires 1-3 args: filename [commentRegex [includeRegex]]");
       System.exit(1);
     }
     String filename = args[0];
-    String comment_re = null;
-    String include_re = null;
+    String commentRegex = null;
+    String includeRegex = null;
     if (args.length >= 2) {
-      comment_re = args[1];
-      if (!RegexUtil.isRegex(comment_re)) {
+      commentRegex = args[1];
+      if (!RegexUtil.isRegex(commentRegex)) {
         System.err.println(
             "Error parsing comment regex \""
-                + comment_re
+                + commentRegex
                 + "\": "
-                + RegexUtil.regexError(comment_re));
+                + RegexUtil.regexError(commentRegex));
         System.exit(1);
       }
     }
     if (args.length >= 3) {
-      include_re = args[2];
-      if (!RegexUtil.isRegex(include_re, 1)) {
+      includeRegex = args[2];
+      if (!RegexUtil.isRegex(includeRegex, 1)) {
         System.err.println(
             "Error parsing include regex \""
-                + include_re
+                + includeRegex
                 + "\": "
-                + RegexUtil.regexError(include_re));
+                + RegexUtil.regexError(includeRegex));
         System.exit(1);
       }
     }
-    EntryReader reader = new EntryReader(filename, comment_re, include_re);
+    EntryReader reader = new EntryReader(filename, commentRegex, includeRegex);
 
     String line = reader.readLine();
     while (line != null) {

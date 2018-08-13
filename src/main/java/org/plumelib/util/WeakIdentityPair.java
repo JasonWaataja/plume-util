@@ -1,12 +1,10 @@
 package org.plumelib.util;
 
 import java.lang.ref.WeakReference;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Immutable pair class: type-safely holds two objects of possibly-different types.
@@ -16,12 +14,21 @@ import org.checkerframework.dataflow.qual.*;
  */
 public class WeakIdentityPair<T1, T2> {
 
+  /** The first element of the pair. */
   private final WeakReference<T1> a;
+  /** The second element of the pair. */
   private final WeakReference<T2> b;
 
+  /** The hash code of this. */
   // Must cache the hashCode to prevent it from changing.
   private final int hashCode;
 
+  /**
+   * Creates a new weakly-held pair of {@code a} and {@code b}.
+   *
+   * @param a the first element of the pair
+   * @param b the second element of the pair
+   */
   public WeakIdentityPair(T1 a, T2 b) {
     if (a == null || b == null) {
       throw new IllegalArgumentException(
@@ -55,8 +62,8 @@ public class WeakIdentityPair<T1, T2> {
    *
    * @return the first element of the pail, or null if it has been garbage-collected
    */
-  /*@SideEffectFree*/
-  public /*@Nullable*/ T1 getA(/*>>>@GuardSatisfied WeakIdentityPair<T1,T2> this*/) {
+  @SideEffectFree
+  public @Nullable T1 getA(@GuardSatisfied WeakIdentityPair<T1, T2> this) {
     return a.get();
   }
 
@@ -65,24 +72,23 @@ public class WeakIdentityPair<T1, T2> {
    *
    * @return the second element of the pair, or null if it has been garbage-collected
    */
-  /*@SideEffectFree*/
-  public /*@Nullable*/ T2 getB(/*>>>@GuardSatisfied WeakIdentityPair<T1,T2> this*/) {
+  @SideEffectFree
+  public @Nullable T2 getB(@GuardSatisfied WeakIdentityPair<T1, T2> this) {
     return b.get();
   }
 
   @Override
-  /*@SideEffectFree*/
-  public String toString(/*>>>@GuardSatisfied WeakIdentityPair<T1,T2> this*/) {
+  @SideEffectFree
+  public String toString(@GuardSatisfied WeakIdentityPair<T1, T2> this) {
     return "<" + String.valueOf(a) + "," + String.valueOf(b) + ">";
   }
 
   @Override
   @SuppressWarnings({"interning", "not.deterministic.call", "lock"})
   // not @Deterministic: values can change by being garbage-collected
-  /*@SideEffectFree*/
+  @SideEffectFree
   public boolean equals(
-      /*>>>@GuardSatisfied WeakIdentityPair<T1,T2> this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+      @GuardSatisfied WeakIdentityPair<T1, T2> this, @GuardSatisfied @Nullable Object obj) {
     if (!(obj instanceof WeakIdentityPair<?, ?>)) {
       return false;
     }
@@ -94,10 +100,10 @@ public class WeakIdentityPair<T1, T2> {
       return false;
     }
 
-    /*@Nullable*/ T1 a = getA();
-    /*@Nullable*/ T2 b = getB();
-    /*@Nullable*/ T1 oa = other.getA();
-    /*@Nullable*/ T2 ob = other.getB();
+    @Nullable T1 a = getA();
+    @Nullable T2 b = getB();
+    @Nullable T1 oa = other.getA();
+    @Nullable T2 ob = other.getB();
     if (a == null || b == null || oa == null || ob == null) {
       // false if any of the components has been garbage-collected
       return false;
@@ -106,8 +112,8 @@ public class WeakIdentityPair<T1, T2> {
   }
 
   @Override
-  /*@Pure*/
-  public int hashCode(/*>>>@GuardSatisfied WeakIdentityPair<T1,T2> this*/) {
+  @Pure
+  public int hashCode(@GuardSatisfied WeakIdentityPair<T1, T2> this) {
     return hashCode;
   }
 }

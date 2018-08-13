@@ -20,16 +20,12 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-/*>>>
-import org.checkerframework.checker.index.qual.*;
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.checker.regex.qual.*;
-import org.checkerframework.checker.signature.qual.*;
-import org.checkerframework.common.value.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.index.qual.Positive;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.checker.determinism.qual.*;
 
 /** Utility functions for Collections, ArrayList, Iterator, and Map. */
@@ -40,6 +36,7 @@ public final class CollectionsPlume {
     throw new Error("do not instantiate");
   }
 
+  /** The system-specific line separator string. */
   private static final @NonDet String lineSep = System.getProperty("line.separator");
 
   ///////////////////////////////////////////////////////////////////////////
@@ -97,8 +94,8 @@ public final class CollectionsPlume {
    * @return true iff o1 and o2 are deeply equal
    */
   @SuppressWarnings({"purity", "lock"}) // side effect to static field deepEqualsUnderway
-  /*@Pure*/
-  public static boolean deepEquals(/*@Nullable*/ Object o1, /*@Nullable*/ Object o2) {
+  @Pure
+  public static boolean deepEquals(@Nullable Object o1, @Nullable Object o2) {
     @SuppressWarnings("interning")
     boolean sameObject = (o1 == o2);
     if (sameObject) {
@@ -221,14 +218,14 @@ public final class CollectionsPlume {
    * specified objects starting at index {@code start} over {@code dims} dimensions, for {@code dims
    * > 0}.
    *
-   * <p>For example, create_combinations(1, 0, {a, b, c}) returns a 3-element list of singleton
+   * <p>For example, createCombinations(1, 0, {a, b, c}) returns a 3-element list of singleton
    * lists:
    *
    * <pre>
    *    {a}, {b}, {c}
    * </pre>
    *
-   * And create_combinations(2, 0, {a, b, c}) returns a 6-element list of 2-element lists:
+   * And createCombinations(2, 0, {a, b, c}) returns a 6-element list of 2-element lists:
    *
    * <pre>
    *    {a, a}, {a, b}, {a, c}
@@ -243,8 +240,8 @@ public final class CollectionsPlume {
    * @return list of lists of length dims, each of which combines elements from objs
    */
   @SuppressWarnings("determinism") // Collections add issue.
-  public static <T> List<List<T>> create_combinations(
-      /*@Positive*/ int dims, /*@NonNegative*/ int start, List<T> objs) {
+  public static <T> List<List<T>> createCombinations(
+      @Positive int dims, @NonNegative int start, List<T> objs) {
 
     if (dims < 1) {
       throw new IllegalArgumentException();
@@ -263,7 +260,7 @@ public final class CollectionsPlume {
         simple.add(objs.get(i));
         results.add(simple);
       } else {
-        List<List<T>> combos = create_combinations(dims - 1, i, objs);
+        List<List<T>> combos = createCombinations(dims - 1, i, objs);
         for (List<T> lt : combos) {
           List<T> simple = new ArrayList<T>();
           simple.add(objs.get(i));
@@ -280,13 +277,13 @@ public final class CollectionsPlume {
    * Returns a list of lists of each combination (with repetition, but not permutations) of integers
    * from start to cnt (inclusive) over arity dimensions.
    *
-   * <p>For example, create_combinations(1, 0, 2) returns a 3-element list of singleton lists:
+   * <p>For example, createCombinations(1, 0, 2) returns a 3-element list of singleton lists:
    *
    * <pre>
    *    {0}, {1}, {2}
    * </pre>
    *
-   * And create_combinations(2, 10, 2) returns a 6-element list of 2-element lists:
+   * And createCombinations(2, 10, 2) returns a 6-element list of 2-element lists:
    *
    * <pre>
    *    {10, 10}, {10, 11}, {10, 12}, {11, 11}, {11, 12}, {12, 12}
@@ -300,8 +297,8 @@ public final class CollectionsPlume {
    * @return list of lists of length arity, each of which combines integers from start to cnt
    */
   @SuppressWarnings("determinism") // Collections add issue.
-  public static ArrayList<ArrayList<Integer>> create_combinations(
-      int arity, /*@NonNegative*/ int start, int cnt) {
+  public static ArrayList<ArrayList<Integer>> createCombinations(
+      int arity, @NonNegative int start, int cnt) {
 
     long numResults = choose(cnt + arity - 1, arity);
     if (numResults > 100000000) {
@@ -317,7 +314,7 @@ public final class CollectionsPlume {
     }
 
     for (int i = start; i <= cnt; i++) {
-      ArrayList<ArrayList<Integer>> combos = create_combinations(arity - 1, i, cnt);
+      ArrayList<ArrayList<Integer>> combos = createCombinations(arity - 1, i, cnt);
       for (ArrayList<Integer> li : combos) {
         ArrayList<Integer> simple = new ArrayList<Integer>();
         simple.add(i);
@@ -366,24 +363,30 @@ public final class CollectionsPlume {
 
   /** Converts an Enumeration into an Iterator. */
   public static final class EnumerationIterator<T> implements Iterator<T> {
+    /** The enumeration that this object wraps. */
     Enumeration<T> e;
 
+    /**
+     * Create an Iterator that yields the elements of the given Enumeration.
+     *
+     * @param e the Enumeration to make into an Iterator
+     */
     public EnumerationIterator(@Det Enumeration<T> e) {
       this.e = e;
     }
 
     @Override
-    public boolean hasNext(/*>>>@GuardSatisfied EnumerationIterator<T> this*/) {
+    public boolean hasNext(@GuardSatisfied EnumerationIterator<T> this) {
       return e.hasMoreElements();
     }
 
     @Override
-    public @PolyDet("up") T next(/*>>>@GuardSatisfied EnumerationIterator<T> this*/) {
+    public @PolyDet("up") T next(@GuardSatisfied EnumerationIterator<T> this) {
       return e.nextElement();
     }
 
     @Override
-    public void remove(/*>>>@GuardSatisfied EnumerationIterator<T> this*/) {
+    public void remove(@GuardSatisfied EnumerationIterator<T> this) {
       throw new UnsupportedOperationException();
     }
   }
@@ -391,8 +394,14 @@ public final class CollectionsPlume {
   /** Converts an Iterator into an Enumeration. */
   @SuppressWarnings("JdkObsolete")
   public static final class IteratorEnumeration<T> implements Enumeration<T> {
+    /** The iterator that this object wraps. */
     Iterator<T> itor;
 
+    /**
+     * Create an Enumeration that contains the elements returned by the given Iterator.
+     *
+     * @param itor the Iterator to make an Enumeration from
+     */
     public IteratorEnumeration(@Det Iterator<T> itor) {
       this.itor = itor;
     }
@@ -415,20 +424,29 @@ public final class CollectionsPlume {
    * two arguments.
    */
   public static final class MergedIterator2<T> implements Iterator<T> {
-    Iterator<T> itor1, itor2;
+    /** The first of the two iterators that this object merges. */
+    Iterator<T> itor1;
+    /** The second of the two iterators that this object merges. */
+    Iterator<T> itor2;
 
-    public MergedIterator2(@Det Iterator<T> itor1_, @Det Iterator<T> itor2_) {
-      this.itor1 = itor1_;
-      this.itor2 = itor2_;
+    /**
+     * Create an iterator that returns the elements of {@code itor1} then those of {@code itor2}.
+     *
+     * @param itor1 an Iterator
+     * @param itor2 another Iterator
+     */
+    public MergedIterator2(@Det Iterator<T> itor1, @Det Iterator<T> itor2) {
+      this.itor1 = itor1;
+      this.itor2 = itor2;
     }
 
     @Override
-    public @PolyDet("down") boolean hasNext(/*>>>@GuardSatisfied MergedIterator2<T> this*/) {
+    public @PolyDet("down") boolean hasNext(@GuardSatisfied MergedIterator2<T> this) {
       return (itor1.hasNext() || itor2.hasNext());
     }
 
     @Override
-    public @PolyDet("up") T next(/*>>>@GuardSatisfied MergedIterator2<T> this*/) {
+    public @PolyDet("up") T next(@GuardSatisfied MergedIterator2<T> this) {
       if (itor1.hasNext()) {
         return itor1.next();
       } else if (itor2.hasNext()) {
@@ -439,7 +457,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public void remove(/*>>>@GuardSatisfied MergedIterator2<T> this*/) {
+    public void remove(@GuardSatisfied MergedIterator2<T> this) {
       throw new UnsupportedOperationException();
     }
   }
@@ -451,17 +469,25 @@ public final class CollectionsPlume {
    * of iterators.
    */
   public static final class MergedIterator<T> implements Iterator<T> {
+    /** The iterators that this object merges. */
     Iterator<Iterator<T>> itorOfItors;
 
+    /**
+     * Create an iterator that returns the elements of the given iterators, in turn.
+     *
+     * @param itorOfItors an iterator whose elements are iterators; this MergedIterator will merge
+     *     them all
+     */
     public MergedIterator(@Det Iterator<Iterator<T>> itorOfItors) {
       this.itorOfItors = itorOfItors;
     }
 
-    // an empty iterator to prime the pump
+    /** The current iterator (from {@link #itorOfItors}) that is being iterated over. */
+    // Initialize to an empty iterator to prime the pump.
     Iterator<T> current = new ArrayList<T>().iterator();
 
     @Override
-    public @PolyDet("down") boolean hasNext(/*>>>@GuardSatisfied MergedIterator<T> this*/) {
+    public @PolyDet("down") boolean hasNext(@GuardSatisfied MergedIterator<T> this) {
       while ((!current.hasNext()) && (itorOfItors.hasNext())) {
         current = itorOfItors.next();
       }
@@ -469,13 +495,13 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public @PolyDet("up") T next(/*>>>@GuardSatisfied MergedIterator<T> this*/) {
+    public @PolyDet("up") T next(@GuardSatisfied MergedIterator<T> this) {
       hasNext(); // for side effect
       return current.next();
     }
 
     @Override
-    public void remove(/*>>>@GuardSatisfied MergedIterator<T> this*/) {
+    public void remove(@GuardSatisfied MergedIterator<T> this) {
       throw new UnsupportedOperationException();
     }
   }
@@ -483,35 +509,49 @@ public final class CollectionsPlume {
   /** An iterator that only returns elements that match the given Filter. */
   @SuppressWarnings("assignment.type.incompatible") // problems in DFF branch
   public static final class FilteredIterator<T> implements Iterator<T> {
+    /** The iterator that this object is filtering. */
     Iterator<T> itor;
+    /** The predicate that determines which elements to retain. */
     Filter<T> filter;
 
+    /**
+     * Create an iterator that only returns elements of {@code itor} that match the given Filter.
+     *
+     * @param itor the Iterator to filter
+     * @param filter the predicate that determines which elements to retain
+     */
     public FilteredIterator(Iterator<T> itor, Filter<T> filter) {
       this.itor = itor;
       this.filter = filter;
     }
 
+    /** A marker object, distinct from any object that the iterator can return. */
     @SuppressWarnings("unchecked")
-    T invalid_t = (T) new Object();
+    T invalidT = (T) new Object();
 
-    @Det T current = invalid_t;
-    boolean current_valid = false;
+    /**
+     * The next object that this iterator will yield, or {@link #invalidT} if {@link #currentValid}
+     * is false.
+     */
+    @Det T current = invalidT;
+    /** True iff {@link #current} is an object from the wrapped iterator. */
+    boolean currentValid = false;
 
     @Override
-    public @PolyDet("down") boolean hasNext(/*>>>@GuardSatisfied FilteredIterator<T> this*/) {
-      while ((!current_valid) && itor.hasNext()) {
+    public @PolyDet("down") boolean hasNext(@GuardSatisfied FilteredIterator<T> this) {
+      while ((!currentValid) && itor.hasNext()) {
         current = itor.next();
-        current_valid = filter.accept(current);
+        currentValid = filter.accept(current);
       }
-      return current_valid;
+      return currentValid;
     }
 
     @Override
-    public @PolyDet("up") T next(/*>>>@GuardSatisfied FilteredIterator<T> this*/) {
+    public @PolyDet("up") T next(@GuardSatisfied FilteredIterator<T> this) {
       if (hasNext()) {
-        current_valid = false;
+        currentValid = false;
         @SuppressWarnings("interning")
-        boolean ok = (current != invalid_t);
+        boolean ok = (current != invalidT);
         assert ok;
         return current;
       } else {
@@ -520,7 +560,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public void remove(/*>>>@GuardSatisfied FilteredIterator<T> this*/) {
+    public void remove(@GuardSatisfied FilteredIterator<T> this) {
       throw new UnsupportedOperationException();
     }
   }
@@ -531,15 +571,24 @@ public final class CollectionsPlume {
    */
   @SuppressWarnings("assignment.type.incompatible") // problems in DFF branch
   public static final class RemoveFirstAndLastIterator<T> implements Iterator<T> {
+    /** The wrapped iterator. */
     Iterator<T> itor;
-    // I don't think this works, because the iterator might itself return null
-    // /*@Nullable*/ T nothing = (/*@Nullable*/ T) null;
+    /** A marker object, distinct from any object that the iterator can return. */
     @SuppressWarnings("unchecked")
     T nothing = (T) new Object();
+    // I don't think this works, because the iterator might itself return null
+    // @Nullable T nothing = (@Nullable T) null;
 
+    /** The first object yielded by the wrapped iterator. */
     T first = nothing;
+    /** The next object that this iterator will return. */
     @Det T current = nothing;
 
+    /**
+     * Create an iterator just like {@code itor}, except without its first and last elements.
+     *
+     * @param itor an itorator whose first and last elements to discard
+     */
     public RemoveFirstAndLastIterator(Iterator<T> itor) {
       this.itor = itor;
       if (itor.hasNext()) {
@@ -551,12 +600,12 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public @PolyDet("down") boolean hasNext(/*>>>@GuardSatisfied RemoveFirstAndLastIterator<T> this*/) {
+    public @PolyDet("down") boolean hasNext(@GuardSatisfied RemoveFirstAndLastIterator<T> this) {
       return itor.hasNext();
     }
 
     @Override
-    public @PolyDet("up") T next(/*>>>@GuardSatisfied RemoveFirstAndLastIterator<T> this*/) {
+    public @PolyDet("up") T next(@GuardSatisfied RemoveFirstAndLastIterator<T> this) {
       if (!itor.hasNext()) {
         throw new NoSuchElementException();
       }
@@ -565,6 +614,12 @@ public final class CollectionsPlume {
       return tmp;
     }
 
+    /**
+     * Return the first element of the iterator that was used to construct this. This value is not
+     * part of this iterator (unless the original iterator would have returned it multiple times).
+     *
+     * @return the first element of the iterator that was used to construct this
+     */
     public T getFirst() {
       @SuppressWarnings("interning") // check for equality to a special value
       boolean invalid = (first == nothing);
@@ -574,9 +629,16 @@ public final class CollectionsPlume {
       return first;
     }
 
-    // Throws an error unless the RemoveFirstAndLastIterator has already
-    // been iterated all the way to its end (so the delegate is pointing to
-    // the last element).  Also, this is buggy when the delegate is empty.
+    /**
+     * Return the last element of the iterator that was used to construct this. This value is not
+     * part of this iterator (unless the original iterator would have returned it multiple times).
+     *
+     * <p>Throws an error unless the RemoveFirstAndLastIterator has already been iterated all the
+     * way to its end (so the delegate is pointing to the last element).
+     *
+     * @return the last element of the iterator that was used to construct this.
+     */
+    // TODO: This is buggy when the delegate is empty.
     public T getLast() {
       if (itor.hasNext()) {
         throw new Error();
@@ -585,46 +647,47 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public void remove(/*>>>@GuardSatisfied RemoveFirstAndLastIterator<T> this*/) {
+    public void remove(@GuardSatisfied RemoveFirstAndLastIterator<T> this) {
       throw new UnsupportedOperationException();
     }
   }
 
   /**
-   * Return a List containing num_elts randomly chosen elements from the iterator, or all the
+   * Return a List containing numElts randomly chosen elements from the iterator, or all the
    * elements of the iterator if there are fewer. It examines every element of the iterator, but
    * does not keep them all in memory.
    *
    * @param <T> type of the iterator elements
    * @param itor elements to be randomly selected from
-   * @param num_elts number of elements to select
-   * @return list of num_elts elements from itor
+   * @param numElts number of elements to select
+   * @return list of numElts elements from itor
    */
-  public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int num_elts) {
-    return randomElements(itor, num_elts, r);
+  public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int numElts) {
+    return randomElements(itor, numElts, r);
   }
 
+  /** The random generator. */
   private static @NonDet Random r = new Random();
 
   /**
-   * Return a List containing num_elts randomly chosen elements from the iterator, or all the
+   * Return a List containing numElts randomly chosen elements from the iterator, or all the
    * elements of the iterator if there are fewer. It examines every element of the iterator, but
    * does not keep them all in memory.
    *
    * @param <T> type of the iterator elements
    * @param itor elements to be randomly selected from
-   * @param num_elts number of elements to select
+   * @param numElts number of elements to select
    * @param random the Random instance to use to make selections
-   * @return list of num_elts elements from itor
+   * @return list of numElts elements from itor
    */
   @SuppressWarnings("determinism") // Extra qualifier on genreic type.
-  public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int num_elts, Random random) {
+  public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int numElts, Random random) {
     // The elements are chosen with the following probabilities,
-    // where n == num_elts:
+    // where n == numElts:
     //   n n/2 n/3 n/4 n/5 ...
 
     @SuppressWarnings("determinism") // Constructor parameters.
-    RandomSelector<T> rs = new RandomSelector<T>(num_elts, random);
+    RandomSelector<T> rs = new RandomSelector<T>(numElts, random);
 
     while (itor.hasNext()) {
       rs.accept(itor.next());
@@ -632,17 +695,17 @@ public final class CollectionsPlume {
     return rs.getValues();
 
     /*
-    ArrayList<T> result = new ArrayList<T>(num_elts);
+    ArrayList<T> result = new ArrayList<T>(numElts);
     int i=1;
-    for (int n=0; n<num_elts && itor.hasNext(); n++, i++) {
+    for (int n=0; n<numElts && itor.hasNext(); n++, i++) {
       result.add(itor.next());
     }
     for (; itor.hasNext(); i++) {
       T o = itor.next();
-      // test random < num_elts/i
-      if (random.nextDouble() * i < num_elts) {
+      // test random < numElts/i
+      if (random.nextDouble() * i < numElts) {
         // This element will replace one of the existing elements.
-        result.set(random.nextInt(num_elts), o);
+        result.set(random.nextInt(numElts), o);
       }
     }
     return result;
@@ -657,26 +720,40 @@ public final class CollectionsPlume {
   // In Python, inlining this gave a 10x speed improvement.
   // Will the same be true for Java?
   /**
-   * Increment the Integer which is indexed by key in the Map. If the key isn't in the Map, it is
-   * added.
+   * Increment the Integer which is indexed by key in the Map. Set the value to 1 if not currently
+   * mapped.
+   *
+   * @param <K> type of keys in the map
+   * @param m map from K to Integer
+   * @param key the key whose value will be incremented
+   * @return the old value, before it was incremented
+   * @throws Error if the key is in the Map but maps to a non-Integer
+   */
+  public static <K> @Nullable Integer incrementMap(Map<K, Integer> m, K key) {
+    return incrementMap(m, key, 1);
+  }
+
+  /**
+   * Increment the Integer which is indexed by key in the Map. Set the value to {@code count} if not
+   * currently mapped.
    *
    * @param <T> type of keys in the map
-   * @param m map to have one of its values incremented
-   * @param key the key for the element whose value will be incremented
+   * @param m map from K to Integer
+   * @param key the key whose value will be incremented
    * @param count how much to increment the value by
    * @return the old value, before it was incremented
    * @throws Error if the key is in the Map but maps to a non-Integer
    */
   @SuppressWarnings("determinism") // Collections add bug.
-  public static <T> /*@Nullable*/ Integer incrementMap(Map<T, Integer> m, T key, int count) {
+  public static <T> @Nullable Integer incrementMap(Map<T, Integer> m, T key, int count) {
     Integer old = m.get(key);
-    int new_total;
+    Integer newTotal;
     if (old == null) {
-      new_total = count;
+      newTotal = count;
     } else {
-      new_total = old.intValue() + count;
+      newTotal = old.intValue() + count;
     }
-    return m.put(key, new_total);
+    return m.put(key, newTotal);
   }
 
   /**
@@ -725,9 +802,9 @@ public final class CollectionsPlume {
    * @param m a map whose keyset will be sorted
    * @return a sorted version of m.keySet()
    */
-  public static <K extends Comparable<? super K>, V> Collection</*@KeyFor("#1")*/ K> sortedKeySet(
+  public static <K extends Comparable<? super K>, V> Collection<@KeyFor("#1") K> sortedKeySet(
       Map<K, V> m) {
-    ArrayList</*@KeyFor("#1")*/ K> theKeys = new ArrayList</*@KeyFor("#1")*/ K>(m.keySet());
+    ArrayList<@KeyFor("#1") K> theKeys = new ArrayList<@KeyFor("#1") K>(m.keySet());
     Collections.sort(theKeys);
     return theKeys;
   }
@@ -741,9 +818,9 @@ public final class CollectionsPlume {
    * @param comparator the Comparator to use for sorting
    * @return a sorted version of m.keySet()
    */
-  public static <K, V> Collection</*@KeyFor("#1")*/ K> sortedKeySet(
+  public static <K, V> Collection<@KeyFor("#1") K> sortedKeySet(
       Map<K, V> m, Comparator<K> comparator) {
-    ArrayList</*@KeyFor("#1")*/ K> theKeys = new ArrayList</*@KeyFor("#1")*/ K>(m.keySet());
+    ArrayList<@KeyFor("#1") K> theKeys = new ArrayList<@KeyFor("#1") K>(m.keySet());
     Collections.sort(theKeys, comparator);
     return theKeys;
   }
@@ -760,7 +837,7 @@ public final class CollectionsPlume {
    * @param key the value to look up in the set
    * @return the object in this set that is equal to key, or null
    */
-  public static /*@Nullable*/ Object getFromSet(Set<?> set, Object key) {
+  public static @Nullable Object getFromSet(Set<?> set, Object key) {
     if (key == null) {
       return null;
     }

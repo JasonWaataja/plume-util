@@ -1,10 +1,9 @@
 package org.plumelib.util;
 
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-import org.checkerframework.checker.nullness.qual.*;
-import org.checkerframework.dataflow.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.determinism.qual.*;
 
 /**
@@ -15,7 +14,7 @@ import org.checkerframework.checker.determinism.qual.*;
  * @param <T1> the type of the first element of the pair
  * @param <T2> the type of the second element of the pair
  */
-public class Pair<T1 extends @Det /*@Nullable*/ Object, T2 extends @Det /*@Nullable*/ Object> {
+public class Pair<T1 extends @Det @Nullable Object, T2 extends @Det @Nullable Object> {
   /** The first element of the pair. */
   public T1 a;
   /** The second element of the pair. */
@@ -41,22 +40,19 @@ public class Pair<T1 extends @Det /*@Nullable*/ Object, T2 extends @Det /*@Nulla
    * @param b second argument
    * @return a pair of the values (a, b)
    */
-  public static <A extends /*@Nullable*/ Object, B extends /*@Nullable*/ Object> Pair<A, B> of(
-      A a, B b) {
+  public static <A extends @Nullable Object, B extends @Nullable Object> Pair<A, B> of(A a, B b) {
     return new Pair<A, B>(a, b);
   }
 
   @Override
-  /*@SideEffectFree*/
-  public String toString(/*>>>@GuardSatisfied Pair<T1,T2> this*/) {
+  @SideEffectFree
+  public String toString(@GuardSatisfied Pair<T1, T2> this) {
     return "<" + String.valueOf(a) + "," + String.valueOf(b) + ">";
   }
 
   @Override
-  /*@Pure*/
-  public boolean equals(
-      /*>>>@GuardSatisfied Pair<T1,T2> this,*/
-      /*@GuardSatisfied*/ /*@Nullable*/ Object obj) {
+  @Pure
+  public boolean equals(@GuardSatisfied Pair<T1, T2> this, @GuardSatisfied @Nullable Object obj) {
     if (!(obj instanceof Pair<?, ?>)) {
       return false;
     }
@@ -71,8 +67,8 @@ public class Pair<T1 extends @Det /*@Nullable*/ Object, T2 extends @Det /*@Nulla
   // (And if they aren't final, it's a bit odd to be calling hashCode.)
   // But then the class would not be useful for mutable pairs.
   @Override
-  /*@Pure*/
-  public @NonDet int hashCode(/*>>>@GuardSatisfied Pair<T1,T2> this*/) {
+  @Pure
+  public @NonDet int hashCode(@GuardSatisfied Pair<T1,T2> this) {
     return (((a == null) ? 0 : a.hashCode()) + ((b == null) ? 0 : b.hashCode()));
   }
 }

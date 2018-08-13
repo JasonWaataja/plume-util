@@ -1,8 +1,6 @@
 package org.plumelib.util;
 
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.determinism.qual.*;
 
 /**
@@ -10,7 +8,7 @@ import org.checkerframework.checker.determinism.qual.*;
  *
  * @param <T> the type of arguments to {@link #accept}.
  */
-public interface Filter<T extends /*@Nullable*/ Object> {
+public interface Filter<T extends @Nullable Object> {
   /**
    * Tests whether a specified Object satisfies the filter.
    *

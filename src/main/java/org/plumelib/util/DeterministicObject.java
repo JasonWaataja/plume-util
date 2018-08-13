@@ -5,10 +5,7 @@ package org.plumelib.util;
 // classes.
 // import java.util.HashMap;
 // import java.util.HashSet;
-
-/*>>>
-import org.checkerframework.checker.lock.qual.*;
-*/
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.determinism.qual.*;
 
 /**
@@ -39,7 +36,7 @@ public class DeterministicObject {
    * the second one has 1, and so forth.
    */
   @Override
-  public @Det int hashCode(/*>>>@GuardSatisfied DeterministicObject this*/) {
+  public @Det int hashCode(@GuardSatisfied DeterministicObject this) {
     return uid;
   }
 }

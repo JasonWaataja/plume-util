@@ -9,15 +9,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.determinism.qual.*;
 
 /** Deterministic versions of Class methods */
 public class ClassDeterministic {
 
+  /** Do not call; this class is a collection of methods and does not represent anything. */
   private ClassDeterministic() {
     throw new Error("do not instantiate");
   }
@@ -78,8 +76,11 @@ public class ClassDeterministic {
    * @return the class's enum constants
    */
   @SuppressWarnings("nullness:argument.type.incompatible") //  comparator handles null
-  public static <@PolyDet T extends @PolyDet Object> T /*@Nullable*/ @PolyDet [] getEnumConstants(Class<T> c) {
+  public static <@PolyDet T extends @PolyDet Object> T @Nullable @PolyDet [] getEnumConstants(Class<T> c) {
     T @PolyDet [] result = c.getEnumConstants();
+    if (result == null) {
+      return null;
+    }
     if (result == null) {
       return null;
     }
@@ -176,6 +177,7 @@ public class ClassDeterministic {
     return list;
   }
 
+  /** Compares Annotation objects by type name. */
   static AnnotationComparator annotationComparator = new AnnotationComparator();
 
   /** Compares Annotation objects by type name. */
@@ -187,6 +189,7 @@ public class ClassDeterministic {
     }
   }
 
+  /** Compares Class objects by fully-qualified name. */
   static ClassComparator classComparator = new ClassComparator();
 
   /** Compares Class objects by fully-qualified name. */
@@ -198,6 +201,10 @@ public class ClassDeterministic {
     }
   }
 
+  /**
+   * Compares Method objects by signature: compares name, number of parameters, parameter type
+   * names, declaring class, and return type (which is necessary to distinguish bridge methods).
+   */
   static MethodComparator methodComparator = new MethodComparator();
 
   /**
@@ -243,6 +250,10 @@ public class ClassDeterministic {
     }
   }
 
+  /**
+   * Compares Constructor objects by signature: compares name, number of parameters, and parameter
+   * type names.
+   */
   static ConstructorComparator constructorComparator = new ConstructorComparator();
 
   /**
@@ -275,6 +286,7 @@ public class ClassDeterministic {
     }
   }
 
+  /** Compares Field objects by name. */
   static FieldComparator fieldComparator = new FieldComparator();
 
   /** Compares Field objects by name. */
@@ -290,6 +302,7 @@ public class ClassDeterministic {
     }
   }
 
+  /** Compares objects by the result of toString(). */
   static ToStringComparator toStringComparator = new ToStringComparator();
 
   /** Compares objects by the result of toString(). */

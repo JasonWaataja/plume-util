@@ -7,10 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-/*>>>
-import org.checkerframework.checker.nullness.qual.*;
-*/
+import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.determinism.qual.*;
 
 /** Graph utility methods. This class does not model a graph: all methods are static. */
@@ -57,20 +55,20 @@ public final class GraphPlume {
    * @param predecessors a graph, represented as a predecessor map
    * @return a map from each node to a list of its pre-dominators
    */
-  public static <T> Map<T, List<T>> dominators(Map<T, List</*@KeyFor("#1")*/ T>> predecessors) {
+  public static <T> Map<T, List<T>> dominators(Map<T, List<@KeyFor("#1") T>> predecessors) {
 
-    // Map</*@KeyFor({"preds","dom"})*/ T,List</*@KeyFor({"preds","dom"})*/ T>> dom
-    //   = new HashMap</*@KeyFor({"preds","dom"})*/ T,List</*@KeyFor({"preds","dom"})*/ T>>();
+    // Map<@KeyFor({"preds","dom"}) T,List<@KeyFor({"preds","dom"}) T>> dom
+    //   = new HashMap<@KeyFor({"preds","dom"}) T,List<@KeyFor({"preds","dom"}) T>>();
     Map<T, List<T>> dom = new HashMap<T, List<T>>();
 
     @SuppressWarnings("keyfor") // every element of pred's value will be a key for dom
-    Map<T, List</*@KeyFor({"dom"})*/ T>> preds = predecessors;
+    Map<T, List<@KeyFor({"dom"}) T>> preds = predecessors;
 
     List<T> nodes = new ArrayList<T>(preds.keySet());
 
     // Compute roots & non-roots, for convenience
-    List</*@KeyFor({"preds","dom"})*/ T> roots = new ArrayList<T>();
-    List</*@KeyFor({"preds","dom"})*/ T> non_roots = new ArrayList<T>();
+    List<@KeyFor({"preds", "dom"}) T> roots = new ArrayList<T>();
+    List<@KeyFor({"preds", "dom"}) T> nonRoots = new ArrayList<T>();
 
     // Initialize result:  for roots just the root, otherwise everything
     for (T node : preds.keySet()) {
@@ -83,10 +81,10 @@ public final class GraphPlume {
         // Initially, set all nodes as dominators;
         // will later remove nodes that aren't dominators.
         dom.put(node, new ArrayList<T>(nodes));
-        non_roots.add(node);
+        nonRoots.add(node);
       }
     }
-    assert roots.size() + non_roots.size() == nodes.size();
+    assert roots.size() + nonRoots.size() == nodes.size();
 
     // Invariants:
     // preds and dom have the same keyset.
@@ -98,30 +96,30 @@ public final class GraphPlume {
     // So, the type of pred is now
     //
     // rather than its original type
-    //   Map<T,List</*@KeyFor("preds")*/ T>> preds
+    //   Map<T,List<@KeyFor("preds") T>> preds
 
     boolean changed = true;
     while (changed) {
       changed = false;
-      for (T node : non_roots) {
-        List<T> new_doms = null;
+      for (T node : nonRoots) {
+        List<T> newDoms = null;
         assert preds.containsKey(node);
         for (T pred : preds.get(node)) {
           assert dom.containsKey(pred);
-          /*@NonNull*/ List<T> dom_of_pred = dom.get(pred);
-          if (new_doms == null) {
-            // make copy because we may side-effect new_doms
-            new_doms = new ArrayList<T>(dom_of_pred);
+          @NonNull List<T> domOfPred = dom.get(pred);
+          if (newDoms == null) {
+            // make copy because we may side-effect newDoms
+            newDoms = new ArrayList<T>(domOfPred);
           } else {
-            new_doms.retainAll(dom_of_pred);
+            newDoms.retainAll(domOfPred);
           }
         }
-        assert new_doms != null
+        assert newDoms != null
             : "@AssumeAssertion(nullness): the loop was entered at least once because this is a non-root, which has at least one predecessor";
-        new_doms.add(node);
+        newDoms.add(node);
         assert dom.containsKey(node);
-        if (!dom.get(node).equals(new_doms)) {
-          dom.put(node, new_doms);
+        if (!dom.get(node).equals(newDoms)) {
+          dom.put(node, newDoms);
           changed = true;
         }
       }
