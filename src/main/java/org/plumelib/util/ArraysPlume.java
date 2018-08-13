@@ -1156,7 +1156,7 @@ public final class ArraysPlume {
       byte[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value="#1", offset="#2 - 1") int length) {
-    @PolyAll byte @PolyDet [] result = new @PolyAll byte @PolyDet [length];
+    @PolyDet byte @PolyDet [] result = new @PolyDet byte @PolyDet [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1175,7 +1175,7 @@ public final class ArraysPlume {
       boolean[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value="#1", offset="#2 - 1") int length) {
-    @PolyAll boolean @PolyDet [] result = new @PolyAll boolean @PolyDet [length];
+    @PolyDet boolean @PolyDet [] result = new @PolyDet boolean @PolyDet [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1194,7 +1194,7 @@ public final class ArraysPlume {
       char[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value="#1", offset="#2 - 1") int length) {
-    @PolyAll char @PolyDet [] result = new @PolyAll char @PolyDet [length];
+    @PolyDet char @PolyDet [] result = new @PolyDet char @PolyDet [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1213,7 +1213,7 @@ public final class ArraysPlume {
       double[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value="#1", offset="#2 - 1") int length) {
-    @PolyAll double @PolyDet [] result = new @PolyAll double @PolyDet [length];
+    @PolyDet double @PolyDet [] result = new @PolyDet double @PolyDet [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1232,7 +1232,7 @@ public final class ArraysPlume {
       float[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value="#1", offset="#2 - 1") int length) {
-    @PolyAll float @PolyDet [] result = new @PolyAll float @PolyDet [length];
+    @PolyDet float @PolyDet [] result = new @PolyDet float @PolyDet [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1251,7 +1251,7 @@ public final class ArraysPlume {
       int[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value="#1", offset="#2 - 1") int length) {
-    @PolyAll int @PolyDet [] result = new @PolyAll int @PolyDet [length];
+    @PolyDet int @PolyDet [] result = new @PolyDet int @PolyDet [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1270,7 +1270,7 @@ public final class ArraysPlume {
       long[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value="#1", offset="#2 - 1") int length) {
-    @PolyAll long @PolyDet [] result = new @PolyAll long @PolyDet [length];
+    @PolyDet long @PolyDet [] result = new @PolyDet long @PolyDet [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1289,7 +1289,7 @@ public final class ArraysPlume {
       short[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value="#1", offset="#2 - 1") int length) {
-    @PolyAll short @PolyDet [] result = new @PolyAll short @PolyDet [length];
+    @PolyDet short @PolyDet [] result = new @PolyDet short @PolyDet [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -2715,7 +2715,7 @@ public final class ArraysPlume {
   @SuppressWarnings("nullness") // https://tinyurl.com/cfissue/1654
   public static @PolyAll int @SameLen("#1")[] fnCompose(
       @IndexFor("#2") int[] a, @PolyAll int[] b) {
-    @PolyAll int @PolyDet [] result = new @PolyDet int @PolyDet [a.length];
+    @PolyAll int @PolyDet [] result = new @PolyAll int @PolyDet [a.length];
     for (int i = 0; i < a.length; i++) {
       result[i] = b[a[i]];
     }
