@@ -1616,7 +1616,7 @@ public final class ArraysPlume {
      *
      * @param theArray the delegate that will be wrapped
      */
-    ListOrArray(T @Nullable [] theArray) {
+    ListOrArray(T @Nullable @Det [] theArray) {
       this.theArray = theArray;
     }
 
@@ -1625,7 +1625,7 @@ public final class ArraysPlume {
      *
      * @param theList the delegate that will be wrapped
      */
-    ListOrArray(@Nullable List<T> theList) {
+    ListOrArray(@Det @Nullable List<T> theList) {
       this.theList = theList;
     }
 
@@ -1844,7 +1844,7 @@ public final class ArraysPlume {
       if (b == null) {
         return a;
       } else {
-        @PolyAll String @PolyDet [] result = new @PolyDet String @PolyDet [a.length + b.length];
+        @PolyAll String @PolyDet [] result = new @PolyAll String @PolyDet [a.length + b.length];
 
         System.arraycopy(a, 0, result, 0, a.length);
         System.arraycopy(b, 0, result, a.length, b.length);
@@ -2715,7 +2715,7 @@ public final class ArraysPlume {
   @SuppressWarnings("nullness") // https://tinyurl.com/cfissue/1654
   public static @PolyAll int @SameLen("#1")[] fnCompose(
       @IndexFor("#2") int[] a, @PolyAll int[] b) {
-    @PolyAll int @PolyDet [] result = new @PolyAll int @PolyDet [a.length];
+    @PolyAll @PolyDet int @PolyDet [] result = new @PolyAll int @PolyDet [a.length];
     for (int i = 0; i < a.length; i++) {
       result[i] = b[a[i]];
     }
@@ -3029,7 +3029,7 @@ public final class ArraysPlume {
      */
     @Pure
     @SuppressWarnings(
-        "override.param.invalid") // CF bug: doesn't expand annotations on array elements with @Poly
+        {"override.param.invalid", "determinism"}) // Extra upper bound with nested types. CF bug: doesn't expand annotations on array elements with @Poly
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyAll(1) T[], @PolyAll(2) T[]), but the
