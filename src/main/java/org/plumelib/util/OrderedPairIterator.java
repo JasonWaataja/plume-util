@@ -90,6 +90,7 @@ public class OrderedPairIterator<T extends @Det Object>
    *
    * @return an element of the first iterator, paired with null
    */
+  @SuppressWarnings("determinism") // Unknown generics error.
   private Pair<@Nullable T, @Nullable T> return1(@GuardSatisfied OrderedPairIterator<T> this) {
     Pair<@Nullable T, @Nullable T> result =
         Pair.<@Nullable T, @Nullable T>of(next1, (@Nullable T) null);
@@ -101,6 +102,7 @@ public class OrderedPairIterator<T extends @Det Object>
    *
    * @return a pair of null and an element of the second iterator
    */
+  @SuppressWarnings("determinism") // Unknown generics error.
   private Pair<@Nullable T, @Nullable T> return2(@GuardSatisfied OrderedPairIterator<T> this) {
     Pair<@Nullable T, @Nullable T> result =
         Pair.<@Nullable T, @Nullable T>of((@Nullable T) null, next2);
@@ -112,6 +114,7 @@ public class OrderedPairIterator<T extends @Det Object>
    *
    * @return a pair containing an element from each iterator
    */
+  @SuppressWarnings("determinism") // Unknown generics error.
   private Pair<@Nullable T, @Nullable T> returnboth(@GuardSatisfied OrderedPairIterator<T> this) {
     Pair<@Nullable T, @Nullable T> result = Pair.<@Nullable T, @Nullable T>of(next1, next2);
     setnext1();

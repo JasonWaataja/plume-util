@@ -53,7 +53,8 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    *
    * @param maxValues the maximum number of values this set will be able to hold; must be positive
    */
-  public LimitedSizeSet(@Positive int maxValues) {
+  @SuppressWarnings("determinism") // Flagging String literal in annotation.
+  public LimitedSizeSet(@Det @Positive int maxValues) {
     if (assertsEnabled && !(maxValues > 0)) {
       throw new IllegalArgumentException("maxValues should be positive, is " + maxValues);
     }
@@ -62,7 +63,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
       "unchecked",
       "value" // https://github.com/kelloggm/checker-framework/issues/174
     })
-    @Nullable T @MinLen(1) [] newValuesArray = (@Nullable T[]) new @Nullable Object[maxValues];
+    @Nullable T @Det @MinLen(1) [] newValuesArray = (@Nullable T[]) new @Nullable Object[maxValues];
     values = newValuesArray;
     numValues = 0;
   }
@@ -93,6 +94,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    *
    * @param s the elements to add to this set
    */
+  @SuppressWarnings("determinism") // Flagging int literal in annotation.
   public void addAll(LimitedSizeSet<? extends T> s) {
     @SuppressWarnings("interning") // optimization; not a subclass of Collection, though
     boolean sameObject = (this == s);
@@ -228,7 +230,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    * @return a LimitedSizeSet that merges the elements of slist
    */
   public static <T> LimitedSizeSet<T> merge(
-      @Positive int maxValues, List<LimitedSizeSet<? extends T>> slist) {
+      @Det @Positive int maxValues, List<LimitedSizeSet<? extends T>> slist) {
     LimitedSizeSet<T> result = new LimitedSizeSet<T>(maxValues);
     for (LimitedSizeSet<? extends T> s : slist) {
       result.addAll(s);
@@ -238,6 +240,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
 
   @SideEffectFree
   @Override
+  @SuppressWarnings("determinism") // Misc, toString should be @PolyDet here.
   public @PolyDet("up") String toString(@GuardSatisfied LimitedSizeSet<T> this) {
     return ("[size="
         + size()

@@ -22,6 +22,7 @@ import org.checkerframework.checker.signature.qual.ClassGetSimpleName;
 import org.checkerframework.checker.signature.qual.FullyQualifiedName;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.bcelutil.JvmUtil;
+import org.checkerframework.checker.determinism.qual.*;
 
 /** Utility functions related to reflection, Class, Method, ClassLoader, and classpath. */
 public final class ReflectionPlume {
@@ -169,6 +170,7 @@ public final class ReflectionPlume {
      * @throws FileNotFoundException if the file does not exist
      * @throws IOException if there is trouble reading the file
      */
+    @SuppressWarnings("determinism") // String format in Excepiton constructor.
     public Class<?> defineClassFromFile(@BinaryName String className, String pathname)
         throws FileNotFoundException, IOException {
       FileInputStream fi = new FileInputStream(pathname);
@@ -260,6 +262,7 @@ public final class ReflectionPlume {
    * @throws ClassNotFoundException if the class is not found
    * @throws NoSuchMethodException if the method is not found
    */
+  @SuppressWarnings("determinism") // Collections add issue, local arrays with maps.
   public static Method methodForName(String method)
       throws ClassNotFoundException, NoSuchMethodException, SecurityException {
 
@@ -291,9 +294,9 @@ public final class ReflectionPlume {
     String all_argnames = method.substring(oparenpos + 1, cparenpos).trim();
     Class<?>[] argclasses = args_seen.get(all_argnames);
     if (argclasses == null) {
-      String[] argnames;
+      @PolyDet String @PolyDet [] argnames;
       if (all_argnames.equals("")) {
-        argnames = new String[0];
+        argnames = new @PolyDet String @PolyDet [0];
       } else {
         argnames = UtilPlume.split(all_argnames, ',');
       }

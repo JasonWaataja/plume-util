@@ -5,6 +5,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Immutable pair class: type-safely holds two objects of possibly-different types.
@@ -21,7 +22,7 @@ public class WeakIdentityPair<T1, T2> {
 
   /** The hash code of this. */
   // Must cache the hashCode to prevent it from changing.
-  private final int hashCode;
+  private final @NonDet int hashCode;
 
   /**
    * Creates a new weakly-held pair of {@code a} and {@code b}.
@@ -84,7 +85,7 @@ public class WeakIdentityPair<T1, T2> {
   }
 
   @Override
-  @SuppressWarnings({"interning", "not.deterministic.call", "lock"})
+  @SuppressWarnings({"interning", "not.deterministic.call", "lock", "determinism"}) // eq on Objects non-deterministic? Make this @NonDet?
   // not @Deterministic: values can change by being garbage-collected
   @SideEffectFree
   public boolean equals(
@@ -113,7 +114,7 @@ public class WeakIdentityPair<T1, T2> {
 
   @Override
   @Pure
-  public int hashCode(@GuardSatisfied WeakIdentityPair<T1, T2> this) {
+  public @NonDet int hashCode(@GuardSatisfied WeakIdentityPair<T1, T2> this) {
     return hashCode;
   }
 }

@@ -152,6 +152,7 @@ public class RandomSelector<T> {
    *
    * @return values
    */
+  @SuppressWarnings("determinism") // Collections add issue.
   public @NonDet List<T> getValues() {
     // avoid concurrent mod errors and rep exposure
     @NonDet ArrayList<T> ret = new ArrayList<T>();

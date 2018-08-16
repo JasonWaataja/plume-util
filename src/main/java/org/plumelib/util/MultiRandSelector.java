@@ -28,7 +28,7 @@ import org.checkerframework.checker.determinism.qual.*;
  * @param <T> the type of elements to be selected among
  * @see RandomSelector
  */
-public class MultiRandSelector<T> {
+public class MultiRandSelector<T extends @Det Object> {
 
   /** Whether to toss a coin or select a given number of elements. */
   private boolean coinTossMode;
@@ -87,7 +87,7 @@ public class MultiRandSelector<T> {
    * @param r the Random instance to use for making random choices
    * @param eq partioner that determines how to partition the objects
    */
-  public MultiRandSelector(double keepProbability, Random r, Partitioner<T, T> eq) {
+  public MultiRandSelector(@Det double keepProbability, @NonDet Random r, @Det Partitioner<T, T> eq) {
     this(r, eq);
     this.coinTossMode = true;
     this.keepProbability = keepProbability;
@@ -109,6 +109,7 @@ public class MultiRandSelector<T> {
    *
    * @param iter contains elements that are added to the pool to select from
    */
+  @SuppressWarnings("determinism") // Extra upper bound on type parameter.
   public void acceptIter(Iterator<T> iter) {
     while (iter.hasNext()) {
       accept(iter.next());
@@ -149,8 +150,9 @@ public class MultiRandSelector<T> {
    *
    * @return an iterator of all objects selected
    */
+  @SuppressWarnings("determinism") // Collections add issue.
   public @NonDet Iterator<T> valuesIter() {
-    ArrayList<T> ret = new ArrayList<T>();
+    @NonDet ArrayList<T> ret = new ArrayList<T>();
     for (RandomSelector<T> rs : map.values()) {
       ret.addAll(rs.getValues());
     }

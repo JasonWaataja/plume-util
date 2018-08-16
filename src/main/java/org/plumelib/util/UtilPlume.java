@@ -63,7 +63,7 @@ public final class UtilPlume {
   }
 
   /** The system-specific line separator string. */
-  private static final String lineSep = System.getProperty("line.separator");
+  private static final @NonDet String lineSep = System.getProperty("line.separator");
 
   ///////////////////////////////////////////////////////////////////////////
   /// BitSet
@@ -494,7 +494,7 @@ public final class UtilPlume {
       return Files.newBufferedWriter(
           Paths.get(filename),
           UTF_8,
-          append ? new StandardOpenOption[] {CREATE, APPEND} : new StandardOpenOption[] {CREATE});
+          append ? new @PolyDet StandardOpenOption @PolyDet [] {CREATE, APPEND} : new @PolyDet StandardOpenOption @PolyDet [] {CREATE});
     }
   }
 
@@ -549,6 +549,7 @@ public final class UtilPlume {
    * @return the contents of {@code filename}, one string per line
    * @throws IOException if there was a problem reading the file
    */
+  @SuppressWarnings("determinism") // Collections add issue.
   public static List<String> fileLines(String filename) throws IOException {
     List<String> textList = new ArrayList<>();
     try (LineNumberReader reader = UtilPlume.lineNumberFileReader(filename)) {
@@ -567,7 +568,7 @@ public final class UtilPlume {
    * @return the inferred line separator used in filename
    * @throws IOException if there is trouble reading the file
    */
-  public static String inferLineSeparator(String filename) throws IOException {
+  public static @NonDet String inferLineSeparator(String filename) throws IOException {
     return inferLineSeparator(new File(filename));
   }
 
@@ -578,7 +579,7 @@ public final class UtilPlume {
    * @return the inferred line separator used in filename
    * @throws IOException if there is trouble reading the file
    */
-  public static String inferLineSeparator(File file) throws IOException {
+  public static @NonDet String inferLineSeparator(File file) throws IOException {
     try (BufferedReader r = UtilPlume.bufferedFileReader(file)) {
       int unix = 0;
       int dos = 0;
@@ -743,7 +744,7 @@ public final class UtilPlume {
    * @param dirName the directory to delete
    * @return true if and only if the file or directory is successfully deleted; false otherwise
    */
-  public static boolean deleteDir(String dirName) {
+  public static @NonDet boolean deleteDir(String dirName) {
     return deleteDir(new File(dirName));
   }
 
@@ -753,8 +754,8 @@ public final class UtilPlume {
    * @param dir the directory to delete
    * @return true if and only if the file or directory is successfully deleted; false otherwise
    */
-  public static boolean deleteDir(File dir) {
-    File[] children = dir.listFiles();
+  public static @NonDet boolean deleteDir(File dir) {
+    @NonDet File @NonDet [] children = dir.listFiles();
     if (children != null) { // null means not a directory, or I/O error occurred.
       for (File child : children) {
         deleteDir(child);
@@ -786,6 +787,7 @@ public final class UtilPlume {
      *
      * @param wildcard a string that must contain exactly one "*"
      */
+    @SuppressWarnings("determinism") // Constructor parameters.
     public WildcardFilter(String wildcard) {
       int astloc = wildcard.indexOf('*');
       if (astloc == -1) {
@@ -806,7 +808,7 @@ public final class UtilPlume {
   }
 
   /** The user's home directory. */
-  static final String userHome = System.getProperty("user.home");
+  static final @NonDet String userHome = System.getProperty("user.home");
 
   /**
    * Does tilde expansion on a file name (to the user's home directory).
@@ -832,7 +834,7 @@ public final class UtilPlume {
    * @param name filename to expand
    * @return expanded filename
    */
-  public static String expandFilename(String name) {
+  public static @NonDet String expandFilename(String name) {
     if (name.contains("~")) {
       return (name.replace("~", userHome));
     } else {
@@ -1150,7 +1152,7 @@ public final class UtilPlume {
    * @param a value to be hashed
    * @return a hash of the arguments
    */
-  public static int hash(@Nullable String a) {
+  public static @NonDet int hash(@Nullable String a) {
     return (a == null) ? 0 : a.hashCode();
   }
 
@@ -1161,7 +1163,7 @@ public final class UtilPlume {
    * @param b value to be hashed
    * @return a hash of the arguments
    */
-  public static int hash(@Nullable String a, @Nullable String b) {
+  public static @NonDet int hash(@Nullable String a, @Nullable String b) {
     long result = 17;
     result = result * 37 + hash(a);
     result = result * 37 + hash(b);
@@ -1176,7 +1178,7 @@ public final class UtilPlume {
    * @param c value to be hashed
    * @return a hash of the arguments
    */
-  public static int hash(@Nullable String a, @Nullable String b, @Nullable String c) {
+  public static @NonDet int hash(@Nullable String a, @Nullable String b, @Nullable String c) {
     long result = 17;
     result = result * 37 + hash(a);
     result = result * 37 + hash(b);
@@ -1190,7 +1192,7 @@ public final class UtilPlume {
    * @param a value to be hashed
    * @return a hash of the arguments
    */
-  public static int hash(@Nullable String @Nullable [] a) {
+  public static @NonDet int hash(@Nullable String @Nullable [] a) {
     long result = 17;
     if (a != null) {
       result = result * 37 + a.length;
@@ -1388,6 +1390,7 @@ public final class UtilPlume {
    * @param delim delimiter to split the string on
    * @return array of length at least 1, containing s split on delimiter
    */
+  @SuppressWarnings("determinism") // Collections add issue.
   public static String[] split(String s, char delim) {
     ArrayList<String> resultList = new ArrayList<String>();
     for (int delimpos = s.indexOf(delim); delimpos != -1; delimpos = s.indexOf(delim)) {
@@ -1409,6 +1412,7 @@ public final class UtilPlume {
    * @param delim delimiter to split the string on
    * @return array of length at least 1, containing s split on delimiter
    */
+  @SuppressWarnings("determinism") // Collections add issue.
   public static String[] split(String s, String delim) {
     int delimlen = delim.length();
     if (delimlen == 0) {
@@ -1472,7 +1476,7 @@ public final class UtilPlume {
    * @param a array of values to concatenate
    * @return the concatenation of the string representations of the values, each on its own line
    */
-  public static String joinLines(Object... a) {
+  public static @NonDet String joinLines(Object... a) {
     return join(a, lineSep);
   }
 
@@ -1508,7 +1512,7 @@ public final class UtilPlume {
    * @param v list of values to concatenate
    * @return the concatenation of the string representations of the values, each on its own line
    */
-  public static String joinLines(List<String> v) {
+  public static @NonDet String joinLines(List<String> v) {
     return join(v, lineSep);
   }
 
@@ -1625,7 +1629,7 @@ public final class UtilPlume {
     } else if (c == '\t') {
       return "\\t";
     } else if (c >= ' ' && c <= '~') {
-      return new String(new char[] {c});
+      return new String(new @PolyDet char @PolyDet [] {c});
     } else if (c < 256) {
       String octal = Integer.toOctalString(c);
       while (octal.length() < 3) {
@@ -1989,6 +1993,7 @@ public final class UtilPlume {
    * @param val a numeric value
    * @return an abbreviated string representation of the value
    */
+
   public static String abbreviateNumber(long val) {
 
     double dval = (double) val;
@@ -2014,8 +2019,8 @@ public final class UtilPlume {
       precision = "1";
     }
 
-    @SuppressWarnings("formatter") // format string computed from precision and mag
-    String result = String.format("%,1." + precision + "f" + mag, dval);
+    @SuppressWarnings({"determinism", "formatter"}) // Format strings, format string computed from precision and mag
+    @PolyDet String result = String.format("%,1." + precision + "f" + mag, dval);
     return result;
   }
 

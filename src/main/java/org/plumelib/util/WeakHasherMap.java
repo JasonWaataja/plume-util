@@ -98,12 +98,14 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 @SuppressWarnings({
   "index",
   "interning",
+  "determinism", // Legacy code.
   "keyfor",
   "lock",
   "nullness",
   "purity",
   "regex"
 }) // old, non-typesafe Sun code, not worth annotating or checking
+
 public final class WeakHasherMap<K, V> extends AbstractMap<K, V> implements Map<K, V> {
 
   /* A WeakHashMap is implemented as a HashMap that maps WeakKeys to values.

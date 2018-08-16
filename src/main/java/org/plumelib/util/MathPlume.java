@@ -949,7 +949,7 @@ public final class MathPlume {
       }
     }
 
-    return new int[] {r, modulus};
+    return new @PolyDet int @PolyDet [] {r, modulus};
   }
 
   /**
@@ -1167,7 +1167,7 @@ public final class MathPlume {
       }
     }
 
-    return new long[] {r, modulus};
+    return new @PolyDet long @PolyDet [] {r, modulus};
   }
 
   /**
@@ -1245,7 +1245,7 @@ public final class MathPlume {
    * @param nums numbers to be excluded; length &gt; 0; may contain duplicates
    * @return the set: [min(nums)..max(nums)] - nums
    */
-  @SuppressWarnings({"purity", "lock"})
+  @SuppressWarnings({"purity", "lock", "determinism"}) // Collections add issue.
   @Pure
   @StaticallyExecutable
   public static int[] missingNumbers(int @MinLen(1) [] nums) {
@@ -1266,7 +1266,7 @@ public final class MathPlume {
         val++;
       }
     }
-    int[] resultArray = new int[resultList.size()];
+    @PolyDet int @PolyDet [] resultArray = new @PolyDet int @PolyDet [resultList.size()];
     for (int i = 0; i < resultArray.length; i++) {
       resultArray[i] = resultList.get(i).intValue();
     }
@@ -1530,7 +1530,7 @@ public final class MathPlume {
     // include it to make this function stand on its own
     for (int m = 2; m <= maxModulus; m++) {
       // System.out.println("Trying m=" + m);
-      boolean[] hasModulus = new boolean[m]; // initialized to false?
+      @PolyDet boolean @PolyDet [] hasModulus = new @PolyDet boolean @PolyDet [m]; // initialized to false?
       int numNonmodulus = m;
       for (int i = 0; i < nums.length; i++) {
         @IndexFor("hasModulus") int rem = modPositive(nums[i], m);
@@ -1548,7 +1548,7 @@ public final class MathPlume {
       }
       // System.out.println("For m=" + m + ", numNonmodulus=" + numNonmodulus);
       if (numNonmodulus == 1) {
-        return new int[] {ArraysPlume.indexOf(hasModulus, false), m};
+        return new @PolyDet int @PolyDet [] {ArraysPlume.indexOf(hasModulus, false), m};
       }
     }
     return null;
@@ -1564,7 +1564,7 @@ public final class MathPlume {
    * @param nums numbers to be excluded; length &gt; 0; may contain duplicates
    * @return the set: [min(nums)..max(nums)] - nums
    */
-  @SuppressWarnings({"purity", "lock"})
+  @SuppressWarnings({"purity", "lock", "determinism"}) // Collections add issues.
   @Pure
   @StaticallyExecutable
   public static long[] missingNumbers(long @MinLen(1) [] nums) {
@@ -1585,7 +1585,7 @@ public final class MathPlume {
         val++;
       }
     }
-    long[] resultArray = new long[resultList.size()];
+    @PolyDet long @PolyDet [] resultArray = new @PolyDet long @PolyDet [resultList.size()];
     for (int i = 0; i < resultArray.length; i++) {
       resultArray[i] = resultList.get(i).longValue();
     }
@@ -1624,10 +1624,11 @@ public final class MathPlume {
      * @param nums a non-empty array
      * @param addEnds if true, include the bracketing endpoints
      */
-    MissingNumbersIteratorLong(long @MinLen(1) [] nums, @Det boolean addEnds) {
+    @SuppressWarnings("determinism") // Setting fields, also weird thing with array defaults.
+    MissingNumbersIteratorLong(@PolyDet long @MinLen(1) @PolyDet [] nums, @Det boolean addEnds) {
       this.addEnds = addEnds;
       { // avoid modifying parameter
-        long[] numsCopy = new long[nums.length];
+        @PolyDet long @PolyDet [] numsCopy = new @PolyDet long @PolyDet [nums.length];
         System.arraycopy(nums, 0, numsCopy, 0, nums.length);
         nums = numsCopy;
       }
@@ -1850,7 +1851,7 @@ public final class MathPlume {
     // include it to make this function stand on its own
     for (int m = 2; m <= maxModulus; m++) {
       // System.out.println("Trying m=" + m);
-      boolean[] hasModulus = new boolean[m]; // initialized to false?
+      @PolyDet boolean @PolyDet [] hasModulus = new @PolyDet boolean @PolyDet [m]; // initialized to false?
       int numNonmodulus = m;
       for (int i = 0; i < nums.length; i++) {
         @IndexFor("hasModulus") int rem = ((int) (modPositive(nums[i], m)));
@@ -1868,7 +1869,7 @@ public final class MathPlume {
       }
       // System.out.println("For m=" + m + ", numNonmodulus=" + numNonmodulus);
       if (numNonmodulus == 1) {
-        return new long[] {ArraysPlume.indexOf(hasModulus, false), m};
+        return new @PolyDet long @PolyDet [] {ArraysPlume.indexOf(hasModulus, false), m};
       }
     }
     return null;

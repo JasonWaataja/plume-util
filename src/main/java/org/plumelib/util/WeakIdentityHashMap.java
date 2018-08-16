@@ -116,7 +116,8 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
   "lock",
   "nullness",
   "purity",
-  "regex"
+  "regex",
+  "determinism" // Legacy code.
 }) // old, non-typesafe Sun code, not worth annotating or checking
 public class WeakIdentityHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V> {
 
