@@ -3,6 +3,8 @@ package org.plumelib.util;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.Iterator;
+import org.checkerframework.checker.determinism.qual.Det;
+import org.checkerframework.checker.determinism.qual.NonDet;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.LTLengthOf;
 import org.checkerframework.checker.index.qual.LessThan;
@@ -15,7 +17,6 @@ import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.common.value.qual.PolyValue;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Utilities for interning objects. Interning is also known as canonicalization or hash-consing: it

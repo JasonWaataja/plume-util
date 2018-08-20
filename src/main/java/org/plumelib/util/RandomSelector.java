@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.checkerframework.checker.determinism.qual.*;
+import org.checkerframework.checker.determinism.qual.Det;
+import org.checkerframework.checker.determinism.qual.NonDet;
 
 /**
  * RandomSelector selects k elements uniformly at random from an arbitrary iterator, using O(k)

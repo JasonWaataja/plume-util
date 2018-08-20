@@ -1,6 +1,6 @@
 package org.plumelib.util;
 
-import org.checkerframework.checker.determinism.qual.*;
+import org.checkerframework.checker.determinism.qual.NonDet;
 
 /**
  * Hasher is intended to work like Comparable: it is an optional argument to a hashing data

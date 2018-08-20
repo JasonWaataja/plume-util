@@ -1,11 +1,11 @@
 package org.plumelib.util;
 
 import java.lang.ref.WeakReference;
+import org.checkerframework.checker.determinism.qual.NonDet;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Immutable pair class: type-safely holds two objects of possibly-different types.

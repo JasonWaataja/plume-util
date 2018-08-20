@@ -1,10 +1,11 @@
 package org.plumelib.util;
 
+import org.checkerframework.checker.determinism.qual.Det;
+import org.checkerframework.checker.determinism.qual.NonDet;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Mutable pair class: type-safely holds two objects of possibly-different types. Defines toStrng(),

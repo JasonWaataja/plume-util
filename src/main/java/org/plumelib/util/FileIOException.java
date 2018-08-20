@@ -3,10 +3,11 @@ package org.plumelib.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import org.checkerframework.checker.determinism.qual.Det;
+import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.determinism.qual.*;
 
 // TODO:  A better name would be LineNumberException.
 // And then it needn't really extend IOException.

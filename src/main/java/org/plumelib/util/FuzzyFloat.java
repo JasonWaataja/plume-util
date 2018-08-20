@@ -3,10 +3,10 @@ package org.plumelib.util;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
+import org.checkerframework.checker.determinism.qual.Det;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Routines for doing approximate ('fuzzy') floating-point comparisons. Those are comparisons that

@@ -5,8 +5,8 @@ package org.plumelib.util;
 // classes.
 // import java.util.HashMap;
 // import java.util.HashSet;
+import org.checkerframework.checker.determinism.qual.Det;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * This is a deterministic version of the {@link Object} class. To remove one source of

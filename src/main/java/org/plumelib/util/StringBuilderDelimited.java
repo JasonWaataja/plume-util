@@ -2,6 +2,7 @@ package org.plumelib.util;
 
 // NEEDS DOCUMENTATION!
 // (Probably mostly Javadoc "see" directives, possibly with first line of relevant method doc.)
+import org.checkerframework.checker.determinism.qual.Det;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.NonNegative;
@@ -9,7 +10,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Like StringBuilder, but adds a delimiter between each pair of strings that are inserted into the

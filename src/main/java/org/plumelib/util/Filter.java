@@ -1,7 +1,8 @@
 package org.plumelib.util;
 
+import org.checkerframework.checker.determinism.qual.NonDet;
+import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.determinism.qual.*;
 
 /**
  * Interface for things that make boolean decisions. This is inspired by java.io.FilenameFilter.
