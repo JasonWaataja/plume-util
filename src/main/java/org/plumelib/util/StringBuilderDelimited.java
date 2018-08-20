@@ -21,7 +21,10 @@ import org.checkerframework.checker.determinism.qual.*;
  *
  * <p>Obsoleted by the Java 8 StringJoiner class. Use only if your code must compile or run under
  * Java 7.
+ *
+ * @deprecated use StringJoiner
  */
+@Deprecated // use StringJoiner
 public class StringBuilderDelimited implements Appendable, CharSequence {
 
   /** The StringBuilder to which this delegates work. */
