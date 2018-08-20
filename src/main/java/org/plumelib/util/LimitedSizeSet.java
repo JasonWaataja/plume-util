@@ -208,7 +208,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
   public LimitedSizeSet<T> clone(@GuardSatisfied LimitedSizeSet<T> this) {
     LimitedSizeSet<T> result;
     try {
-      @SuppressWarnings({"unchecked", "determinism"})
+      @SuppressWarnings({"unchecked", "determinism"}) // Dot operator bug.
       @PolyDet LimitedSizeSet<T> resultAsLss = (LimitedSizeSet<T>) super.clone();
       result = resultAsLss;
     } catch (CloneNotSupportedException e) {
