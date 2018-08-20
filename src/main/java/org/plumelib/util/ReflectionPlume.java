@@ -20,7 +20,7 @@ import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.ClassGetSimpleName;
 import org.checkerframework.checker.signature.qual.FullyQualifiedName;
 import org.checkerframework.dataflow.qual.Pure;
-import org.plumelib.bcelutil.JvmUtil;
+import org.plumelib.signature.Signatures;
 import org.checkerframework.checker.determinism.qual.*;
 
 /** Utility functions related to reflection, Class, Method, ClassLoader, and classpath. */
