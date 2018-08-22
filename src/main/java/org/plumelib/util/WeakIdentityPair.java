@@ -85,8 +85,8 @@ public class WeakIdentityPair<T1, T2> {
   }
 
   @Override
-  @SuppressWarnings({"interning", "not.deterministic.call", "lock", "determinism"}) // eq on Objects non-deterministic? Make this @NonDet?
-  // not @Deterministic: values can change by being garbage-collected
+  @SuppressWarnings({"interning", "not.deterministic.call", "lock", "determinism"})
+  // not @Deterministic or @PolyDet: values can change by being garbage-collected
   @SideEffectFree
   public boolean equals(
       @GuardSatisfied WeakIdentityPair<T1, T2> this, @GuardSatisfied @Nullable Object obj) {

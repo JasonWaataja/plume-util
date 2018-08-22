@@ -98,7 +98,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 @SuppressWarnings({
   "index",
   "interning",
-  "determinism", // Legacy code.
+  "determinism",
   "keyfor",
   "lock",
   "nullness",

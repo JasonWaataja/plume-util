@@ -16,5 +16,5 @@ public interface Filter<T extends @Nullable @NonDet Object> {
    * @param o the object to test
    * @return whether the object satisfies the filter
    */
-  @PolyDet boolean accept(@PolyDet T o);
+  boolean accept(T o);
 }

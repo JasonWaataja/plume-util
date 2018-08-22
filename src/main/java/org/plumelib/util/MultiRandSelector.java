@@ -29,7 +29,7 @@ import org.checkerframework.checker.determinism.qual.NonDet;
  * @param <T> the type of elements to be selected among
  * @see RandomSelector
  */
-public class MultiRandSelector<T extends @Det Object> {
+public class MultiRandSelector<T> {
 
   /** Whether to toss a coin or select a given number of elements. */
   private boolean coinTossMode;
@@ -110,7 +110,7 @@ public class MultiRandSelector<T extends @Det Object> {
    *
    * @param iter contains elements that are added to the pool to select from
    */
-  @SuppressWarnings("determinism") // Extra upper bound on type parameter.
+  @SuppressWarnings("determinism") // known issue, T defaults to @PolyDet here, causing an error
   public void acceptIter(Iterator<T> iter) {
     while (iter.hasNext()) {
       accept(iter.next());
@@ -151,7 +151,7 @@ public class MultiRandSelector<T extends @Det Object> {
    *
    * @return an iterator of all objects selected
    */
-  @SuppressWarnings("determinism") // Collections add issue.
+  @SuppressWarnings("determinism") // adding to a local collection
   public @NonDet Iterator<T> valuesIter() {
     @NonDet ArrayList<T> ret = new ArrayList<T>();
     for (RandomSelector<T> rs : map.values()) {

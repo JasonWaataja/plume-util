@@ -495,7 +495,8 @@ public final class UtilPlume {
       return Files.newBufferedWriter(
           Paths.get(filename),
           UTF_8,
-          append ? new @PolyDet StandardOpenOption @PolyDet [] {CREATE, APPEND} : new @PolyDet StandardOpenOption @PolyDet [] {CREATE});
+          append ? new @PolyDet StandardOpenOption @PolyDet [] {CREATE, APPEND}
+              : new @PolyDet StandardOpenOption @PolyDet [] {CREATE});
     }
   }
 
@@ -550,7 +551,7 @@ public final class UtilPlume {
    * @return the contents of {@code filename}, one string per line
    * @throws IOException if there was a problem reading the file
    */
-  @SuppressWarnings("determinism") // Collections add issue.
+  @SuppressWarnings("determinism") // adding to a local collection
   public static List<String> fileLines(String filename) throws IOException {
     List<String> textList = new ArrayList<>();
     try (LineNumberReader reader = UtilPlume.lineNumberFileReader(filename)) {
@@ -788,7 +789,7 @@ public final class UtilPlume {
      *
      * @param wildcard a string that must contain exactly one "*"
      */
-    @SuppressWarnings("determinism") // Constructor parameters.
+    @SuppressWarnings("determinism") // passing @PolyDet to constructors
     public WildcardFilter(String wildcard) {
       int astloc = wildcard.indexOf('*');
       if (astloc == -1) {
@@ -1391,7 +1392,7 @@ public final class UtilPlume {
    * @param delim delimiter to split the string on
    * @return array of length at least 1, containing s split on delimiter
    */
-  @SuppressWarnings("determinism") // Collections add issue.
+  @SuppressWarnings("determinism") // adding to a local collection
   public static String[] split(String s, char delim) {
     ArrayList<String> resultList = new ArrayList<String>();
     for (int delimpos = s.indexOf(delim); delimpos != -1; delimpos = s.indexOf(delim)) {
@@ -1413,7 +1414,7 @@ public final class UtilPlume {
    * @param delim delimiter to split the string on
    * @return array of length at least 1, containing s split on delimiter
    */
-  @SuppressWarnings("determinism") // Collections add issue.
+  @SuppressWarnings("determinism") // adding to a local collection
   public static String[] split(String s, String delim) {
     int delimlen = delim.length();
     if (delimlen == 0) {
@@ -1587,8 +1588,7 @@ public final class UtilPlume {
       case '\r':
         return "\\r";
       default:
-        @PolyDet char @PolyDet [] arr = new @PolyDet char @PolyDet [] { c};
-        return new String(arr);
+        return new String(new @PolyDet char @PolyDet [] {c});
     }
   }
 
@@ -2020,7 +2020,7 @@ public final class UtilPlume {
       precision = "1";
     }
 
-    @SuppressWarnings({"determinism", "formatter"}) // Format strings, format string computed from precision and mag
+    @SuppressWarnings({"formatter"}) // format string computed from precision and mag
     @PolyDet String result = String.format("%,1." + precision + "f" + mag, dval);
     return result;
   }

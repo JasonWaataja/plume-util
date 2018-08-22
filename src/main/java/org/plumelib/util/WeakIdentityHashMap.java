@@ -110,14 +110,14 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 @SuppressWarnings({
   "unchecked",
   "rawtypes",
+  "determinism",
   "index",
   "interning",
   "keyfor",
   "lock",
   "nullness",
   "purity",
-  "regex",
-  "determinism" // Legacy code.
+  "regex"
 }) // old, non-typesafe Sun code, not worth annotating or checking
 public class WeakIdentityHashMap<K, V> extends AbstractMap<K, V> implements Map<K, V> {
 

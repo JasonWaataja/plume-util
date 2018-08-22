@@ -54,7 +54,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    *
    * @param maxValues the maximum number of values this set will be able to hold; must be positive
    */
-  @SuppressWarnings("determinism") // Flagging String literal in annotation.
+  @SuppressWarnings("determinism") // checker bug, String literal flagged in annotation
   public LimitedSizeSet(@Det @Positive int maxValues) {
     if (assertsEnabled && !(maxValues > 0)) {
       throw new IllegalArgumentException("maxValues should be positive, is " + maxValues);
@@ -95,7 +95,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    *
    * @param s the elements to add to this set
    */
-  @SuppressWarnings("determinism") // Flagging int literal in annotation.
+  @SuppressWarnings("determinism") // checker bug, int literal flagged in annotation
   public void addAll(LimitedSizeSet<? extends T> s) {
     @SuppressWarnings("interning") // optimization; not a subclass of Collection, though
     boolean sameObject = (this == s);
@@ -209,7 +209,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
   public LimitedSizeSet<T> clone(@GuardSatisfied LimitedSizeSet<T> this) {
     LimitedSizeSet<T> result;
     try {
-      @SuppressWarnings({"unchecked", "determinism"}) // Dot operator bug.
+      @SuppressWarnings({"unchecked", "determinism"}) // dot operator bug
       @PolyDet LimitedSizeSet<T> resultAsLss = (LimitedSizeSet<T>) super.clone();
       result = resultAsLss;
     } catch (CloneNotSupportedException e) {
@@ -241,7 +241,8 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
 
   @SideEffectFree
   @Override
-  @SuppressWarnings("determinism") // Misc, toString should be @PolyDet here.
+  @SuppressWarnings("determinism") // ArraysPlume.toString() is incorrectly @NonDet, see
+  // https://github.com/t-rasmud/checker-framework/issues/23
   public @PolyDet("up") String toString(@GuardSatisfied LimitedSizeSet<T> this) {
     return ("[size="
         + size()

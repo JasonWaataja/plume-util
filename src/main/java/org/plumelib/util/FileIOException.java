@@ -281,7 +281,7 @@ public class FileIOException extends IOException {
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied FileIOException this) {
-    @SuppressWarnings("determinism") // Dot operator bug.
+    @SuppressWarnings("determinism") // dot operator bug
     @PolyDet String result = super.toString();
     if (fileName != null) {
       result += " in file " + fileName;

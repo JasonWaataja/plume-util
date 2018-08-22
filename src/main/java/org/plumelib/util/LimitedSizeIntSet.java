@@ -206,9 +206,6 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
   public LimitedSizeIntSet clone(@GuardSatisfied LimitedSizeIntSet this) {
     LimitedSizeIntSet result;
     try {
-      // @SuppressWarnings("determinism")
-      // @PolyDet LimitedSizeIntSet cloned = (LimitedSizeIntSet) super.clone();
-      // result = cloned;
       result = (LimitedSizeIntSet) super.clone();
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen

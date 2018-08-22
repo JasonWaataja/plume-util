@@ -76,9 +76,8 @@ public final class CollectionsPlume {
   }
 
   /** All calls to deepEquals that are currently underway. */
-  @SuppressWarnings("determinism") // Allows for local declarations in deepEquals methods to make sense.
-  private static HashSet<WeakIdentityPair<@PolyDet Object, @PolyDet Object>> deepEqualsUnderway =
-      new HashSet<WeakIdentityPair<@PolyDet Object, @PolyDet Object>>();
+  private static HashSet<WeakIdentityPair<@NonDet Object, @NonDet Object>> deepEqualsUnderway =
+      new HashSet<WeakIdentityPair<@NonDet Object, @NonDet Object>>();
 
   /**
    * Determines deep equality for the elements.
@@ -132,8 +131,9 @@ public final class CollectionsPlume {
       return Arrays.equals((short[]) o1, (short[]) o2);
     }
 
-    @SuppressWarnings({"purity", "lock", "determinism"}) // creates local state. Collections add issue.
-    WeakIdentityPair<@PolyDet Object, @PolyDet Object> mypair = new WeakIdentityPair<@PolyDet Object, @PolyDet Object>(o1, o2);
+    @SuppressWarnings({"purity", "lock"}) // creates local state
+    WeakIdentityPair<@NonDet Object, @NonDet Object> mypair =
+        new WeakIdentityPair<@NonDet Object, @NonDet Object>(o1, o2);
     if (deepEqualsUnderway.contains(mypair)) {
       return true;
     }
@@ -178,7 +178,7 @@ public final class CollectionsPlume {
    * @param e an enumeration to convert to a ArrayList
    * @return a vector containing the elements of the enumeration
    */
-  @SuppressWarnings("determinism") // Collections add bug.
+  @SuppressWarnings("determinism") // adding to a local collection
   public static <T> ArrayList<T> makeArrayList(Enumeration<T> e) {
     ArrayList<T> result = new ArrayList<T>();
     while (e.hasMoreElements()) {
@@ -241,7 +241,7 @@ public final class CollectionsPlume {
    * @param objs list of elements to create combinations of
    * @return list of lists of length dims, each of which combines elements from objs
    */
-  @SuppressWarnings("determinism") // Collections add issue.
+  @SuppressWarnings("determinism") // adding to a local collection
   public static <T> List<List<T>> createCombinations(
       @Positive int dims, @NonNegative int start, List<T> objs) {
 
@@ -298,7 +298,7 @@ public final class CollectionsPlume {
    * @param cnt maximum element value
    * @return list of lists of length arity, each of which combines integers from start to cnt
    */
-  @SuppressWarnings("determinism") // Collections add issue.
+  @SuppressWarnings("determinism") // adding to a local collection
   public static ArrayList<ArrayList<Integer>> createCombinations(
       int arity, @NonNegative int start, int cnt) {
 
@@ -682,13 +682,13 @@ public final class CollectionsPlume {
    * @param random the Random instance to use to make selections
    * @return list of numElts elements from itor
    */
-  @SuppressWarnings("determinism") // Extra qualifier on genreic type.
+  @SuppressWarnings("determinism") // T defaults to @PolyDet when calling rs.accept
   public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int numElts, Random random) {
     // The elements are chosen with the following probabilities,
     // where n == numElts:
     //   n n/2 n/3 n/4 n/5 ...
 
-    @SuppressWarnings("determinism") // Constructor parameters.
+    @SuppressWarnings("determinism") // passing @PolyDet to constructors
     RandomSelector<T> rs = new RandomSelector<T>(numElts, random);
 
     while (itor.hasNext()) {
@@ -739,15 +739,15 @@ public final class CollectionsPlume {
    * Increment the Integer which is indexed by key in the Map. Set the value to {@code count} if not
    * currently mapped.
    *
-   * @param <T> type of keys in the map
+   * @param <K> type of keys in the map
    * @param m map from K to Integer
    * @param key the key whose value will be incremented
    * @param count how much to increment the value by
    * @return the old value, before it was incremented
    * @throws Error if the key is in the Map but maps to a non-Integer
    */
-  @SuppressWarnings("determinism") // Collections add bug.
-  public static <T> @Nullable Integer incrementMap(Map<T, Integer> m, T key, int count) {
+  @SuppressWarnings("determinism") // adding to a local collection
+  public static <K> @Nullable Integer incrementMap(Map<K, Integer> m, K key, int count) {
     Integer old = m.get(key);
     Integer newTotal;
     if (old == null) {

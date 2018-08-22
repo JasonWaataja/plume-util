@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.checkerframework.checker.determinism.qual.NonDet;
 import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -22,8 +23,6 @@ import org.checkerframework.checker.signature.qual.ClassGetSimpleName;
 import org.checkerframework.checker.signature.qual.FullyQualifiedName;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.signature.Signatures;
-
-/** Utility functions related to reflection, Class, Method, ClassLoader, and classpath. */
 
 /** Utility functions related to reflection, Class, Method, ClassLoader, and classpath. */
 public final class ReflectionPlume {
@@ -171,7 +170,8 @@ public final class ReflectionPlume {
      * @throws FileNotFoundException if the file does not exist
      * @throws IOException if there is trouble reading the file
      */
-    @SuppressWarnings("determinism") // String format in Excepiton constructor.
+    @SuppressWarnings("determinism") // passing @Det and then @PolyDet to String.format, see
+    // https://github.com/t-rasmud/checker-framework/issues/24
     public Class<?> defineClassFromFile(@BinaryName String className, String pathname)
         throws FileNotFoundException, IOException {
       FileInputStream fi = new FileInputStream(pathname);
@@ -263,7 +263,7 @@ public final class ReflectionPlume {
    * @throws ClassNotFoundException if the class is not found
    * @throws NoSuchMethodException if the method is not found
    */
-  @SuppressWarnings("determinism") // Collections add issue, local arrays with maps.
+  @SuppressWarnings("determinism") // adding to a local collection
   public static Method methodForName(String method)
       throws ClassNotFoundException, NoSuchMethodException, SecurityException {
 
@@ -302,7 +302,8 @@ public final class ReflectionPlume {
         argnames = UtilPlume.split(all_argnames, ',');
       }
 
-      @MonotonicNonNull Class<?>[] argclasses_tmp = new Class<?>[argnames.length];
+      @MonotonicNonNull @PolyDet Class<?> @PolyDet [] argclasses_tmp =
+          new Class<?> @PolyDet [argnames.length];
       for (int i = 0; i < argnames.length; i++) {
         String bnArgname = argnames[i].trim();
         @ClassGetName String cgnArgname = Signatures.binaryNameToClassGetName(bnArgname);
@@ -480,7 +481,8 @@ public final class ReflectionPlume {
    * @return the least upper bound of the classes of the given objects, or null if all arguments are
    *     null
    */
-  public static <T> @Nullable Class<T> leastUpperBound(List<? extends @Nullable Object> objects) {
+  public static <T> @Nullable Class<T> leastUpperBound(
+      List<? extends @Nullable @NonDet Object> objects) {
     Class<T> result = null;
     for (Object obj : objects) {
       if (obj != null) {

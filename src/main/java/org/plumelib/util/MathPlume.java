@@ -834,7 +834,7 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static @PolyDet int @Nullable @ArrayLen(2) [] modulus(int[] nums) {
+  public static int @Nullable @ArrayLen(2) [] modulus(int[] nums) {
     if (nums.length < 3) {
       return null;
     }
@@ -862,7 +862,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulus(int[])
    */
-  public static @PolyDet int @Nullable @ArrayLen(2) [] modulusInt(Iterator<Integer> itor) {
+  public static int @Nullable @ArrayLen(2) [] modulusInt(Iterator<Integer> itor) {
     if (!itor.hasNext()) {
       return null;
     }
@@ -966,7 +966,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulusStrict(int[], boolean)
    */
-  public static @PolyDet int @Nullable @ArrayLen(2)[] modulusStrictInt(
+  public static int @Nullable @ArrayLen(2) [] modulusStrictInt(
       Iterator<Integer> itor, boolean nonstrictEnds) {
     if (!itor.hasNext()) {
       return null;
@@ -1052,7 +1052,7 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static @PolyDet long @Nullable @ArrayLen(2)[] modulus(long[] nums) {
+  public static long @Nullable @ArrayLen(2) [] modulus(long[] nums) {
     if (nums.length < 3) {
       return null;
     }
@@ -1080,7 +1080,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulus(long[])
    */
-  public static @PolyDet long @Nullable @ArrayLen(2)[] modulusLong(Iterator<Long> itor) {
+  public static @PolyDet long @Nullable @ArrayLen(2) [] modulusLong(Iterator<Long> itor) {
     if (!itor.hasNext()) {
       return null;
     }
@@ -1184,7 +1184,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulusStrict(int[], boolean)
    */
-  public static @PolyDet long @Nullable @ArrayLen(2)[] modulusStrictLong(
+  public static @PolyDet long @Nullable @ArrayLen(2) [] modulusStrictLong(
       Iterator<Long> itor, boolean nonstrictEnds) {
     if (!itor.hasNext()) {
       return null;
@@ -1246,7 +1246,7 @@ public final class MathPlume {
    * @param nums numbers to be excluded; length &gt; 0; may contain duplicates
    * @return the set: [min(nums)..max(nums)] - nums
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // Collections add issue.
+  @SuppressWarnings({"purity", "lock", "determinism"}) // adding to a local collection
   @Pure
   @StaticallyExecutable
   public static int[] missingNumbers(int @MinLen(1) [] nums) {
@@ -1426,7 +1426,7 @@ public final class MathPlume {
   @SuppressWarnings({"purity", "lock"})
   @Pure
   @StaticallyExecutable
-  public static @PolyDet int @Nullable @ArrayLen(2) [] nonmodulusStrict(int @Det [] nums) {
+  public static int @Nullable @ArrayLen(2) [] nonmodulusStrict(int @Det [] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
     // instead of all at once.
@@ -1626,7 +1626,7 @@ public final class MathPlume {
      * @param addEnds if true, include the bracketing endpoints
      */
     @SuppressWarnings("determinism") // Setting fields, also weird thing with array defaults.
-    MissingNumbersIteratorLong(@PolyDet long @MinLen(1) @PolyDet [] nums, @Det boolean addEnds) {
+    MissingNumbersIteratorLong(long @MinLen(1) [] nums, @Det boolean addEnds) {
       this.addEnds = addEnds;
       { // avoid modifying parameter
         @PolyDet long @PolyDet [] numsCopy = new @PolyDet long @PolyDet [nums.length];

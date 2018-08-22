@@ -78,8 +78,9 @@ public class ClassDeterministic {
    * @return the class's enum constants
    */
   @SuppressWarnings("nullness:argument.type.incompatible") //  comparator handles null
-  public static <@PolyDet T extends @PolyDet Object> T @Nullable @PolyDet [] getEnumConstants(Class<T> c) {
-    T @PolyDet [] result = c.getEnumConstants();
+  public static <T> T @Nullable @Det [] getEnumConstants(Class<T> c) {
+    @SuppressWarnings("determinism") // TODO: Get the JDK annotation for this method changed.
+    T @OrderNonDet [] result = c.getEnumConstants();
     if (result == null) {
       return null;
     }
@@ -172,7 +173,7 @@ public class ClassDeterministic {
    * @param <T> the element type
    * @return the sorted list of elements of the given array
    */
-  private <T extends @Det Object> List<T> toSortedList(T @OrderNonDet [] array, @Det Comparator<T> comparator) {
+  private <T> List<T> toSortedList(T @OrderNonDet [] array, @Det Comparator<T> comparator) {
     List<T> list = new ArrayList<>();
     Collections.addAll(list, array);
     Collections.sort(list, comparator);

@@ -530,7 +530,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
 
     // If a line has been pushed back, return it instead
     if (pushbackLine != null) {
-      @SuppressWarnings("determinism") // Non-deterministic but forced to comply for overriding.
+      @SuppressWarnings("determinism") // non-deterministic but superclass requires this method be
+      // @PolyDet, perhaps its JDK annotation should be changed
       @PolyDet String line = pushbackLine;
       pushbackLine = null;
       return line;
@@ -564,7 +565,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       if (m.matches()) {
         String filenameString = m.group(1);
         if (filenameString == null) {
-          @SuppressWarnings("determinism") // Exception constructor parameters.
+          @SuppressWarnings("determinism") // includeRegex is @Det while line is @PolyDet, causing
+          // an error, see https://github.com/t-rasmud/checker-framework/issues/24
           String message = String.format("includeRegex (%s) does not capture group 1 in %s", includeRegex, line);
           throw new Error(message);
         }
@@ -721,7 +723,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         putback(line);
       }
 
-      @SuppressWarnings("determinism") // Constructor parameters.
+      @SuppressWarnings("determinism") // passing @PolyDet to constructors
       @PolyDet Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, false);
       entry = newEntry;
 
@@ -742,7 +744,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         putback(line);
       }
 
-      @SuppressWarnings("determinism") // Constructor parameters.
+      @SuppressWarnings("determinism") // passing @PolyDet to constructors
       Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, true);
       entry = newEntry;
     }
@@ -839,8 +841,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @param entryStartRegex regular expression that starts a long entry
    * @param entryStopRegex regular expression that ends a long entry
    */
-  public void setEntryStartStop(
-      @GuardSatisfied EntryReader this,
+  public void setEntryStartStop(@GuardSatisfied EntryReader this,
       @Regex(1) @Det Pattern entryStartRegex, @Det Pattern entryStopRegex) {
     this.entryStartRegex = entryStartRegex;
     this.entryStopRegex = entryStopRegex;

@@ -15,7 +15,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * @param <T1> the type of the first element of the pair
  * @param <T2> the type of the second element of the pair
  */
-public class Pair<T1 extends @Det @Nullable Object, T2 extends @Det @Nullable Object> {
+public class Pair<T1 extends @Nullable @NonDet Object, T2 extends @Nullable @NonDet Object> {
   /** The first element of the pair. */
   public T1 a;
   /** The second element of the pair. */
@@ -41,18 +41,21 @@ public class Pair<T1 extends @Det @Nullable Object, T2 extends @Det @Nullable Ob
    * @param b second argument
    * @return a pair of the values (a, b)
    */
-  public static <A extends @Nullable Object, B extends @Nullable Object> Pair<A, B> of(A a, B b) {
+  public static <A extends @Nullable @NonDet Object, B extends @Nullable @NonDet Object>
+      Pair<A, B> of(A a, B b) {
     return new Pair<A, B>(a, b);
   }
 
   @Override
   @SideEffectFree
+  @SuppressWarnings("determinism") // operations on generic types become @NonDet
   public String toString(@GuardSatisfied Pair<T1, T2> this) {
     return "<" + String.valueOf(a) + "," + String.valueOf(b) + ">";
   }
 
   @Override
   @Pure
+  @SuppressWarnings("determinism") // operations on generic types become @NonDet
   public boolean equals(@GuardSatisfied Pair<T1, T2> this, @GuardSatisfied @Nullable Object obj) {
     if (!(obj instanceof Pair<?, ?>)) {
       return false;

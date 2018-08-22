@@ -677,7 +677,7 @@ public final class Intern {
    * @param a the array to canonicalize
    * @return a canonical representation for the int[] array
    */
-  @SuppressWarnings({"interning", "purity", "lock", "determinism"}) // Guarantees of interning.
+  @SuppressWarnings({"interning", "purity", "lock", "determinism"}) // properties of interning
   @Pure
   public static int @Interned @PolyValue @SameLen("#1") [] intern(int @PolyValue [] a) {
     // Throwable stack = new Throwable("debug traceback");
@@ -708,7 +708,7 @@ public final class Intern {
    * @param a the array to canonicalize
    * @return a canonical representation for the long[] array
    */
-  @SuppressWarnings({"interning", "purity", "lock", "determinism"}) // Guarantees of interning.
+  @SuppressWarnings({"interning", "purity", "lock", "determinism"}) // properties of interning
   @Pure
   public static long @Interned @PolyValue @SameLen("#1") [] intern(long @PolyValue [] a) {
     // System.out.printf("intern %s %s long[] %s%n", a.getClass(),
@@ -739,7 +739,7 @@ public final class Intern {
   // TODO: JLS 5.1.7 requires that the boxing conversion interns integer
   // values between -128 and 127 (and Double.valueOf is intended to promise
   // the same).  This could take advantage of that.
-  @SuppressWarnings({"interning", "purity", "lock", "determinism"}) // Guarantees of interning.
+  @SuppressWarnings({"interning", "purity", "lock", "determinism"}) // properties of interning
   @Pure
   public static @Interned Double intern(Double a) {
     // Double.NaN == Double.Nan  always evaluates to false.
@@ -796,7 +796,7 @@ public final class Intern {
    * @param a the array to canonicalize
    * @return a canonical representation for the double[] array
    */
-  @SuppressWarnings({"interning", "purity", "lock", "determinism"}) // Guarantees of determinism.
+  @SuppressWarnings({"interning", "purity", "lock", "determinism"}) // properties of interning
   @Pure
   public static double @Interned @PolyValue @SameLen("#1") [] intern(double @PolyValue [] a) {
     WeakReference<double @Interned []> lookup = internedDoubleArrays.get(a);
@@ -828,7 +828,7 @@ public final class Intern {
     "purity",
     "lock",
     "cast",
-    "determinism" // Guarantees of interning.
+    "determinism" // properties of interning
   }) // cast is redundant (except in JSR 308)
   @Pure
   public static @PolyNull @Interned String @Interned @PolyValue @SameLen("#1") [] intern(
@@ -874,7 +874,7 @@ public final class Intern {
     "purity",
     "lock",
     "cast",
-    "determinism" // Guarantees of interning.
+    "determinism" // properties of interning
   }) // cast is redundant (except in JSR 308)
   @Pure
   public static @PolyNull @Interned Object @Interned @PolyValue @SameLen("#1") [] intern(
@@ -952,7 +952,7 @@ public final class Intern {
    * @param end the index of the end of the subsequence to compute and intern
    * @return a subsequence of seq from start to end that is interned
    */
-  @SuppressWarnings("determinism") // Guarantees of interning.
+  @SuppressWarnings("determinism") // properties of interning
   public static int @Interned [] internSubsequence(
       int @Interned [] seq,
       @IndexFor("#1") @LessThan("#3") int start,

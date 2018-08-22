@@ -55,7 +55,7 @@ public final class GraphPlume {
    * @param predecessors a graph, represented as a predecessor map
    * @return a map from each node to a list of its pre-dominators
    */
-  @SuppressWarnings("determinism") // Collections put issue.
+  @SuppressWarnings("determinism") // adding to a local collection (map)
   public static <T> Map<T, List<T>> dominators(Map<T, List<@KeyFor("#1") T>> predecessors) {
 
     // Map<@KeyFor({"preds","dom"}) T,List<@KeyFor({"preds","dom"}) T>> dom
@@ -146,7 +146,7 @@ public final class GraphPlume {
    * @param ps the PrintStream to which to print the graph
    * @param indent the number of spaces by which to indent the printed representation
    */
-  public static <T extends @Det Object> void print(Map<T, List<T>> graph, PrintStream ps, int indent) {
+  public static <T> void print(Map<T, List<T>> graph, PrintStream ps, int indent) {
     String indentString = "";
     for (int i = 0; i < indent; i++) {
       indentString += " ";
