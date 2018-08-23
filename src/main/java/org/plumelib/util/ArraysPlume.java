@@ -476,7 +476,7 @@ public final class ArraysPlume {
    * @see java.util.List#indexOf(java.lang.Object)
    */
   @Pure
-  @SuppressWarnings("determinism") // indexOfEq is @NonDet, but only use when elt is null
+  @SuppressWarnings("determinism") // indexOfEq is @NonDet, but only used when elt is null
   public static <T> @PolyDet("up") int indexOf(T[] a, @Nullable Object elt) {
     if (elt == null) {
       return indexOfEq(a, elt);
@@ -503,7 +503,7 @@ public final class ArraysPlume {
    * @see java.util.List#indexOf(java.lang.Object)
    */
   @Pure
-  @SuppressWarnings("determinism") // indexOfEq is @NonDet, but only use when elt is null
+  @SuppressWarnings("determinism") // indexOfEq is @NonDet, but only used when elt is null
   public static <T> @PolyDet("up") int indexOf(
       T[] a,
       @Nullable Object elt,
@@ -1120,7 +1120,7 @@ public final class ArraysPlume {
    * @return a sublist of the given list
    */
   @SideEffectFree
-  public static <T> List<T> subarray(
+  public static <T> @PolyDet("up") List<T> subarray(
       List<T> a, @IndexFor("#1") int startindex, @IndexOrHigh("#1") int length) {
     return a.subList(startindex, startindex + length);
   }
@@ -1311,7 +1311,7 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static boolean isSubarray(
+  public static @PolyDet("up") boolean isSubarray(
       @PolyAll Object[] a, @PolyNull Object[] sub, @NonNegative int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
@@ -1335,7 +1335,7 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static boolean isSubarrayEq(
+  public static @NonDet boolean isSubarrayEq(
       @PolyAll Object[] a, @PolyAll Object[] sub, @NonNegative int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
@@ -1360,7 +1360,8 @@ public final class ArraysPlume {
    *     element is found in the array
    */
   @Pure
-  public static boolean isSubarray(@PolyAll Object[] a, List<?> sub, @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(@PolyAll Object[] a, List<?> sub,
+      @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.length) {
       return false;
     }
@@ -1383,7 +1384,8 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static boolean isSubarrayEq(@PolyAll Object[] a, List<?> sub, @NonNegative int aOffset) {
+  public static @NonDet boolean isSubarrayEq(@PolyAll Object[] a, List<?> sub,
+      @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.length) {
       return false;
     }
@@ -1407,7 +1409,8 @@ public final class ArraysPlume {
    *     element is found in the array
    */
   @Pure
-  public static boolean isSubarray(List<?> a, @PolyAll Object[] sub, @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(List<?> a, @PolyAll Object[] sub,
+      @NonNegative int aOffset) {
     if (aOffset + sub.length > a.size()) {
       return false;
     }
@@ -1430,7 +1433,8 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static boolean isSubarrayEq(List<?> a, @PolyAll Object[] sub, @NonNegative int aOffset) {
+  public static @NonDet boolean isSubarrayEq(List<?> a, @PolyAll Object[] sub,
+      @NonNegative int aOffset) {
     if (aOffset + sub.length > a.size()) {
       return false;
     }
@@ -1454,7 +1458,8 @@ public final class ArraysPlume {
    *     element is found in the array
    */
   @Pure
-  public static boolean isSubarray(List<?> a, List<?> sub, @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(List<?> a, List<?> sub,
+      @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.size()) {
       return false;
     }
@@ -1477,7 +1482,7 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static boolean isSubarrayEq(List<?> a, List<?> sub, @NonNegative int aOffset) {
+  public static @NonDet boolean isSubarrayEq(List<?> a, List<?> sub, @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.size()) {
       return false;
     }
@@ -1500,7 +1505,7 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static boolean isSubarray(int[] a, int[] sub, @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(int[] a, int[] sub, @NonNegative int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1523,7 +1528,7 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static boolean isSubarray(long[] a, long[] sub, @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(long[] a, long[] sub, @NonNegative int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1546,7 +1551,8 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static boolean isSubarray(double[] a, double[] sub, @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(double[] a, double[] sub,
+      @NonNegative int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1569,7 +1575,8 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static boolean isSubarray(boolean[] a, boolean[] sub, @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(boolean[] a, boolean[] sub,
+      @NonNegative int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1712,7 +1719,6 @@ public final class ArraysPlume {
      *
      * @return the least upper bound of the classes of the elements of this
      */
-    @SuppressWarnings("determinism") // leastUpperBound returns, possible error
     @Nullable Class<?> leastUpperBound() {
       if (theArray != null) {
         return ReflectionPlume.leastUpperBound(theArray);
@@ -2168,7 +2174,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#toString
    */
   @SideEffectFree
-  public static String toString(@PolyAll Object @Nullable [] a) {
+  public static @PolyDet("up") String toString(@PolyAll Object @Nullable [] a) {
     return toString(a, false);
   }
 
@@ -2181,7 +2187,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#toString
    */
   @SideEffectFree
-  public static String toStringQuoted(@PolyAll Object @Nullable [] a) {
+  public static @PolyDet("up") String toStringQuoted(@PolyAll Object @Nullable [] a) {
     return toString(a, true);
   }
 
@@ -2197,7 +2203,7 @@ public final class ArraysPlume {
    */
   @SuppressWarnings({"purity", "lock"}) // side effect to local state (string creation)
   @SideEffectFree
-  public static String toString(@PolyAll Object @Nullable [] a, boolean quoted) {
+  public static @PolyDet("up") String toString(@PolyAll Object @Nullable [] a, boolean quoted) {
     if (a == null) {
       return "null";
     }
@@ -2230,7 +2236,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#toString
    */
   @SideEffectFree
-  public static String toString(@Nullable Collection<?> a) {
+  public static @PolyDet("up") String toString(@Nullable Collection<?> a) {
     return toString(a, false);
   }
 
@@ -2243,7 +2249,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#toString
    */
   @SideEffectFree
-  public static String toStringQuoted(@Nullable Collection<?> a) {
+  public static @PolyDet("up") String toStringQuoted(@Nullable Collection<?> a) {
     return toString(a, true);
   }
 
@@ -2258,7 +2264,7 @@ public final class ArraysPlume {
    */
   @SuppressWarnings({"purity", "lock"}) // side effect to local state (string creation)
   @SideEffectFree
-  public static String toString(@Nullable Collection<?> a, boolean quoted) {
+  public static @PolyDet("up") String toString(@Nullable Collection<?> a, boolean quoted) {
     if (a == null) {
       return "null";
     }
@@ -2294,7 +2300,7 @@ public final class ArraysPlume {
    * @return true iff the array is sorted
    */
   @Pure
-  public static boolean sorted(int[] a) {
+  public static @PolyDet("up") boolean sorted(int[] a) {
     for (int i = 0; i < a.length - 1; i++) {
       if (a[i + 1] < a[i]) {
         return false;
@@ -2310,7 +2316,7 @@ public final class ArraysPlume {
    * @return true iff the array is sorted
    */
   @Pure
-  public static boolean sorted(long[] a) {
+  public static @PolyDet("up") boolean sorted(long[] a) {
     for (int i = 0; i < a.length - 1; i++) {
       if (a[i + 1] < a[i]) {
         return false;
@@ -2326,7 +2332,7 @@ public final class ArraysPlume {
    * @return true iff the array is sorted in desending order
    */
   @Pure
-  public static boolean isSortedDescending(int[] a) {
+  public static @PolyDet("up") boolean isSortedDescending(int[] a) {
     for (int i = 0; i < a.length - 1; i++) {
       if (a[i + 1] > a[i]) {
         return false;
@@ -2342,7 +2348,7 @@ public final class ArraysPlume {
    * @return true iff the array is sorted in desending order
    */
   @Pure
-  public static boolean isSortedDescending(long[] a) {
+  public static @PolyDet("up") boolean isSortedDescending(long[] a) {
     for (int i = 0; i < a.length - 1; i++) {
       if (a[i + 1] > a[i]) {
         return false;

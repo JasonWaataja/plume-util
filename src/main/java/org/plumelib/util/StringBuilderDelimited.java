@@ -3,6 +3,7 @@ package org.plumelib.util;
 // NEEDS DOCUMENTATION!
 // (Probably mostly Javadoc "see" directives, possibly with first line of relevant method doc.)
 import org.checkerframework.checker.determinism.qual.Det;
+import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.index.qual.NonNegative;
@@ -58,7 +59,7 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
    * @param newElement the character sequence to append to this StringBuilderDelimited
    * @return a reference to this StringBuilderDelimited
    */
-  public StringBuilderDelimited add(@Nullable CharSequence newElement) {
+  public StringBuilderDelimited add(@Nullable @PolyDet("use") CharSequence newElement) {
     appendDelimiter();
     delegate.append(newElement);
     return this;
@@ -72,7 +73,7 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
    * @deprecated Use #add(CharSequence); change sbd.append(str) into sbd.add(str)
    */
   @Deprecated
-  public StringBuilderDelimited append(@Nullable String str) {
+  public StringBuilderDelimited append(@Nullable @PolyDet("use") String str) {
     appendDelimiter();
     delegate.append(str);
     return this;
@@ -86,7 +87,7 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
    * @deprecated Use #add(CharSequence); change sbd.append(o) into sbd.add(o.toString())
    */
   @Deprecated
-  public StringBuilderDelimited append(@Nullable Object o) {
+  public StringBuilderDelimited append(@Nullable @PolyDet("use") Object o) {
     appendDelimiter();
     delegate.append(o);
     return this;
@@ -101,7 +102,7 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
    */
   @Deprecated
   @Override
-  public StringBuilderDelimited append(char c) {
+  public StringBuilderDelimited append(@PolyDet("use") char c) {
     appendDelimiter();
     delegate.append(c);
     return this;
@@ -116,7 +117,7 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
    */
   @Deprecated
   @Override
-  public StringBuilderDelimited append(@Nullable CharSequence csq) {
+  public StringBuilderDelimited append(@Nullable @PolyDet("use") CharSequence csq) {
     appendDelimiter();
     delegate.append(csq);
     return this;
@@ -129,7 +130,9 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
   @Deprecated
   @Override
   public StringBuilderDelimited append(
-      @Nullable CharSequence csq, @IndexOrHigh("#1") int start, @IndexOrHigh("#1") int end) {
+      @Nullable @PolyDet("use") CharSequence csq,
+      @IndexOrHigh("#1") @PolyDet("use") int start,
+      @IndexOrHigh("#1") @PolyDet("use") int end) {
     appendDelimiter();
     delegate.append(csq, start, end);
     return this;

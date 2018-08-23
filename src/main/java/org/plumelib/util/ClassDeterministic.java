@@ -173,7 +173,7 @@ public class ClassDeterministic {
    * @param <T> the element type
    * @return the sorted list of elements of the given array
    */
-  private <T> List<T> toSortedList(T @OrderNonDet [] array, @Det Comparator<T> comparator) {
+  private <T> @Det List<T> toSortedList(T @OrderNonDet [] array, @Det Comparator<T> comparator) {
     List<T> list = new ArrayList<>();
     Collections.addAll(list, array);
     Collections.sort(list, comparator);

@@ -602,7 +602,7 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static int gcd(int[] a) {
+  public static @PolyDet("down") int gcd(int[] a) {
     // Euclid's method
     if (a.length == 0) {
       return 0;
@@ -626,7 +626,7 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static int gcdDifferences(int[] a) {
+  public static @PolyDet("up") int gcdDifferences(int[] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;
@@ -676,7 +676,7 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static long gcd(long[] a) {
+  public static @PolyDet("down") long gcd(long[] a) {
     // Euclid's method
     if (a.length == 0) {
       return 0;
@@ -700,7 +700,7 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static long gcdDifferences(long[] a) {
+  public static @PolyDet("up") long gcdDifferences(long[] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;
@@ -757,7 +757,7 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static double gcd(double[] a) {
+  public static @PolyDet("down") double gcd(double[] a) {
     // Euclid's method
     if (a.length == 0) {
       return 0;
@@ -781,7 +781,7 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static double gcdDifferences(double[] a) {
+  public static @PolyDet("up") double gcdDifferences(double[] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;

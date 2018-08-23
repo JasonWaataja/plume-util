@@ -10,7 +10,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * @param <CLASS> the type of equivalence classes (classification buckets)
  * @see MultiRandSelector
  */
-public interface Partitioner<ELEMENT extends @Nullable @NonDet Object, CLASS extends @Nullable @NonDet Object> {
+public interface Partitioner<ELEMENT extends @Nullable @NonDet Object,
+    CLASS extends @Nullable @NonDet Object> {
 
   /**
    * @param obj the Object to be assigned to a bucket

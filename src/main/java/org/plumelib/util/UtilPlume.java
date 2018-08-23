@@ -625,7 +625,7 @@ public final class UtilPlume {
    * @return true iff the files have the same contents
    */
   @Pure
-  public static boolean equalFiles(String file1, String file2) {
+  public static @NonDet boolean equalFiles(String file1, String file2) {
     return equalFiles(file1, file2, false);
   }
 
@@ -639,7 +639,7 @@ public final class UtilPlume {
    */
   @SuppressWarnings({"purity", "lock"}) // reads files, side effects local state
   @Pure
-  public static boolean equalFiles(String file1, String file2, boolean trimLines) {
+  public static @NonDet boolean equalFiles(String file1, String file2, boolean trimLines) {
     try (LineNumberReader reader1 = UtilPlume.lineNumberFileReader(file1);
         LineNumberReader reader2 = UtilPlume.lineNumberFileReader(file2); ) {
       String line1 = reader1.readLine();
@@ -670,7 +670,7 @@ public final class UtilPlume {
    * @param file the file to create and write
    * @return true iff the file can be created and written
    */
-  public static boolean canCreateAndWrite(File file) {
+  public static @NonDet boolean canCreateAndWrite(File file) {
     if (file.exists()) {
       return file.canWrite();
     } else {
@@ -718,7 +718,7 @@ public final class UtilPlume {
    *     SecurityManager.checkWrite(java.lang.String) method does not allow a file to be created
    * @see java.io.File#createTempFile(String, String, File)
    */
-  public static File createTempDir(String prefix, String suffix) throws IOException {
+  public static @NonDet File createTempDir(String prefix, String suffix) throws IOException {
     String fs = File.separator;
     String path = System.getProperty("java.io.tmpdir") + fs + System.getProperty("user.name") + fs;
     File pathFile = new File(path);
@@ -818,7 +818,7 @@ public final class UtilPlume {
    * @param name file whose name to expand
    * @return file with expanded file
    */
-  public static File expandFilename(File name) {
+  public static @NonDet File expandFilename(File name) {
     String path = name.getPath();
     String newname = expandFilename(path);
     @SuppressWarnings("interning")
@@ -890,7 +890,7 @@ public final class UtilPlume {
    * @throws IOException if there is trouble reading the file
    * @throws ClassNotFoundException if the object's class cannot be found
    */
-  public static Object readObject(File file) throws IOException, ClassNotFoundException {
+  public static @NonDet Object readObject(File file) throws IOException, ClassNotFoundException {
     // 8192 is the buffer size in BufferedReader
     InputStream istream = new BufferedInputStream(new FileInputStream(file), 8192);
     if (file.getName().endsWith(".gz")) {
@@ -936,7 +936,7 @@ public final class UtilPlume {
    * @param file the file to read
    * @return the entire contents of the reader, as a string
    */
-  public static String readFile(File file) {
+  public static @NonDet String readFile(File file) {
 
     try {
       BufferedReader reader = UtilPlume.bufferedFileReader(file);
@@ -1226,7 +1226,7 @@ public final class UtilPlume {
    *     then its arguments)
    * @return all the output of the command
    */
-  public static String backticks(List<String> command) {
+  public static @NonDet String backticks(List<String> command) {
     ProcessBuilder pb = new ProcessBuilder(command);
     pb.redirectErrorStream(true);
     // TimeLimitProcess p = new TimeLimitProcess(pb.start(), TIMEOUT_SEC * 1000);
@@ -1273,7 +1273,8 @@ public final class UtilPlume {
    * @see Properties#getProperty
    * @see Properties#setProperty
    */
-  public static @Nullable String appendProperty(Properties p, String key, String value) {
+  public static @Nullable String appendProperty(Properties p, @PolyDet("use") String key,
+      @PolyDet("use") String value) {
     return (String) p.setProperty(key, p.getProperty(key, "") + value);
   }
 
@@ -1287,7 +1288,8 @@ public final class UtilPlume {
    * @param value value to set the property to, if it is not already set
    * @return the previous value of the property
    */
-  public static @Nullable String setDefaultMaybe(Properties p, String key, String value) {
+  public static @Nullable String setDefaultMaybe(Properties p, @PolyDet("use") String key,
+      @PolyDet("use") String value) {
     String currentValue = p.getProperty(key);
     if (currentValue == null) {
       p.setProperty(key, value);
@@ -1305,7 +1307,7 @@ public final class UtilPlume {
    * @param from input stream
    * @param to output stream
    */
-  public static void streamCopy(InputStream from, OutputStream to) {
+  public static void streamCopy(@PolyDet("use") InputStream from, OutputStream to) {
     byte[] buffer = new byte[1024];
     int bytes;
     try {
@@ -1457,7 +1459,7 @@ public final class UtilPlume {
    * @return the concatenation of the string representations of the values, with the delimiter
    *     between
    */
-  public static String join(Object[] a, String delim) {
+  public static @PolyDet("up") String join(Object[] a, String delim) {
     if (a.length == 0) {
       return "";
     }

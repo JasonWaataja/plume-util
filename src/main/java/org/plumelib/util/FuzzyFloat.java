@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import org.checkerframework.checker.determinism.qual.Det;
+import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.dataflow.qual.Pure;
@@ -202,7 +203,7 @@ public class FuzzyFloat {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
   @Pure
-  public int indexOf(double[] a, double elt) {
+  public @PolyDet("up") int indexOf(double[] a, double elt) {
     for (int i = 0; i < a.length; i++) {
       if (eq(elt, a[i])) {
         return i;
@@ -223,7 +224,7 @@ public class FuzzyFloat {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  public int indexOf(double[] a, double[] sub) {
+  public @PolyDet("up") int indexOf(double[] a, double[] sub) {
 
     int aIndexMax = a.length - sub.length;
 
@@ -252,7 +253,7 @@ public class FuzzyFloat {
    */
   @SuppressWarnings({"purity", "lock"}) // side effect to local state (arrays)
   @Pure
-  public boolean isElemMatch(double[] a1, double[] a2) {
+  public @PolyDet("down") boolean isElemMatch(double[] a1, double[] a2) {
 
     // don't change our parameters
     a1 = a1.clone();
@@ -370,7 +371,7 @@ public class FuzzyFloat {
    */
   @SuppressWarnings({"purity", "lock"}) // side effect to local state (arrays)
   @Pure
-  public boolean isSubset(double[] smaller, double[] bigger) {
+  public @PolyDet("down") boolean isSubset(double[] smaller, double[] bigger) {
 
     // don't change our parameters
     smaller = smaller.clone();
