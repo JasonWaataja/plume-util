@@ -1215,7 +1215,7 @@ public final class UtilPlume {
    * @param command a command to execute on the command line
    * @return all the output of the command
    */
-  public static String backticks(String... command) {
+  public static @NonDet String backticks(String... command) {
     return backticks(Arrays.asList(command));
   }
 
@@ -1330,6 +1330,8 @@ public final class UtilPlume {
    * @param is input stream to read
    * @return a String containing all the characters from the input stream
    */
+  @SuppressWarnings("determinism") // baos should be @PolyDet to make this work, but local variables
+  // cannot be declared that way
   public static String streamString(InputStream is) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     streamCopy(is, baos);

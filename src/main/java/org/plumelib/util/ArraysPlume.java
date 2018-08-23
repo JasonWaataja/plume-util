@@ -1719,6 +1719,8 @@ public final class ArraysPlume {
      *
      * @return the least upper bound of the classes of the elements of this
      */
+    @SuppressWarnings("determinism") // error when finding least upper bound of theArray, see
+    // https://github.com/t-rasmud/checker-framework/issues/23
     @Nullable Class<?> leastUpperBound() {
       if (theArray != null) {
         return ReflectionPlume.leastUpperBound(theArray);
