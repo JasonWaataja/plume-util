@@ -746,7 +746,8 @@ public final class CollectionsPlume {
    * @return the old value, before it was incremented
    * @throws Error if the key is in the Map but maps to a non-Integer
    */
-  @SuppressWarnings("determinism") // adding to a local collection
+  @SuppressWarnings("determinism") // adding to a collection, could try to change this to use a type
+  // parameter, but would require count to be an Integer instead of int.
   public static <K> @Nullable Integer incrementMap(Map<K, Integer> m, K key, int count) {
     Integer old = m.get(key);
     Integer newTotal;

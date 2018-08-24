@@ -171,7 +171,11 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
      * @param filename filename in which the entry was found
      * @param lineNumber line number of first line of entry
      */
-    Entry(@Det String firstLine, @Det String body, @Det String filename, @Det long lineNumber,
+    Entry(
+        @Det String firstLine,
+        @Det String body,
+        @Det String filename,
+        @Det long lineNumber,
         @Det boolean shortEntry) {
       this.firstLine = firstLine;
       this.body = body;
@@ -841,8 +845,10 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @param entryStartRegex regular expression that starts a long entry
    * @param entryStopRegex regular expression that ends a long entry
    */
-  public void setEntryStartStop(@GuardSatisfied EntryReader this,
-      @Regex(1) @Det Pattern entryStartRegex, @Det Pattern entryStopRegex) {
+  public void setEntryStartStop(
+      @GuardSatisfied EntryReader this,
+      @Regex(1) @Det Pattern entryStartRegex,
+      @Det Pattern entryStopRegex) {
     this.entryStartRegex = entryStartRegex;
     this.entryStopRegex = entryStopRegex;
   }

@@ -324,8 +324,7 @@ public final class ArraysPlume {
       resultMin = Math.min(resultMin, a[i]);
       resultMax = Math.max(resultMax, a[i]);
     }
-    @PolyDet int @PolyDet [] result = new @PolyDet int @PolyDet [] {resultMin, resultMax};
-    return result;
+    return new @PolyDet int @PolyDet [] {resultMin, resultMax};
   }
 
   /**
@@ -348,8 +347,7 @@ public final class ArraysPlume {
       resultMin = Math.min(resultMin, a[i]);
       resultMax = Math.max(resultMax, a[i]);
     }
-    @PolyDet long @PolyDet [] result = new @PolyDet long @PolyDet [] {resultMin, resultMax};
-    return result;
+    return new @PolyDet long @PolyDet [] {resultMin, resultMax};
   }
 
   /**
@@ -531,8 +529,8 @@ public final class ArraysPlume {
    * @see java.util.List#indexOf(java.lang.Object)
    */
   @Pure
-  public static @PolyDet("up") int indexOf(List<? extends @PolyNull Object> a,
-      @Nullable Object elt) {
+  public static @PolyDet("up") int indexOf(
+      List<? extends @PolyNull Object> a, @Nullable Object elt) {
     return a.indexOf(elt);
   }
 
@@ -622,8 +620,8 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
   @Pure
-  public static @PolyDet("up") int indexOfEq(List<? extends @PolyNull @NonDet Object> a,
-      @Nullable Object elt) {
+  public static @PolyDet("up") int indexOfEq(
+      List<? extends @PolyNull @NonDet Object> a, @Nullable Object elt) {
     for (int i = 0; i < a.size(); i++) {
       if (elt == a.get(i)) {
         return i;
@@ -1360,8 +1358,8 @@ public final class ArraysPlume {
    *     element is found in the array
    */
   @Pure
-  public static @PolyDet("up") boolean isSubarray(@PolyAll Object[] a, List<?> sub,
-      @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(
+      @PolyAll Object[] a, List<?> sub, @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.length) {
       return false;
     }
@@ -1384,8 +1382,8 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static @NonDet boolean isSubarrayEq(@PolyAll Object[] a, List<?> sub,
-      @NonNegative int aOffset) {
+  public static @NonDet boolean isSubarrayEq(
+      @PolyAll Object[] a, List<?> sub, @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.length) {
       return false;
     }
@@ -1409,8 +1407,8 @@ public final class ArraysPlume {
    *     element is found in the array
    */
   @Pure
-  public static @PolyDet("up") boolean isSubarray(List<?> a, @PolyAll Object[] sub,
-      @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(
+      List<?> a, @PolyAll Object[] sub, @NonNegative int aOffset) {
     if (aOffset + sub.length > a.size()) {
       return false;
     }
@@ -1433,8 +1431,8 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static @NonDet boolean isSubarrayEq(List<?> a, @PolyAll Object[] sub,
-      @NonNegative int aOffset) {
+  public static @NonDet boolean isSubarrayEq(
+      List<?> a, @PolyAll Object[] sub, @NonNegative int aOffset) {
     if (aOffset + sub.length > a.size()) {
       return false;
     }
@@ -1458,8 +1456,8 @@ public final class ArraysPlume {
    *     element is found in the array
    */
   @Pure
-  public static @PolyDet("up") boolean isSubarray(List<?> a, List<?> sub,
-      @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(
+      List<?> a, List<?> sub, @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.size()) {
       return false;
     }
@@ -1551,8 +1549,8 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static @PolyDet("up") boolean isSubarray(double[] a, double[] sub,
-      @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(
+      double[] a, double[] sub, @NonNegative int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -1575,8 +1573,8 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static @PolyDet("up") boolean isSubarray(boolean[] a, boolean[] sub,
-      @NonNegative int aOffset) {
+  public static @PolyDet("up") boolean isSubarray(
+      boolean[] a, boolean[] sub, @NonNegative int aOffset) {
     if (aOffset + sub.length > a.length) {
       return false;
     }
@@ -2751,8 +2749,7 @@ public final class ArraysPlume {
    * @return function from [0..a.length) to {range R} union {-1}, that is the composition of a and
    *     b.
    */
-  public static int @SameLen("#1") [] partialFnCompose(
-      @IndexOrLow("#2") int[] a, int[] b) {
+  public static int @SameLen("#1") [] partialFnCompose(@IndexOrLow("#2") int[] a, int[] b) {
     @PolyDet int @PolyDet [] result = new @PolyDet int @PolyDet [a.length];
     for (int i = 0; i < a.length; i++) {
       int inner = a[i];
@@ -3052,9 +3049,7 @@ public final class ArraysPlume {
      */
     @Pure
     @SuppressWarnings(
-        {"override.param.invalid", "determinism"}) // known issue with nested generic types, see
-    // https://github.com/t-rasmud/checker-framework/issues/22
-    // CF bug: doesn't expand annotations on array elements with @Poly
+        "override.param.invalid") // CF bug: doesn't expand annotations on array elements with @Poly
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyAll(1) T[], @PolyAll(2) T[]), but the

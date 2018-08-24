@@ -2024,7 +2024,7 @@ public final class UtilPlume {
       precision = "1";
     }
 
-    @SuppressWarnings({"formatter"}) // format string computed from precision and mag
+    @SuppressWarnings("formatter") // format string computed from precision and mag
     @PolyDet String result = String.format("%,1." + precision + "f" + mag, dval);
     return result;
   }
