@@ -7,7 +7,6 @@ import org.checkerframework.checker.determinism.qual.Det;
 import org.checkerframework.checker.determinism.qual.NonDet;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.Raw;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
@@ -157,8 +156,13 @@ public class OrderedPairIterator<T extends @NonDet Object> implements java.util.
         // Either T extends Comparable<T>, or else a comparator was passed in.
         try {
           if (comparator == null) {
-            @SuppressWarnings("unchecked")
-            Comparable<@NonNull T> cble1 = (Comparable<@NonNull T>) next1;
+            // This code creates bytecodes that ASM rejects; thus, the classfiles cannot be
+            // processed by Gradle, shadowJar, or other tools.  I'm not sure where the fault lies;
+            // for now, remove the annotations.
+            // @SuppressWarnings("unchecked")
+            // Comparable<@NonNull T> cble1 = (Comparable<@NonNull T>) next1;
+            @SuppressWarnings("nullness")
+            Comparable<T> cble1 = (Comparable<T>) next1;
             comparison = cble1.compareTo(next2);
           } else {
             comparison = comparator.compare(next1, next2);
