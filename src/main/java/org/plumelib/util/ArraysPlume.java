@@ -3417,6 +3417,9 @@ public final class ArraysPlume {
    * @param k number of subsets into which to partition {@code elts}
    * @return a list of partitionings, where each contains exactly k subsets
    */
+  @SuppressWarnings("determinism") // seems to be an issue with the variable arguments method
+  // Arrays.asList returning @NonDet, as simply creating a list and adding the single element causes
+  // no error
   public static <T> List<Partitioning<T>> partitionInto(Queue<T> elts, @NonNegative int k) {
     if (elts.size() < k) {
       throw new IllegalArgumentException();
@@ -3439,7 +3442,7 @@ public final class ArraysPlume {
   // "p.addToPart(i, ...)" is OK: i is < numNonemptyParts
   //  and p.size() = numNonemptyParts + numEmptyParts, both of which are non-negative.
   @SuppressWarnings("determinism") // adding to a local collection
-  public static <T extends @NonNull Object> List<Partitioning<T>> partitionIntoHelper(
+  public static <T extends @NonNull @NonDet Object> List<Partitioning<T>> partitionIntoHelper(
       Queue<T> elts,
       List</*@ LengthIs("#3")*/ Partitioning<T>> resultSoFar,
       @NonNegative int numEmptyParts,

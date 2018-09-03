@@ -383,7 +383,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public @PolyDet("up") T next(@GuardSatisfied EnumerationIterator<T> this) {
+    public T next(@GuardSatisfied EnumerationIterator<T> this) {
       return e.nextElement();
     }
 
@@ -414,6 +414,8 @@ public final class CollectionsPlume {
     }
 
     @Override
+    @SuppressWarnings("determinism") // mismatch between new Iterator interface and Enumeration in
+    // JDK after update
     public @PolyDet("up") T nextElement() {
       return itor.next();
     }
@@ -448,7 +450,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public @PolyDet("up") T next(@GuardSatisfied MergedIterator2<T> this) {
+    public T next(@GuardSatisfied MergedIterator2<T> this) {
       if (itor1.hasNext()) {
         return itor1.next();
       } else if (itor2.hasNext()) {
@@ -497,7 +499,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public @PolyDet("up") T next(@GuardSatisfied MergedIterator<T> this) {
+    public T next(@GuardSatisfied MergedIterator<T> this) {
       hasNext(); // for side effect
       return current.next();
     }
@@ -549,7 +551,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public @PolyDet("up") T next(@GuardSatisfied FilteredIterator<T> this) {
+    public T next(@GuardSatisfied FilteredIterator<T> this) {
       if (hasNext()) {
         currentValid = false;
         @SuppressWarnings("interning")
@@ -607,7 +609,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public @PolyDet("up") T next(@GuardSatisfied RemoveFirstAndLastIterator<T> this) {
+    public T next(@GuardSatisfied RemoveFirstAndLastIterator<T> this) {
       if (!itor.hasNext()) {
         throw new NoSuchElementException();
       }

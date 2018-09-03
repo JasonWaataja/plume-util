@@ -641,9 +641,11 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @throws NoSuchElementException at end of file
    */
   @Override
-  public String next(@GuardSatisfied EntryReader this) {
+  public @Det String next(@GuardSatisfied EntryReader this) {
     try {
-      String result = readLine();
+      @SuppressWarnings("determinism") // return type of this method is actually @PolyDet("up")
+      // String but @Det is required here now
+      @Det String result = readLine();
       if (result != null) {
         return result;
       } else {

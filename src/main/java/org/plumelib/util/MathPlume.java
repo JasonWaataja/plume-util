@@ -1401,7 +1401,7 @@ public final class MathPlume {
     }
 
     @Override
-    public Integer next(@GuardSatisfied MissingNumbersIteratorInt this) {
+    public @Det Integer next(@GuardSatisfied MissingNumbersIteratorInt this) {
       if (!hasNext()) {
         throw new NoSuchElementException();
       }
@@ -1721,7 +1721,7 @@ public final class MathPlume {
     }
 
     @Override
-    public Long next(@GuardSatisfied MissingNumbersIteratorLong this) {
+    public @Det Long next(@GuardSatisfied MissingNumbersIteratorLong this) {
       if (!hasNext()) {
         throw new NoSuchElementException();
       }

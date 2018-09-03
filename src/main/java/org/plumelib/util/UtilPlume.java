@@ -1215,6 +1215,8 @@ public final class UtilPlume {
    * @param command a command to execute on the command line
    * @return all the output of the command
    */
+  @SuppressWarnings("determinism") // backticks requires a List<@Det String> and can't be
+  // converted to use a generic type parameter
   public static @NonDet String backticks(String... command) {
     return backticks(Arrays.asList(command));
   }

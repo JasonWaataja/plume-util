@@ -146,6 +146,8 @@ public final class GraphPlume {
    * @param ps the PrintStream to which to print the graph
    * @param indent the number of spaces by which to indent the printed representation
    */
+  @SuppressWarnings("determinism") // we're writing to ps, but we don't always want this to be
+  // deterministic, this also depends on T itself
   public static <T> void print(Map<T, List<T>> graph, PrintStream ps, int indent) {
     String indentString = "";
     for (int i = 0; i < indent; i++) {
