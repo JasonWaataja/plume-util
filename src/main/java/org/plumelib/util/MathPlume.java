@@ -1246,7 +1246,7 @@ public final class MathPlume {
    * @param nums numbers to be excluded; length &gt; 0; may contain duplicates
    * @return the set: [min(nums)..max(nums)] - nums
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // adding to a local collection
+  @SuppressWarnings({"purity", "lock"})
   @Pure
   @StaticallyExecutable
   public static int[] missingNumbers(int @MinLen(1) [] nums) {
@@ -1256,7 +1256,7 @@ public final class MathPlume {
     int min = nums[0];
     int max = nums[nums.length - 1];
     int sizeEstimate = max - min + 1 - nums.length;
-    List<Integer> resultList = new ArrayList<Integer>(sizeEstimate < 1 ? 1 : sizeEstimate);
+    List<@PolyDet Integer> resultList = new ArrayList<@PolyDet Integer>(sizeEstimate < 1 ? 1 : sizeEstimate);
     int val = min;
     for (int i = 0; i < nums.length; i++) {
       while (val < nums[i]) {

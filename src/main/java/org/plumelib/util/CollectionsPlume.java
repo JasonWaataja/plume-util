@@ -178,7 +178,6 @@ public final class CollectionsPlume {
    * @param e an enumeration to convert to a ArrayList
    * @return a vector containing the elements of the enumeration
    */
-  @SuppressWarnings("determinism") // adding to a local collection
   public static <T> ArrayList<T> makeArrayList(Enumeration<T> e) {
     ArrayList<T> result = new ArrayList<T>();
     while (e.hasMoreElements()) {
@@ -241,7 +240,6 @@ public final class CollectionsPlume {
    * @param objs list of elements to create combinations of
    * @return list of lists of length dims, each of which combines elements from objs
    */
-  @SuppressWarnings("determinism") // adding to a local collection
   public static <T> List<List<T>> createCombinations(
       @Positive int dims, @NonNegative int start, List<T> objs) {
 

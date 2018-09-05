@@ -153,10 +153,9 @@ public class RandomSelector<T> {
    *
    * @return values
    */
-  @SuppressWarnings("determinism") // adding to a local collection
   public @NonDet List<T> getValues() {
     // avoid concurrent mod errors and rep exposure
-    @NonDet ArrayList<T> ret = new ArrayList<T>();
+    @NonDet ArrayList<T> ret = new @NonDet ArrayList<T>();
     ret.addAll(values);
     return ret;
   }

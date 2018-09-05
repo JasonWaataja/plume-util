@@ -151,7 +151,9 @@ public class MultiRandSelector<T> {
    *
    * @return an iterator of all objects selected
    */
-  @SuppressWarnings("determinism") // adding to a local collection
+  @SuppressWarnings("determinism") // there's an error with the addAll method here where there
+  // shouldn't be because ret itself is @NonDet, but there's seems to be an issue with local
+  // variables versus parameters
   public @NonDet Iterator<T> valuesIter() {
     @NonDet ArrayList<T> ret = new ArrayList<T>();
     for (RandomSelector<T> rs : map.values()) {

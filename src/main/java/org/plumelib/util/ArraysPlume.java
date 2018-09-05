@@ -1696,7 +1696,7 @@ public final class ArraysPlume {
      * @param dest the destination array
      * @param destPos the index at which to start overwriting elements of {@code dest}
      */
-    @SuppressWarnings({"index", "determinism"}) // adding to a local collection (array)
+    @SuppressWarnings("index")
     // TODO: annotate for Index Checker
     void copyInto(@PolyDet("use") ListOrArray<T> this, T[] dest, @PolyDet("use") int destPos) {
       if (theArray != null) {
@@ -2615,8 +2615,7 @@ public final class ArraysPlume {
    * @param a a list
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet)
   @Pure
   public static <T> @PolyDet("down") boolean noDuplicates(List<T> a) {
     HashSet<T> hs = new HashSet<T>();
@@ -2845,11 +2844,11 @@ public final class ArraysPlume {
    * @param bigger second set to test
    * @return true iff smaller is a subset of bigger
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock"}) // side effect to local state (HashSet),
   @Pure
-  public static @PolyDet("down") boolean isSubset(String[] smaller, String[] bigger) {
-    Set<String> setBigger = new HashSet<String>();
+  public static <T extends @NonDet String> @PolyDet("down") boolean isSubset(
+      T[] smaller, T[] bigger) {
+    Set<T> setBigger = new HashSet<T>();
 
     for (int i = 0; i < bigger.length; i++) {
       setBigger.add(bigger[i]);
@@ -3511,7 +3510,6 @@ public final class ArraysPlume {
      *
      * @return all the elements in any part of the Partitioning
      */
-    @SuppressWarnings("determinism") // adding to a local collection
     List<T> partitionedSet() {
       List<T> result = new ArrayList<T>();
       for (List<T> part : this) {
@@ -3539,7 +3537,10 @@ public final class ArraysPlume {
      * @param elt the element to add
      * @return a new partitioning just like this one, but with elt added to the ith part
      */
-    @SuppressWarnings("determinism") // adding to a local colleciton
+    @SuppressWarnings("determinism") // the newArrayList returns a @NonDet ArrayList because
+    // @PolyDet is resolved to @NonDet based on the type parameter, but @Det ArrayList is required
+    // for a Partitioning, calling result.set requires a @Det parameter but is being passed
+    // @PolyDet.
     Partitioning<T> addToPart(@NonNegative int i, T elt) {
       Partitioning<T> result = new Partitioning<T>(this);
       if (size() == i) {

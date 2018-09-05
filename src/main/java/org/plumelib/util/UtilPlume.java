@@ -551,9 +551,8 @@ public final class UtilPlume {
    * @return the contents of {@code filename}, one string per line
    * @throws IOException if there was a problem reading the file
    */
-  @SuppressWarnings("determinism") // adding to a local collection
-  public static List<String> fileLines(String filename) throws IOException {
-    List<String> textList = new ArrayList<>();
+  public static @NonDet List<@NonDet String> fileLines(String filename) throws IOException {
+    List<@NonDet String> textList = new @NonDet ArrayList<@NonDet String>();
     try (LineNumberReader reader = UtilPlume.lineNumberFileReader(filename)) {
       String line;
       while ((line = reader.readLine()) != null) {

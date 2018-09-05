@@ -263,7 +263,7 @@ public final class ReflectionPlume {
    * @throws ClassNotFoundException if the class is not found
    * @throws NoSuchMethodException if the method is not found
    */
-  @SuppressWarnings("determinism") // adding to a local collection
+  @SuppressWarnings("determinism") // adding to a local collection (args_seen field)
   public static Method methodForName(String method)
       throws ClassNotFoundException, NoSuchMethodException, SecurityException {
 
