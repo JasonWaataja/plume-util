@@ -569,9 +569,10 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       if (m.matches()) {
         String filenameString = m.group(1);
         if (filenameString == null) {
-          @SuppressWarnings("determinism") // includeRegex is @Det while line is @PolyDet, causing
-          // an error, see https://github.com/t-rasmud/checker-framework/issues/24
-          String message = String.format("includeRegex (%s) does not capture group 1 in %s", includeRegex, line);
+          String message = String.format(
+              "includeRegex (%s) does not capture group 1 in %s",
+              (@PolyDet Pattern) includeRegex,
+              line);
           throw new Error(message);
         }
         File filename = new File(UtilPlume.expandFilename(filenameString));

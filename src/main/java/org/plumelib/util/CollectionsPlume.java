@@ -412,9 +412,7 @@ public final class CollectionsPlume {
     }
 
     @Override
-    @SuppressWarnings("determinism") // mismatch between new Iterator interface and Enumeration in
-    // JDK after update
-    public @PolyDet("up") T nextElement() {
+    public T nextElement() {
       return itor.next();
     }
   }
@@ -746,8 +744,7 @@ public final class CollectionsPlume {
    * @return the old value, before it was incremented
    * @throws Error if the key is in the Map but maps to a non-Integer
    */
-  @SuppressWarnings("determinism") // adding to a collection, could try to change this to use a type
-  // parameter, but would require count to be an Integer instead of int.
+  @SuppressWarnings("determinism") // adding to a colleciton
   public static <K> @Nullable Integer incrementMap(Map<K, Integer> m, K key, int count) {
     Integer old = m.get(key);
     Integer newTotal;

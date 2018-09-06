@@ -170,8 +170,6 @@ public final class ReflectionPlume {
      * @throws FileNotFoundException if the file does not exist
      * @throws IOException if there is trouble reading the file
      */
-    @SuppressWarnings("determinism") // passing @Det and then @PolyDet to String.format, see
-    // https://github.com/t-rasmud/checker-framework/issues/24
     public Class<?> defineClassFromFile(@BinaryName String className, String pathname)
         throws FileNotFoundException, IOException {
       FileInputStream fi = new FileInputStream(pathname);
@@ -182,7 +180,10 @@ public final class ReflectionPlume {
       if (bytesRead < numbytes) {
         throw new Error(
             String.format(
-                "Expected to read %d bytes from %s, got %d", numbytes, pathname, bytesRead));
+                "Expected to read %d bytes from %s, got %d",
+                (@PolyDet int) numbytes,
+                pathname,
+                bytesRead));
       }
       Class<?> return_class = defineClass(className, classBytes, 0, numbytes);
       resolveClass(return_class); // link the class

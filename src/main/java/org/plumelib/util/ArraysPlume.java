@@ -3537,10 +3537,8 @@ public final class ArraysPlume {
      * @param elt the element to add
      * @return a new partitioning just like this one, but with elt added to the ith part
      */
-    @SuppressWarnings("determinism") // the newArrayList returns a @NonDet ArrayList because
-    // @PolyDet is resolved to @NonDet based on the type parameter, but @Det ArrayList is required
-    // for a Partitioning, calling result.set requires a @Det parameter but is being passed
-    // @PolyDet.
+    @SuppressWarnings("determinism") // newPart is reloved to @NonDet because of a generic type
+    // parameter
     Partitioning<T> addToPart(@NonNegative int i, T elt) {
       Partitioning<T> result = new Partitioning<T>(this);
       if (size() == i) {

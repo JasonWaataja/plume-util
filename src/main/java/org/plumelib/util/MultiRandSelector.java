@@ -110,7 +110,6 @@ public class MultiRandSelector<T> {
    *
    * @param iter contains elements that are added to the pool to select from
    */
-  @SuppressWarnings("determinism") // known issue, T defaults to @PolyDet here, causing an error
   public void acceptIter(Iterator<T> iter) {
     while (iter.hasNext()) {
       accept(iter.next());

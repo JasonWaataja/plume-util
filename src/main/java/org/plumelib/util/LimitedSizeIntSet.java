@@ -200,7 +200,7 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
     values = null;
   }
 
-  @SuppressWarnings({"sideeffectfree", "determinism"}) // dot operator bug, side effect to local state (clone)
+  @SuppressWarnings("sideeffectfree") // side effect to local state (clone)
   @SideEffectFree
   @Override
   public LimitedSizeIntSet clone(@GuardSatisfied LimitedSizeIntSet this) {
