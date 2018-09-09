@@ -1426,7 +1426,7 @@ public final class MathPlume {
   @SuppressWarnings({"purity", "lock"})
   @Pure
   @StaticallyExecutable
-  public static int @Nullable @ArrayLen(2) [] nonmodulusStrict(int @Det [] nums) {
+  public static int @Nullable @ArrayLen(2) @Det [] nonmodulusStrict(int @Det [] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
     // instead of all at once.
@@ -1481,7 +1481,8 @@ public final class MathPlume {
    * @param nums the list of operands
    * @return a (remainder, modulus) pair that fails to match elements of nums
    */
-  public static int @Nullable @ArrayLen(2) [] nonmodulusStrictInt(@Det Iterator<Integer> nums) {
+  public static int @Nullable @ArrayLen(2) @Det [] nonmodulusStrictInt(
+      @Det Iterator<Integer> nums) {
     return nonmodulusStrictIntInternal(new MissingNumbersIteratorInt(nums, true));
   }
 

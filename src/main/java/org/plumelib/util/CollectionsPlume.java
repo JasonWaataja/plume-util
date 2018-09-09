@@ -240,6 +240,8 @@ public final class CollectionsPlume {
    * @param objs list of elements to create combinations of
    * @return list of lists of length dims, each of which combines elements from objs
    */
+  @SuppressWarnings("determinism") // need to annoate local variable simple as @PolyDet, see
+  // https://github.com/t-rasmud/checker-framework/issues/32
   public static <T> List<List<T>> createCombinations(
       @Positive int dims, @NonNegative int start, List<T> objs) {
 
