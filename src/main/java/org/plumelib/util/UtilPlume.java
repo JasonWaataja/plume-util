@@ -1214,8 +1214,6 @@ public final class UtilPlume {
    * @param command a command to execute on the command line
    * @return all the output of the command
    */
-  @SuppressWarnings("determinism") // backticks requires a List<@Det String> and can't be
-  // converted to use a generic type parameter
   public static @NonDet String backticks(String... command) {
     return backticks(Arrays.asList(command));
   }
@@ -1227,7 +1225,10 @@ public final class UtilPlume {
    *     then its arguments)
    * @return all the output of the command
    */
-  public static @NonDet String backticks(List<String> command) {
+  public static @NonDet String backticks(List<@PolyDet String> command) {
+    @SuppressWarnings("determinism") // ProcessBuilder is in JDK and requires a List of @Det String
+    // rather than @PolyDet
+    // TODO: update JDK to take Lists of @PolyDet types?
     ProcessBuilder pb = new ProcessBuilder(command);
     pb.redirectErrorStream(true);
     // TimeLimitProcess p = new TimeLimitProcess(pb.start(), TIMEOUT_SEC * 1000);
@@ -1331,8 +1332,8 @@ public final class UtilPlume {
    * @param is input stream to read
    * @return a String containing all the characters from the input stream
    */
-  @SuppressWarnings("determinism") // baos should be @PolyDet to make this work, but local variables
-  // cannot be declared that way
+  @SuppressWarnings("determinism") // baos should be @PolyDet but can't be declared that way, see
+  // https://github.com/t-rasmud/checker-framework/issues/32
   public static String streamString(InputStream is) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     streamCopy(is, baos);

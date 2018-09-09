@@ -264,7 +264,8 @@ public final class ReflectionPlume {
    * @throws ClassNotFoundException if the class is not found
    * @throws NoSuchMethodException if the method is not found
    */
-  @SuppressWarnings("determinism") // adding to a local collection (args_seen field)
+  @SuppressWarnings("determinism") // modifying @Det field args_seen with @PolyDet arguments, same
+  // issue as with constructors
   public static Method methodForName(String method)
       throws ClassNotFoundException, NoSuchMethodException, SecurityException {
 

@@ -1679,7 +1679,6 @@ public final class ArraysPlume {
      *
      * @return an array with the same contents as this
      */
-    @SuppressWarnings("determinism") // known issue, T defaults to @PolyDet
     T[] toArray() {
       if (theArray != null) {
         return theArray;
@@ -3537,8 +3536,9 @@ public final class ArraysPlume {
      * @param elt the element to add
      * @return a new partitioning just like this one, but with elt added to the ith part
      */
-    @SuppressWarnings("determinism") // newPart is reloved to @NonDet because of a generic type
-    // parameter
+    @SuppressWarnings("determinism") // because a Partitioning is always a collection of @Det
+    // ArrayLists, there's an issue to adding to it in this method, furthermore, newPart becomes
+    // @NonDet because method calls on generic types become @NonDet
     Partitioning<T> addToPart(@NonNegative int i, T elt) {
       Partitioning<T> result = new Partitioning<T>(this);
       if (size() == i) {

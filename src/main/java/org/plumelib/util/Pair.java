@@ -48,14 +48,16 @@ public class Pair<T1 extends @Nullable @NonDet Object, T2 extends @Nullable @Non
 
   @Override
   @SideEffectFree
-  @SuppressWarnings("determinism") // operations on generic types become @NonDet
+  @SuppressWarnings("determinism") // uses operations on a and b fields, which will always be
+  // @NonDet, but toString must return @PolyDet
   public String toString(@GuardSatisfied Pair<T1, T2> this) {
     return "<" + String.valueOf(a) + "," + String.valueOf(b) + ">";
   }
 
   @Override
   @Pure
-  @SuppressWarnings("determinism") // operations on generic types become @NonDet
+  @SuppressWarnings("determinism") // uses operations on a and b fields, which will always be
+  // @NonDet, but equals must return @PolyDet
   public boolean equals(@GuardSatisfied Pair<T1, T2> this, @GuardSatisfied @Nullable Object obj) {
     if (!(obj instanceof Pair<?, ?>)) {
       return false;

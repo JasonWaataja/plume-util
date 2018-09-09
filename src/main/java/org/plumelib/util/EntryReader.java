@@ -645,7 +645,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
   public @Det String next(@GuardSatisfied EntryReader this) {
     try {
       @SuppressWarnings("determinism") // return type of this method is actually @PolyDet("up")
-      // String but @Det is required here now
+      // String but @Det is required here because of fix for
+      // https://github.com/t-rasmud/checker-framework/issues/14
       @Det String result = readLine();
       if (result != null) {
         return result;

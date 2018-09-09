@@ -682,7 +682,6 @@ public final class CollectionsPlume {
    * @param random the Random instance to use to make selections
    * @return list of numElts elements from itor
    */
-  @SuppressWarnings("determinism") // T defaults to @PolyDet when calling rs.accept
   public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int numElts, Random random) {
     // The elements are chosen with the following probabilities,
     // where n == numElts:
