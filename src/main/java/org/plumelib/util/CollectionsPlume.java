@@ -39,6 +39,13 @@ public final class CollectionsPlume {
   }
 
   /** The system-specific line separator string. */
+  // TODO: I was initially surprised that this is @NonDet, since two executions on the same machine
+  // will never yield different results.  This needs to be clarified in the specification of the
+  // Determinism Checker (that is, in the manual).  I am inclined to say that the system-specific
+  // line separator and path separator are @Det.  Otherwise, println() with no arguments is
+  // non-deterministic, as is String.format("%n").  This would make all output nondeterministic,
+  // which would not be helpful to users.  Please make the change in the manual, and we'll want to
+  // special-case a few specific calls to System.getProperty in the checker.
   private static final @NonDet String lineSep = System.getProperty("line.separator");
 
   ///////////////////////////////////////////////////////////////////////////
@@ -240,7 +247,7 @@ public final class CollectionsPlume {
    * @param objs list of elements to create combinations of
    * @return list of lists of length dims, each of which combines elements from objs
    */
-  @SuppressWarnings("determinism") // need to annoate local variable simple as @PolyDet, see
+  @SuppressWarnings("determinism") // need to annotate local variable simply as @PolyDet, see
   // https://github.com/t-rasmud/checker-framework/issues/32
   public static <T> List<List<T>> createCombinations(
       @Positive int dims, @NonNegative int start, List<T> objs) {
@@ -373,6 +380,7 @@ public final class CollectionsPlume {
      *
      * @param e the Enumeration to make into an Iterator
      */
+    // TODO: Why does this require the argument to be @Det, rather than making it @PolyDet?
     public EnumerationIterator(@Det Enumeration<T> e) {
       this.e = e;
     }
@@ -745,7 +753,7 @@ public final class CollectionsPlume {
    * @return the old value, before it was incremented
    * @throws Error if the key is in the Map but maps to a non-Integer
    */
-  @SuppressWarnings("determinism") // adding to a colleciton
+  @SuppressWarnings("determinism") // adding to a collection
   public static <K> @Nullable Integer incrementMap(Map<K, Integer> m, K key, int count) {
     Integer old = m.get(key);
     Integer newTotal;

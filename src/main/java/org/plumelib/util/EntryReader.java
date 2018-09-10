@@ -142,7 +142,6 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
      * @param filename file from which to read
      * @throws IOException if there is trobule reading the file
      */
-    // TODO: Fix above typo.
     public FlnReader(@Det String filename) throws IOException {
       super(UtilPlume.fileReader(filename));
       this.filename = filename;
@@ -536,7 +535,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
     if (pushbackLine != null) {
       @SuppressWarnings("determinism") // non-deterministic but superclass requires this method be
       // @PolyDet, perhaps its JDK annotation should be changed
-      @PolyDet String line = pushbackLine;
+      @PolyDet
+      String line = pushbackLine;
       pushbackLine = null;
       return line;
     }
@@ -569,10 +569,10 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       if (m.matches()) {
         String filenameString = m.group(1);
         if (filenameString == null) {
-          String message = String.format(
-              "includeRegex (%s) does not capture group 1 in %s",
-              (@PolyDet Pattern) includeRegex,
-              line);
+          String message =
+              String.format(
+                  "includeRegex (%s) does not capture group 1 in %s",
+                  (@PolyDet Pattern) includeRegex, line);
           throw new Error(message);
         }
         File filename = new File(UtilPlume.expandFilename(filenameString));
@@ -647,7 +647,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       @SuppressWarnings("determinism") // return type of this method is actually @PolyDet("up")
       // String but @Det is required here because of fix for
       // https://github.com/t-rasmud/checker-framework/issues/14
-      @Det String result = readLine();
+      @Det
+      String result = readLine();
       if (result != null) {
         return result;
       } else {
@@ -732,7 +733,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       }
 
       @SuppressWarnings("determinism") // passing @PolyDet to constructors
-      @PolyDet Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, false);
+      @PolyDet
+      Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, false);
       entry = newEntry;
 
     } else { // blank-separated entry
