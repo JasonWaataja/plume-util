@@ -1,5 +1,3 @@
-// MultiRandSelector.java
-
 package org.plumelib.util;
 
 import java.util.ArrayList;
@@ -88,7 +86,8 @@ public class MultiRandSelector<T> {
    * @param r the Random instance to use for making random choices
    * @param eq partioner that determines how to partition the objects
    */
-  public MultiRandSelector(@Det double keepProbability, @NonDet Random r, @Det Partitioner<T, T> eq) {
+  public MultiRandSelector(
+      @Det double keepProbability, @NonDet Random r, @Det Partitioner<T, T> eq) {
     this(r, eq);
     this.coinTossMode = true;
     this.keepProbability = keepProbability;

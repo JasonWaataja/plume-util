@@ -495,7 +495,8 @@ public final class UtilPlume {
       return Files.newBufferedWriter(
           Paths.get(filename),
           UTF_8,
-          append ? new @PolyDet StandardOpenOption @PolyDet [] {CREATE, APPEND}
+          append
+              ? new @PolyDet StandardOpenOption @PolyDet [] {CREATE, APPEND}
               : new @PolyDet StandardOpenOption @PolyDet [] {CREATE});
     }
   }
@@ -1275,8 +1276,8 @@ public final class UtilPlume {
    * @see Properties#getProperty
    * @see Properties#setProperty
    */
-  public static @Nullable String appendProperty(Properties p, @PolyDet("use") String key,
-      @PolyDet("use") String value) {
+  public static @Nullable String appendProperty(
+      Properties p, @PolyDet("use") String key, @PolyDet("use") String value) {
     return (String) p.setProperty(key, p.getProperty(key, "") + value);
   }
 
@@ -1290,8 +1291,8 @@ public final class UtilPlume {
    * @param value value to set the property to, if it is not already set
    * @return the previous value of the property
    */
-  public static @Nullable String setDefaultMaybe(Properties p, @PolyDet("use") String key,
-      @PolyDet("use") String value) {
+  public static @Nullable String setDefaultMaybe(
+      Properties p, @PolyDet("use") String key, @PolyDet("use") String value) {
     String currentValue = p.getProperty(key);
     if (currentValue == null) {
       p.setProperty(key, value);
@@ -2008,7 +2009,6 @@ public final class UtilPlume {
    * @param val a numeric value
    * @return an abbreviated string representation of the value
    */
-
   public static String abbreviateNumber(long val) {
 
     double dval = (double) val;

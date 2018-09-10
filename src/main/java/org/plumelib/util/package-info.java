@@ -122,4 +122,4 @@
  *       with weak pointers, and its equals() method uses object equality to compare its elements.
  * </dl>
  */
-
+package org.plumelib.util;
