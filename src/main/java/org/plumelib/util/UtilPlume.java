@@ -495,7 +495,8 @@ public final class UtilPlume {
       return Files.newBufferedWriter(
           Paths.get(filename),
           UTF_8,
-          append ? new @PolyDet StandardOpenOption @PolyDet [] {CREATE, APPEND}
+          append
+              ? new @PolyDet StandardOpenOption @PolyDet [] {CREATE, APPEND}
               : new @PolyDet StandardOpenOption @PolyDet [] {CREATE});
     }
   }
@@ -1275,8 +1276,8 @@ public final class UtilPlume {
    * @see Properties#getProperty
    * @see Properties#setProperty
    */
-  public static @Nullable String appendProperty(Properties p, @PolyDet("use") String key,
-      @PolyDet("use") String value) {
+  public static @Nullable String appendProperty(
+      Properties p, @PolyDet("use") String key, @PolyDet("use") String value) {
     return (String) p.setProperty(key, p.getProperty(key, "") + value);
   }
 
@@ -1290,8 +1291,8 @@ public final class UtilPlume {
    * @param value value to set the property to, if it is not already set
    * @return the previous value of the property
    */
-  public static @Nullable String setDefaultMaybe(Properties p, @PolyDet("use") String key,
-      @PolyDet("use") String value) {
+  public static @Nullable String setDefaultMaybe(
+      Properties p, @PolyDet("use") String key, @PolyDet("use") String value) {
     String currentValue = p.getProperty(key);
     if (currentValue == null) {
       p.setProperty(key, value);
@@ -1393,6 +1394,10 @@ public final class UtilPlume {
    * delimiter character. Always returns an array of length at least 1 (it might contain only the
    * empty string).
    *
+   * <p>Consider using the built-in <a
+   * href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#split-java.lang.String-">String.split</a>
+   * method.
+   *
    * @see #split(String s, String delim)
    * @param s the string to split
    * @param delim delimiter to split the string on
@@ -1414,6 +1419,10 @@ public final class UtilPlume {
    * Return an array of Strings representing the characters between successive instances of the
    * delimiter String. Always returns an array of length at least 1 (it might contain only the empty
    * string).
+   *
+   * <p>Consider using the built-in <a
+   * href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#split-java.lang.String-">String.split</a>
+   * method.
    *
    * @see #split(String s, char delim)
    * @param s the string to split
@@ -2000,7 +2009,6 @@ public final class UtilPlume {
    * @param val a numeric value
    * @return an abbreviated string representation of the value
    */
-
   public static String abbreviateNumber(long val) {
 
     double dval = (double) val;

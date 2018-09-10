@@ -14,7 +14,9 @@ import org.checkerframework.checker.determinism.qual.OrderNonDet;
 import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-/** Deterministic versions of Class methods */
+/**
+ * Deterministic versions of {@code java.lang.Class} methods, which return arrays in sorted order.
+ */
 public class ClassDeterministic {
 
   /** Do not call; this class is a collection of methods and does not represent anything. */
