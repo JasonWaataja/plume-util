@@ -535,8 +535,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
     if (pushbackLine != null) {
       @SuppressWarnings("determinism") // non-deterministic but superclass requires this method be
       // @PolyDet, perhaps its JDK annotation should be changed
-      @PolyDet
-      String line = pushbackLine;
+      @PolyDet String line = pushbackLine;
       pushbackLine = null;
       return line;
     }
@@ -647,8 +646,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       @SuppressWarnings("determinism") // return type of this method is actually @PolyDet("up")
       // String but @Det is required here because of fix for
       // https://github.com/t-rasmud/checker-framework/issues/14
-      @Det
-      String result = readLine();
+      @Det String result = readLine();
       if (result != null) {
         return result;
       } else {
@@ -733,8 +731,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       }
 
       @SuppressWarnings("determinism") // passing @PolyDet to constructors
-      @PolyDet
-      Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, false);
+      @PolyDet Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, false);
       entry = newEntry;
 
     } else { // blank-separated entry

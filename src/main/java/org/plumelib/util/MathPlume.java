@@ -1286,7 +1286,8 @@ public final class MathPlume {
     int min = nums[0];
     int max = nums[nums.length - 1];
     int sizeEstimate = max - min + 1 - nums.length;
-    List<@PolyDet Integer> resultList = new ArrayList<@PolyDet Integer>(sizeEstimate < 1 ? 1 : sizeEstimate);
+    List<@PolyDet Integer> resultList =
+        new ArrayList<@PolyDet Integer>(sizeEstimate < 1 ? 1 : sizeEstimate);
     int val = min;
     for (int i = 0; i < nums.length; i++) {
       while (val < nums[i]) {
@@ -1831,17 +1832,13 @@ public final class MathPlume {
    *
    * @param nums the list of operands
    * @return a (remainder, modulus) pair that fails to match elements of nums
-   *
-  public static long @Nullable @ArrayLen(2)[] nonmodulusStrictLong(@Det Iterator<Long> nums) {
-    return nonmodulusStrictLongInternal(new MissingNumbersIteratorLong(nums, true));
-  }
-
-  // Old, slightly less efficient implementation that uses the version of
-  // missingNumbers that returns an array instead of an Iterator.
-  // /**
-  //  * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
-  //  * m) but all missing numbers in their range are.
-  //  */
+   *     <p>public static long @Nullable @ArrayLen(2)[] nonmodulusStrictLong(@Det Iterator<Long>
+   *     nums) { return nonmodulusStrictLongInternal(new MissingNumbersIteratorLong(nums, true)); }
+   *     <p>// Old, slightly less efficient implementation that uses the version of //
+   *     missingNumbers that returns an array instead of an Iterator. // /** // * Return a tuple of
+   *     (r,m) where no number in NUMS is equal to r (mod // * m) but all missing numbers in their
+   *     range are. //
+   */
   // public static long @Nullable @ArrayLen(2) [] nonmodulusStrict(long[] nums) {
   //   // This implementation is particularly inefficient; find a better way to
   //   // compute this.  Perhaps obtain the new modulus numbers incrementally

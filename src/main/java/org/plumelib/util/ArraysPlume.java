@@ -365,8 +365,7 @@ public final class ArraysPlume {
     }
     @SuppressWarnings("purity.not.deterministic.call") // use deterministic parts of object
     // TODO: shouldn't the array be @PolyDet("down") rather than @PolyDat?
-    @PolyDet
-    int @PolyDet [] minAndMax = minAndMax(a);
+    @PolyDet int @PolyDet [] minAndMax = minAndMax(a);
     return minAndMax[1] - minAndMax[0];
   }
 
@@ -384,8 +383,7 @@ public final class ArraysPlume {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(long[])");
     }
     @SuppressWarnings("purity.not.deterministic.call") // use deterministic parts of object
-    @PolyDet
-    long @PolyDet [] minAndMax = minAndMax(a);
+    @PolyDet long @PolyDet [] minAndMax = minAndMax(a);
     return minAndMax[1] - minAndMax[0];
   }
 
@@ -2746,8 +2744,7 @@ public final class ArraysPlume {
   public static @PolyAll int @SameLen("#1") [] fnCompose(
       @IndexFor("#2") int[] a, @PolyAll int[] b) {
     // TODO: If @PolyAll is already present, you should not need @PolyDet (it should be redundant)
-    @PolyAll @PolyDet
-    int @PolyDet [] result = new @PolyAll int @PolyDet [a.length];
+    @PolyAll @PolyDet int @PolyDet [] result = new @PolyAll int @PolyDet [a.length];
     for (int i = 0; i < a.length; i++) {
       result[i] = b[a[i]];
     }

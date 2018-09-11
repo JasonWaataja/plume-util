@@ -39,7 +39,8 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
  */
 // T need not extend Comparable<T>, because a comparator can be passed in.
 @SuppressWarnings("deprecation") // an acceptable use of the Pair class
-public class OrderedPairIterator<T extends @NonDet Object> implements java.util.Iterator<Pair<@Nullable T, @Nullable T>> {
+public class OrderedPairIterator<T extends @NonDet Object>
+    implements java.util.Iterator<Pair<@Nullable T, @Nullable T>> {
 
   /** The iterator for first elements of pairs. */
   Iterator<T> itor1;
@@ -79,8 +80,8 @@ public class OrderedPairIterator<T extends @NonDet Object> implements java.util.
    * @param itor2 iterator for second elements of pairs
    * @param comparator determines whether two elements are equal and should be paired together
    */
-  public OrderedPairIterator(@Det Iterator<T> itor1, @Det Iterator<T> itor2,
-      @Det Comparator<T> comparator) {
+  public OrderedPairIterator(
+      @Det Iterator<T> itor1, @Det Iterator<T> itor2, @Det Comparator<T> comparator) {
     this(itor1, itor2);
     this.comparator = comparator;
   }

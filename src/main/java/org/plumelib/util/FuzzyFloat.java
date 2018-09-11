@@ -63,7 +63,8 @@ public class FuzzyFloat {
    *     which requires exact matching rather than permitting fuzzy matching)
    * @see #FuzzyFloat
    */
-  public void setRelativeRatio(@UnknownInitialization @Raw FuzzyFloat this, @Det double relativeRatio) {
+  public void setRelativeRatio(
+      @UnknownInitialization @Raw FuzzyFloat this, @Det double relativeRatio) {
     minRatio = 1 - relativeRatio;
     maxRatio = 1 + relativeRatio;
     exactComparisons = (relativeRatio == 0.0);
