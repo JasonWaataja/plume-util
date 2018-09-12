@@ -18,7 +18,6 @@ import java.util.Queue;
 import java.util.Set;
 import org.checkerframework.checker.determinism.qual.Det;
 import org.checkerframework.checker.determinism.qual.NonDet;
-import org.checkerframework.checker.determinism.qual.OrderNonDet;
 import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.IndexOrHigh;
@@ -42,7 +41,7 @@ import org.plumelib.reflection.ReflectionPlume;
  */
 @SuppressWarnings("interning") // to do later
 public final class ArraysPlume {
-  /** This class is a collecton of methods; it does not represent anything. */
+  /** This class is a collection of methods; it does not represent anything. */
   private ArraysPlume() {
     throw new Error("do not instantiate");
   }
@@ -365,6 +364,7 @@ public final class ArraysPlume {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(int[])");
     }
     @SuppressWarnings("purity.not.deterministic.call") // use deterministic parts of object
+    // TODO: shouldn't the array be @PolyDet("down") rather than @PolyDat?
     @PolyDet int @PolyDet [] minAndMax = minAndMax(a);
     return minAndMax[1] - minAndMax[0];
   }
@@ -621,6 +621,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
   @Pure
+  // TODO: Why is the result of indexOfEq @PolyDet("up") for lists but @NonDet for arrays?
   public static @PolyDet("up") int indexOfEq(
       List<? extends @PolyNull @NonDet Object> a, @Nullable Object elt) {
     for (int i = 0; i < a.size(); i++) {
@@ -820,6 +821,9 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
+  // TODO: You removed a @PolyAll annotation here.  Why?  I'm concerned that will affect other
+  // clients.  If you write an explicit annotation for the Determinism Checker, then @PolyAll does
+  // not apply to the Determinism Checker.
   public static @PolyDet("up") int indexOf(Object[] a, Object[] sub) {
     int aIndexMax = a.length - sub.length + 1;
     for (int i = 0; i <= aIndexMax; i++) {
@@ -1103,6 +1107,7 @@ public final class ArraysPlume {
       @PolyAll Object[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
+    // TODO: the type here (@PolyDet) is not the same as the return type of the method, @PolyDet(up)
     @PolyAll Object @PolyDet [] result = new @PolyAll Object @PolyDet [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1696,8 +1701,7 @@ public final class ArraysPlume {
      * @param dest the destination array
      * @param destPos the index at which to start overwriting elements of {@code dest}
      */
-    @SuppressWarnings("index")
-    // TODO: annotate for Index Checker
+    @SuppressWarnings("index") // TODO: annotate for Index Checker
     void copyInto(@PolyDet("use") ListOrArray<T> this, T[] dest, @PolyDet("use") int destPos) {
       if (theArray != null) {
         System.arraycopy(theArray, 0, dest, destPos, theArray.length);
@@ -1717,6 +1721,7 @@ public final class ArraysPlume {
      *
      * @return the least upper bound of the classes of the elements of this
      */
+    // TODO: This issue is closed.  Can the @SuppressWarnings be removed?
     @SuppressWarnings("determinism") // error when finding least upper bound of theArray, see
     // https://github.com/t-rasmud/checker-framework/issues/23
     @Nullable Class<?> leastUpperBound() {
@@ -1739,6 +1744,10 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
+  // TODO: I don't understand the comment.  The discussion of polymorphism in constructor
+  // invocations (currently in the "Default annotations" section of the manual, though that's not
+  // where it belongs) is about suppressing warnings on constructor definitions.  Here, the
+  // @SuppressWarnings is on a construrctor invocation.  Can you please clarify?
   @SuppressWarnings("determinism") // passing @PolyDet to constructors
   public static <T> T[] concat(T @Nullable [] a, T @Nullable [] b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
@@ -2326,10 +2335,10 @@ public final class ArraysPlume {
   }
 
   /**
-   * Returns whether the array is sorted in desending order.
+   * Returns whether the array is sorted in descending order.
    *
    * @param a an array
-   * @return true iff the array is sorted in desending order
+   * @return true iff the array is sorted in descending order
    */
   @Pure
   public static @PolyDet("up") boolean isSortedDescending(int[] a) {
@@ -2342,10 +2351,10 @@ public final class ArraysPlume {
   }
 
   /**
-   * Returns whether the array is sorted in desending order.
+   * Returns whether the array is sorted in descending order.
    *
    * @param a an array
-   * @return true iff the array is sorted in desending order
+   * @return true iff the array is sorted in descending order
    */
   @Pure
   public static @PolyDet("up") boolean isSortedDescending(long[] a) {
@@ -2365,6 +2374,8 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
+  // TODO: You added the comment "adding to a local collection".  How is that different than "side
+  // effect to local state"?
   @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
   // adding to a local collection
   @Pure
@@ -2667,7 +2678,7 @@ public final class ArraysPlume {
   }
 
   /**
-   * Return an array [0..lenth).
+   * Return an array [0..length).
    *
    * @param length the length of the result
    * @return fresh array that is the identity function of the given length
@@ -2732,6 +2743,7 @@ public final class ArraysPlume {
   @SuppressWarnings("nullness") // https://tinyurl.com/cfissue/1654
   public static @PolyAll int @SameLen("#1") [] fnCompose(
       @IndexFor("#2") int[] a, @PolyAll int[] b) {
+    // TODO: If @PolyAll is already present, you should not need @PolyDet (it should be redundant)
     @PolyAll @PolyDet int @PolyDet [] result = new @PolyAll int @PolyDet [a.length];
     for (int i = 0; i < a.length; i++) {
       result[i] = b[a[i]];
@@ -3031,7 +3043,7 @@ public final class ArraysPlume {
    * lengths differ, then the shorter array is considered less.
    *
    * <p>Note: this comparator imposes orderings that are inconsistent with {@link Object#equals}.
-   * That is, it may return 0 if the arrays contain identical elemetns but are not equal according
+   * That is, it may return 0 if the arrays contain identical elements but are not equal according
    * to {@code equals()} (which tests reference equality).
    */
   public static final class ComparableArrayComparatorLexical<T extends Comparable<T>>
@@ -3227,10 +3239,10 @@ public final class ArraysPlume {
      *     argument is less than, equal to, or greater than the second argument
      */
     @Pure
-    @SuppressWarnings(
-        {"override.param.invalid", "determinism"}) // known issue with nested generic types, see
-    // https://github.com/t-rasmud/checker-framework/issues/22
-    // CF bug: doesn't expand annotations on array elements with @Poly
+    @SuppressWarnings({
+      "override.param.invalid",
+      "determinism"
+    }) // https://github.com/t-rasmud/checker-framework/issues/22
     // The signature on this method is unnecessarily strict because it
     // requires that the component types be identical.  The signature should
     // be compare(@PolyAll(1) T[], @PolyAll(2) T[]), but the
@@ -3416,6 +3428,7 @@ public final class ArraysPlume {
    * @param k number of subsets into which to partition {@code elts}
    * @return a list of partitionings, where each contains exactly k subsets
    */
+  // TODO: Can you create an issue and reference it?
   @SuppressWarnings("determinism") // seems to be an issue with the variable arguments method
   // Arrays.asList returning @NonDet, as simply creating a list and adding the single element causes
   // no error
@@ -3537,6 +3550,14 @@ public final class ArraysPlume {
      * @param elt the element to add
      * @return a new partitioning just like this one, but with elt added to the ith part
      */
+    // TODO: You can change code like
+    //   result.add(newPart);
+    // into
+    //   @SuppressWarnings(...)
+    //   boolean ignore = result.add(newPart);
+    // to scope the suppression just to the relevant statement.
+    // Also, please be more specific about "adding to it": is the problem that the argument is
+    // @NonDet?
     @SuppressWarnings("determinism") // because a Partitioning is always a collection of @Det
     // ArrayLists, there's an issue to adding to it in this method, furthermore, newPart becomes
     // @NonDet because method calls on generic types become @NonDet

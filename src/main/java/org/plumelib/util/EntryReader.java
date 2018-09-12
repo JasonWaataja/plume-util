@@ -142,7 +142,6 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
      * @param filename file from which to read
      * @throws IOException if there is trobule reading the file
      */
-    // TODO: Fix above typo.
     public FlnReader(@Det String filename) throws IOException {
       super(UtilPlume.fileReader(filename));
       this.filename = filename;
@@ -569,10 +568,10 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       if (m.matches()) {
         String filenameString = m.group(1);
         if (filenameString == null) {
-          String message = String.format(
-              "includeRegex (%s) does not capture group 1 in %s",
-              (@PolyDet Pattern) includeRegex,
-              line);
+          String message =
+              String.format(
+                  "includeRegex (%s) does not capture group 1 in %s",
+                  (@PolyDet Pattern) includeRegex, line);
           throw new Error(message);
         }
         File filename = new File(UtilPlume.expandFilename(filenameString));

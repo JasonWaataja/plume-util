@@ -31,6 +31,7 @@ public class ClassDeterministic {
    * @return the class's annotations
    */
   public static @Det Annotation @Det [] getAnnotations(Class<?> c) {
+    // TODO: Is the @Det annotation necessary here?  I think type refinement should infer it.
     @Det Annotation @OrderNonDet [] result = c.getAnnotations();
     Arrays.sort(result, annotationComparator);
     return result;
@@ -55,7 +56,7 @@ public class ClassDeterministic {
    * @return the class's member classes
    */
   public static @Det Class<?> @Det [] getClasses(@Det Class<?> c) {
-    Class<?> [] result = c.getClasses();
+    Class<?>[] result = c.getClasses();
     Arrays.sort(result, classComparator);
     return result;
   }
@@ -81,11 +82,9 @@ public class ClassDeterministic {
    */
   @SuppressWarnings("nullness:argument.type.incompatible") //  comparator handles null
   public static <T> T @Nullable @Det [] getEnumConstants(Class<T> c) {
+    // TODO: What change is needed?  Can you just make the change?
     @SuppressWarnings("determinism") // TODO: Get the JDK annotation for this method changed.
     T @OrderNonDet [] result = c.getEnumConstants();
-    if (result == null) {
-      return null;
-    }
     if (result == null) {
       return null;
     }

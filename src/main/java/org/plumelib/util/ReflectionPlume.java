@@ -186,9 +186,7 @@ public final class ReflectionPlume {
         throw new Error(
             String.format(
                 "Expected to read %d bytes from %s, got %d",
-                (@PolyDet int) numbytes,
-                pathname,
-                bytesRead));
+                (@PolyDet int) numbytes, pathname, bytesRead));
       }
       Class<?> return_class = defineClass(className, classBytes, 0, numbytes);
       resolveClass(return_class); // link the class
@@ -309,8 +307,7 @@ public final class ReflectionPlume {
         argnames = UtilPlume.split(all_argnames, ',');
       }
 
-      @MonotonicNonNull @PolyDet Class<?> @PolyDet [] argclasses_tmp =
-          new Class<?> @PolyDet [argnames.length];
+      @MonotonicNonNull @PolyDet Class<?> @PolyDet [] argclasses_tmp = new Class<?> @PolyDet [argnames.length];
       for (int i = 0; i < argnames.length; i++) {
         String bnArgname = argnames[i].trim();
         @ClassGetName String cgnArgname = Signatures.binaryNameToClassGetName(bnArgname);

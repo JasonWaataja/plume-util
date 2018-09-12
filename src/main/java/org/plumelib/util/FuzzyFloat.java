@@ -63,7 +63,8 @@ public class FuzzyFloat {
    *     which requires exact matching rather than permitting fuzzy matching)
    * @see #FuzzyFloat
    */
-  public void setRelativeRatio(@UnknownInitialization @Raw FuzzyFloat this, @Det double relativeRatio) {
+  public void setRelativeRatio(
+      @UnknownInitialization @Raw FuzzyFloat this, @Det double relativeRatio) {
     minRatio = 1 - relativeRatio;
     maxRatio = 1 + relativeRatio;
     exactComparisons = (relativeRatio == 0.0);
@@ -213,8 +214,8 @@ public class FuzzyFloat {
   }
 
   /**
-   * Searches for the first subsequence of a that matches sub elementwise. Elements of sub are
-   * considered to match elements of a if they pass the {@link #eq} test.
+   * Searches for the first subsequence of {@code a} that matches {@code sub} elementwise. Elements
+   * of {@code sub} are considered to match elements of {@code a} if they pass the {@link #eq} test.
    *
    * @param a the sequence to search in
    * @param sub the sequence to search for
