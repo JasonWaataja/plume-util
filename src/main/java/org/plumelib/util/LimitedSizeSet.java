@@ -54,7 +54,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    *
    * @param maxValues the maximum number of values this set will be able to hold; must be positive
    */
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public LimitedSizeSet(@Det @Positive int maxValues) {
     if (assertsEnabled && !(maxValues > 0)) {
       throw new IllegalArgumentException("maxValues should be positive, is " + maxValues);
@@ -95,7 +95,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    *
    * @param s the elements to add to this set
    */
-  @SuppressWarnings("determinism") // bug, int literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public void addAll(LimitedSizeSet<? extends T> s) {
     @SuppressWarnings("interning") // optimization; not a subclass of Collection, though
     boolean sameObject = (this == s);

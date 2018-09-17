@@ -359,7 +359,7 @@ public final class ArraysPlume {
    */
   @Pure
   @StaticallyExecutable
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyDet("down") int elementRange(int[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(int[])");
@@ -378,7 +378,7 @@ public final class ArraysPlume {
    */
   @Pure
   @StaticallyExecutable
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyDet("down") long elementRange(long[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(long[])");
@@ -1101,7 +1101,7 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    */
   @SideEffectFree
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyAll @PolyDet("up") Object @PolyDet("up") [] subarray(
       @PolyAll Object[] a,
       @NonNegative int startindex,
@@ -1138,7 +1138,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyAll @PolyDet("up") String @PolyDet("up") [] subarray(
       @PolyAll String[] a,
       @NonNegative int startindex,
@@ -1159,7 +1159,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyDet("up") byte @PolyDet("up") [] subarray(
       byte[] a,
       @NonNegative int startindex,
@@ -1179,7 +1179,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyDet("up") boolean @PolyDet("up") [] subarray(
       boolean[] a,
       @NonNegative int startindex,
@@ -1200,7 +1200,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyDet("up") char @PolyDet("up") [] subarray(
       char[] a,
       @NonNegative int startindex,
@@ -1220,7 +1220,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyDet("up") double @PolyDet("up") [] subarray(
       double[] a,
       @NonNegative int startindex,
@@ -1241,7 +1241,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyDet("up") float @PolyDet("up") [] subarray(
       float[] a,
       @NonNegative int startindex,
@@ -1262,7 +1262,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyDet("up") int @PolyDet("up") [] subarray(
       int[] a,
       @NonNegative int startindex,
@@ -1282,7 +1282,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyDet("up") long @PolyDet("up") [] subarray(
       long[] a,
       @NonNegative int startindex,
@@ -1302,7 +1302,7 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
-  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public static @PolyDet("up") short @PolyDet("up") [] subarray(
       short[] a,
       @NonNegative int startindex,
@@ -1734,9 +1734,6 @@ public final class ArraysPlume {
      *
      * @return the least upper bound of the classes of the elements of this
      */
-    // TODO: This issue is closed.  Can the @SuppressWarnings be removed?
-    @SuppressWarnings("determinism") // error when finding least upper bound of theArray, see
-    // https://github.com/t-rasmud/checker-framework/issues/23
     @Nullable Class<?> leastUpperBound() {
       if (theArray != null) {
         return ReflectionPlume.leastUpperBound(theArray);
@@ -2387,8 +2384,6 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  // TODO: You added the comment "adding to a local collection".  How is that different than "side
-  // effect to local state"?
   @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean noDuplicates(boolean[] a) {
@@ -2654,8 +2649,8 @@ public final class ArraysPlume {
    * @param a an array, representing a function
    * @return true iff all elements of a are in [0..a.length) and a contains no duplicates.
    */
-  @SuppressWarnings({"purity", "determinism"}) // side effect to local state (array), String literal
-  // flagged in annotation
+  @SuppressWarnings({"purity", "determinism"}) // side effect to local state (array),
+  // https://github.com/t-rasmud/checker-framework/issues/40
   @Pure
   public static @PolyDet("down") boolean fnIsPermutation(int[] a) {
     // In the common case we expect to succeed, so use as few loops as possible
@@ -2745,11 +2740,11 @@ public final class ArraysPlume {
    * @param b function from [0..b.length) to range R
    * @return function from [0..a.length) to range R that is the composition of a and b
    */
-  @SuppressWarnings("nullness") // https://tinyurl.com/cfissue/1654
+  @SuppressWarnings({"nullness", "determinism"}) // https://tinyurl.com/cfissue/1654,
+  // https://github.com/t-rasmud/checker-framework/issues/39
   public static @PolyAll int @SameLen("#1") [] fnCompose(
       @IndexFor("#2") int[] a, @PolyAll int[] b) {
-    // TODO: If @PolyAll is already present, you should not need @PolyDet (it should be redundant)
-    @PolyAll @PolyDet int @PolyDet [] result = new @PolyAll int @PolyDet [a.length];
+    @PolyAll int @PolyDet [] result = new @PolyAll int @PolyDet [a.length];
     for (int i = 0; i < a.length; i++) {
       result[i] = b[a[i]];
     }
@@ -3432,10 +3427,6 @@ public final class ArraysPlume {
    * @param k number of subsets into which to partition {@code elts}
    * @return a list of partitionings, where each contains exactly k subsets
    */
-  // TODO: Can you create an issue and reference it?
-  @SuppressWarnings("determinism") // seems to be an issue with the variable arguments method
-  // Arrays.asList returning @NonDet, as simply creating a list and adding the single element causes
-  // no error
   public static <T> List<Partitioning<T>> partitionInto(Queue<T> elts, @NonNegative int k) {
     if (elts.size() < k) {
       throw new IllegalArgumentException();
@@ -3554,26 +3545,21 @@ public final class ArraysPlume {
      * @param elt the element to add
      * @return a new partitioning just like this one, but with elt added to the ith part
      */
-    // TODO: You can change code like
-    //   result.add(newPart);
-    // into
-    //   @SuppressWarnings(...)
-    //   boolean ignore = result.add(newPart);
-    // to scope the suppression just to the relevant statement.
-    // Also, please be more specific about "adding to it": is the problem that the argument is
-    // @NonDet?
-    @SuppressWarnings("determinism") // because a Partitioning is always a collection of @Det
-    // ArrayLists, there's an issue to adding to it in this method, furthermore, newPart becomes
-    // @NonDet because method calls on generic types become @NonDet
     Partitioning<T> addToPart(@NonNegative int i, T elt) {
       Partitioning<T> result = new Partitioning<T>(this);
       if (size() == i) {
-        ArrayList<T> newPart = newArrayList(elt);
+        @SuppressWarnings("determinism") // a Partitioning<T> is a collection of @Det ArrayList<T>,
+        // supposing this type has already been instantiated, creating a new ArrayList with a single
+        // T element should also be @Det
+        @Det ArrayList<T> newPart = newArrayList(elt);
         result.add(newPart);
       } else {
         ArrayList<T> newPart = new ArrayList<T>(result.get(i));
         newPart.add(elt);
-        result.set(i, newPart);
+        @SuppressWarnings("determinism") // i is required to be @Det because result is @Det, result
+        // should be @PolyDet but can't be because of
+        // https://github.com/t-rasmud/checker-framework/issues/32
+        ArrayList<T> ignored = result.set(i, newPart);
       }
       return result;
     }
