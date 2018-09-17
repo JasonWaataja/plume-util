@@ -39,14 +39,8 @@ public final class CollectionsPlume {
   }
 
   /** The system-specific line separator string. */
-  // TODO: I was initially surprised that this is @NonDet, since two executions on the same machine
-  // will never yield different results.  This needs to be clarified in the specification of the
-  // Determinism Checker (that is, in the manual).  I am inclined to say that the system-specific
-  // line separator and path separator are @Det.  Otherwise, println() with no arguments is
-  // non-deterministic, as is String.format("%n").  This would make all output nondeterministic,
-  // which would not be helpful to users.  Please make the change in the manual, and we'll want to
-  // special-case a few specific calls to System.getProperty in the checker.
-  private static final @NonDet String lineSep = System.getProperty("line.separator");
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/37
+  private static final String lineSep = System.getProperty("line.separator");
 
   ///////////////////////////////////////////////////////////////////////////
   /// Collections

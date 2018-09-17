@@ -81,8 +81,6 @@ public class ClassDeterministic {
    */
   @SuppressWarnings("nullness:argument.type.incompatible") //  comparator handles null
   public static <T> T @Nullable @Det [] getEnumConstants(Class<T> c) {
-    // TODO: What change is needed?  Can you just make the change?
-    @SuppressWarnings("determinism") // TODO: Get the JDK annotation for this method changed.
     T @OrderNonDet [] result = c.getEnumConstants();
     if (result == null) {
       return null;

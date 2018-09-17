@@ -110,7 +110,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
   @Nullable @NonDet String pushbackLine = null;
 
   /** Platform-specific line separator. */
-  private static final @NonDet String lineSep = System.getProperty("line.separator");
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/37
+  private static final String lineSep = System.getProperty("line.separator");
 
   ///
   /// Helper classes
@@ -671,7 +672,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @return the next entry (paragraph) in the file
    * @throws IOException if there is a problem reading the file
    */
-  public @Nullable @NonDet Entry getEntry(@GuardSatisfied EntryReader this) throws IOException {
+  public @Nullable Entry getEntry(@GuardSatisfied EntryReader this) throws IOException {
 
     // Skip any preceding blank lines
     String line = readLine();

@@ -2389,8 +2389,7 @@ public final class ArraysPlume {
    */
   // TODO: You added the comment "adding to a local collection".  How is that different than "side
   // effect to local state"?
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean noDuplicates(boolean[] a) {
     HashSet<Boolean> hs = new HashSet<Boolean>();
@@ -2414,8 +2413,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean noDuplicates(byte[] a) {
     HashSet<Byte> hs = new HashSet<Byte>();
@@ -2439,8 +2437,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean noDuplicates(char[] a) {
     HashSet<Character> hs = new HashSet<Character>();
@@ -2464,8 +2461,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean noDuplicates(float[] a) {
     HashSet<Float> hs = new HashSet<Float>();
@@ -2489,8 +2485,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean noDuplicates(short[] a) {
     HashSet<Short> hs = new HashSet<Short>();
@@ -2514,8 +2509,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean noDuplicates(int[] a) {
     HashSet<Integer> hs = new HashSet<Integer>();
@@ -2540,8 +2534,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean noDuplicates(double[] a) {
     HashSet<Double> hs = new HashSet<Double>();
@@ -2565,8 +2558,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean noDuplicates(long[] a) {
     HashSet<Long> hs = new HashSet<Long>();
@@ -2590,8 +2582,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet
   @Pure
   public static @PolyDet("down") boolean noDuplicates(String[] a) {
     HashSet<String> hs = new HashSet<String>();
@@ -2614,8 +2605,7 @@ public final class ArraysPlume {
    * @param a an array
    * @return true iff a does not contain duplicate elements
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean noDuplicates(Object[] a) {
     HashSet<Object> hs = new HashSet<Object>();
@@ -2805,8 +2795,7 @@ public final class ArraysPlume {
    * @param bigger second set to test
    * @return true iff smaller is a subset of bigger
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean isSubset(long[] smaller, long[] bigger) {
     Set<Long> setBigger = new HashSet<Long>();
@@ -2838,8 +2827,7 @@ public final class ArraysPlume {
    * @param bigger second set to test
    * @return true iff smaller is a subset of bigger
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet),
-  // adding to a local collection
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (HashSet)
   @Pure
   public static @PolyDet("down") boolean isSubset(double[] smaller, double[] bigger) {
     Set<Double> setBigger = new HashSet<Double>();

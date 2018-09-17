@@ -64,7 +64,8 @@ public final class UtilPlume {
   }
 
   /** The system-specific line separator string. */
-  private static final @NonDet String lineSep = System.getProperty("line.separator");
+  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/37
+  private static final String lineSep = System.getProperty("line.separator");
 
   ///////////////////////////////////////////////////////////////////////////
   /// BitSet
@@ -552,8 +553,9 @@ public final class UtilPlume {
    * @return the contents of {@code filename}, one string per line
    * @throws IOException if there was a problem reading the file
    */
-  public static @NonDet List<@NonDet String> fileLines(String filename) throws IOException {
-    List<@NonDet String> textList = new @NonDet ArrayList<@NonDet String>();
+  @SuppressWarnings("determinism") // adding to a local collection
+  public static List<String> fileLines(String filename) throws IOException {
+    List<String> textList = new ArrayList<String>();
     try (LineNumberReader reader = UtilPlume.lineNumberFileReader(filename)) {
       String line;
       while ((line = reader.readLine()) != null) {
@@ -570,7 +572,7 @@ public final class UtilPlume {
    * @return the inferred line separator used in filename
    * @throws IOException if there is trouble reading the file
    */
-  public static @NonDet String inferLineSeparator(String filename) throws IOException {
+  public static String inferLineSeparator(String filename) throws IOException {
     return inferLineSeparator(new File(filename));
   }
 
@@ -581,7 +583,7 @@ public final class UtilPlume {
    * @return the inferred line separator used in filename
    * @throws IOException if there is trouble reading the file
    */
-  public static @NonDet String inferLineSeparator(File file) throws IOException {
+  public static String inferLineSeparator(File file) throws IOException {
     try (BufferedReader r = UtilPlume.bufferedFileReader(file)) {
       int unix = 0;
       int dos = 0;
@@ -625,7 +627,7 @@ public final class UtilPlume {
    * @return true iff the files have the same contents
    */
   @Pure
-  public static @NonDet boolean equalFiles(String file1, String file2) {
+  public static boolean equalFiles(String file1, String file2) {
     return equalFiles(file1, file2, false);
   }
 
@@ -639,7 +641,7 @@ public final class UtilPlume {
    */
   @SuppressWarnings({"purity", "lock"}) // reads files, side effects local state
   @Pure
-  public static @NonDet boolean equalFiles(String file1, String file2, boolean trimLines) {
+  public static boolean equalFiles(String file1, String file2, boolean trimLines) {
     try (LineNumberReader reader1 = UtilPlume.lineNumberFileReader(file1);
         LineNumberReader reader2 = UtilPlume.lineNumberFileReader(file2); ) {
       String line1 = reader1.readLine();
@@ -670,7 +672,7 @@ public final class UtilPlume {
    * @param file the file to create and write
    * @return true iff the file can be created and written
    */
-  public static @NonDet boolean canCreateAndWrite(File file) {
+  public static boolean canCreateAndWrite(File file) {
     if (file.exists()) {
       return file.canWrite();
     } else {
@@ -718,7 +720,7 @@ public final class UtilPlume {
    *     SecurityManager.checkWrite(java.lang.String) method does not allow a file to be created
    * @see java.io.File#createTempFile(String, String, File)
    */
-  public static @NonDet File createTempDir(String prefix, String suffix) throws IOException {
+  public static File createTempDir(String prefix, String suffix) throws IOException {
     String fs = File.separator;
     String path = System.getProperty("java.io.tmpdir") + fs + System.getProperty("user.name") + fs;
     File pathFile = new File(path);
@@ -818,7 +820,7 @@ public final class UtilPlume {
    * @param name file whose name to expand
    * @return file with expanded file
    */
-  public static @NonDet File expandFilename(File name) {
+  public static File expandFilename(File name) {
     String path = name.getPath();
     String newname = expandFilename(path);
     @SuppressWarnings("interning")
@@ -890,7 +892,7 @@ public final class UtilPlume {
    * @throws IOException if there is trouble reading the file
    * @throws ClassNotFoundException if the object's class cannot be found
    */
-  public static @NonDet Object readObject(File file) throws IOException, ClassNotFoundException {
+  public static Object readObject(File file) throws IOException, ClassNotFoundException {
     // 8192 is the buffer size in BufferedReader
     InputStream istream = new BufferedInputStream(new FileInputStream(file), 8192);
     if (file.getName().endsWith(".gz")) {
@@ -936,7 +938,7 @@ public final class UtilPlume {
    * @param file the file to read
    * @return the entire contents of the reader, as a string
    */
-  public static @NonDet String readFile(File file) {
+  public static String readFile(File file) {
 
     try {
       BufferedReader reader = UtilPlume.bufferedFileReader(file);
@@ -1493,7 +1495,7 @@ public final class UtilPlume {
    * @param a array of values to concatenate
    * @return the concatenation of the string representations of the values, each on its own line
    */
-  public static @NonDet String joinLines(Object... a) {
+  public static String joinLines(Object... a) {
     return join(a, lineSep);
   }
 
@@ -1529,7 +1531,7 @@ public final class UtilPlume {
    * @param v list of values to concatenate
    * @return the concatenation of the string representations of the values, each on its own line
    */
-  public static @NonDet String joinLines(List<String> v) {
+  public static String joinLines(List<String> v) {
     return join(v, lineSep);
   }
 
