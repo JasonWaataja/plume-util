@@ -3,6 +3,7 @@ package org.plumelib.util;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.lock.qual.GuardedByUnknown;
 import org.checkerframework.dataflow.qual.Pure;
 
@@ -22,6 +23,7 @@ public final class FileWriterWithName extends FileWriter {
    * @throws IOException if the named file exists but is a directory rather than a regular file,
    *     does not exist but cannot be created, or cannot be opened for any other reason
    */
+  @SuppressWarnings("determinism") // assigning @PolyDet to fields in constructor
   public FileWriterWithName(String fileName) throws IOException {
     super(fileName);
     this.fileName = fileName;
@@ -37,6 +39,7 @@ public final class FileWriterWithName extends FileWriter {
    * @throws IOException if the named file exists but is a directory rather than a regular file,
    *     does not exist but cannot be created, or cannot be opened for any other reason
    */
+  @SuppressWarnings("determinism") // assigning @PolyDet to fields in constructor
   public FileWriterWithName(String fileName, boolean append) throws IOException {
     super(fileName, append);
     this.fileName = fileName;
@@ -49,6 +52,7 @@ public final class FileWriterWithName extends FileWriter {
    * @throws IOException if the file exists but is a directory rather than a regular file, does not
    *     exist but cannot be created, or cannot be opened for any other reason
    */
+  @SuppressWarnings("determinism") // assigning @PolyDet to fields in constructor
   public FileWriterWithName(File file) throws IOException {
     super(file);
     this.fileName = file.getAbsolutePath();
@@ -65,6 +69,7 @@ public final class FileWriterWithName extends FileWriter {
    *     exist but cannot be created, or cannot be opened for any other reason
    * @since 1.4
    */
+  @SuppressWarnings("determinism") // assigning @PolyDet to fields in constructor
   public FileWriterWithName(File file, boolean append) throws IOException {
     super(file, append);
     this.fileName = file.getAbsolutePath();
