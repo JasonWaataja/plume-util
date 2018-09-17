@@ -31,8 +31,7 @@ public class ClassDeterministic {
    * @return the class's annotations
    */
   public static @Det Annotation @Det [] getAnnotations(Class<?> c) {
-    // TODO: Is the @Det annotation necessary here?  I think type refinement should infer it.
-    @Det Annotation @OrderNonDet [] result = c.getAnnotations();
+    Annotation @OrderNonDet [] result = c.getAnnotations();
     Arrays.sort(result, annotationComparator);
     return result;
   }
@@ -44,7 +43,7 @@ public class ClassDeterministic {
    * @return the class's declared annotations
    */
   public static @Det Annotation @Det [] getDeclaredAnnotations(Class<?> c) {
-    @Det Annotation @OrderNonDet [] result = c.getDeclaredAnnotations();
+    Annotation @OrderNonDet [] result = c.getDeclaredAnnotations();
     Arrays.sort(result, annotationComparator);
     return result;
   }
@@ -68,7 +67,7 @@ public class ClassDeterministic {
    * @return the class's declared member classes
    */
   public static @Det Class<?> @Det [] getDeclaredClasses(Class<?> c) {
-    @Det Class<?> @OrderNonDet [] result = c.getDeclaredClasses();
+    Class<?> @OrderNonDet [] result = c.getDeclaredClasses();
     Arrays.sort(result, classComparator);
     return result;
   }
@@ -99,7 +98,7 @@ public class ClassDeterministic {
    * @return the class's constructors
    */
   public static @Det Constructor<?> @Det [] getConstructors(Class<?> c) {
-    @Det Constructor<?> @OrderNonDet [] result = c.getConstructors();
+    Constructor<?> @OrderNonDet [] result = c.getConstructors();
     Arrays.sort(result, constructorComparator);
     return result;
   }
@@ -111,7 +110,7 @@ public class ClassDeterministic {
    * @return the class's declared constructors
    */
   public static @Det Constructor<?> @Det [] getDeclaredConstructors(Class<?> c) {
-    @Det Constructor<?> @OrderNonDet [] result = c.getDeclaredConstructors();
+    Constructor<?> @OrderNonDet [] result = c.getDeclaredConstructors();
     Arrays.sort(result, constructorComparator);
     return result;
   }
@@ -123,7 +122,7 @@ public class ClassDeterministic {
    * @return the class's fields
    */
   public static @Det Field @Det [] getFields(Class<?> c) {
-    @Det Field @OrderNonDet [] result = c.getFields();
+    Field @OrderNonDet [] result = c.getFields();
     Arrays.sort(result, fieldComparator);
     return result;
   }
@@ -135,7 +134,7 @@ public class ClassDeterministic {
    * @return the class's declared fields
    */
   public static @Det Field @Det [] getDeclaredFields(Class<?> c) {
-    @Det Field @OrderNonDet [] result = c.getDeclaredFields();
+    Field @OrderNonDet [] result = c.getDeclaredFields();
     Arrays.sort(result, fieldComparator);
     return result;
   }
@@ -147,7 +146,7 @@ public class ClassDeterministic {
    * @return the class's methods
    */
   public static @Det Method @Det [] getMethods(Class<?> c) {
-    @Det Method @OrderNonDet [] result = c.getMethods();
+    Method @OrderNonDet [] result = c.getMethods();
     Arrays.sort(result, methodComparator);
     return result;
   }
@@ -159,7 +158,7 @@ public class ClassDeterministic {
    * @return the class's declared methods
    */
   public static @Det Method @Det [] getDeclaredMethods(Class<?> c) {
-    @Det Method @OrderNonDet [] result = c.getDeclaredMethods();
+    Method @OrderNonDet [] result = c.getDeclaredMethods();
     Arrays.sort(result, methodComparator);
     return result;
   }

@@ -365,7 +365,6 @@ public final class ArraysPlume {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(int[])");
     }
     @SuppressWarnings("purity.not.deterministic.call") // use deterministic parts of object
-    // TODO: shouldn't the array be @PolyDet("down") rather than @PolyDat?
     @PolyDet("down") int @PolyDet("down") [] minAndMax = minAndMax(a);
     return minAndMax[1] - minAndMax[0];
   }
@@ -624,7 +623,6 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
   @Pure
-  // TODO: Why is the result of indexOfEq @PolyDet("up") for lists but @NonDet for arrays?
   public static @NonDet int indexOfEq(
       List<? extends @PolyNull @NonDet Object> a, @Nullable Object elt) {
     for (int i = 0; i < a.size(); i++) {
@@ -824,9 +822,6 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  // TODO: You removed a @PolyAll annotation here.  Why?  I'm concerned that will affect other
-  // clients.  If you write an explicit annotation for the Determinism Checker, then @PolyAll does
-  // not apply to the Determinism Checker.
   public static @PolyDet("up") int indexOf(@PolyAll Object[] a, Object[] sub) {
     int aIndexMax = a.length - sub.length + 1;
     for (int i = 0; i <= aIndexMax; i++) {
@@ -1106,12 +1101,13 @@ public final class ArraysPlume {
    *     whether it would be the last included index or the first non-included index)
    */
   @SideEffectFree
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyAll @PolyDet("up") Object @PolyDet("up") [] subarray(
       @PolyAll Object[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    // TODO: the type here (@PolyDet) is not the same as the return type of the method, @PolyDet(up)
-    @PolyAll Object @PolyDet [] result = new @PolyAll Object @PolyDet [length];
+    @PolyAll @PolyDet("up") Object @PolyDet("up") [] result =
+        new @PolyAll @PolyDet("up") Object @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1142,11 +1138,13 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyAll @PolyDet("up") String @PolyDet("up") [] subarray(
       @PolyAll String[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyAll String @PolyDet [] result = new @PolyAll String @PolyDet [length];
+    @PolyAll @PolyDet("up") String @PolyDet("up") [] result =
+        new @PolyAll @PolyDet("up") String @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1161,11 +1159,12 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyDet("up") byte @PolyDet("up") [] subarray(
       byte[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet byte @PolyDet [] result = new @PolyDet byte @PolyDet [length];
+    @PolyDet("up") byte @PolyDet("up") [] result = new @PolyDet("up") byte @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1180,11 +1179,13 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyDet("up") boolean @PolyDet("up") [] subarray(
       boolean[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet boolean @PolyDet [] result = new @PolyDet boolean @PolyDet [length];
+    @PolyDet("up") boolean @PolyDet("up") [] result =
+        new @PolyDet("up") boolean @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1199,11 +1200,12 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyDet("up") char @PolyDet("up") [] subarray(
       char[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet char @PolyDet [] result = new @PolyDet char @PolyDet [length];
+    @PolyDet("up") char @PolyDet("up") [] result = new @PolyDet("up") char @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1218,11 +1220,13 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyDet("up") double @PolyDet("up") [] subarray(
       double[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet double @PolyDet [] result = new @PolyDet double @PolyDet [length];
+    @PolyDet("up") double @PolyDet("up") [] result =
+        new @PolyDet("up") double @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1237,11 +1241,13 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyDet("up") float @PolyDet("up") [] subarray(
       float[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet float @PolyDet [] result = new @PolyDet float @PolyDet [length];
+    @PolyDet("up") float @PolyDet("up") [] result =
+        new @PolyDet("up") float @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1256,11 +1262,12 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyDet("up") int @PolyDet("up") [] subarray(
       int[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet int @PolyDet [] result = new @PolyDet int @PolyDet [length];
+    @PolyDet("up") int @PolyDet("up") [] result = new @PolyDet("up") int @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1275,11 +1282,12 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyDet("up") long @PolyDet("up") [] subarray(
       long[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet long @PolyDet [] result = new @PolyDet long @PolyDet [length];
+    @PolyDet("up") long @PolyDet("up") [] result = new @PolyDet("up") long @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1294,11 +1302,13 @@ public final class ArraysPlume {
    * @return a subarray of the given array
    */
   @SideEffectFree
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyDet("up") short @PolyDet("up") [] subarray(
       short[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet short @PolyDet [] result = new @PolyDet short @PolyDet [length];
+    @PolyDet("up") short @PolyDet("up") [] result =
+        new @PolyDet("up") short @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1619,7 +1629,7 @@ public final class ArraysPlume {
    * A wrapper around a list or an array (or null). Avoids code duplication for arrays and lists, at
    * the cost of object construction and method calls.
    */
-  private static class ListOrArray<T> {
+  private static class ListOrArray<T extends @Det Object> {
     // At most one field is non-null.
     /** The array that this object wraps, or null. */
     T @Nullable [] theArray = null;
@@ -1805,7 +1815,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  private static <T> T[] concat(ListOrArray<T> a, ListOrArray<T> b) {
+  private static <T extends @Det Object> T[] concat(ListOrArray<T> a, ListOrArray<T> b) {
     if (a.isNull() && b.isNull()) {
       @SuppressWarnings("unchecked")
       T[] result = (T[]) new Object[0];
@@ -2654,11 +2664,13 @@ public final class ArraysPlume {
    * @param a an array, representing a function
    * @return true iff all elements of a are in [0..a.length) and a contains no duplicates.
    */
-  @SuppressWarnings("purity") // side effect to local state (array)
+  @SuppressWarnings({"purity", "determinism"}) // side effect to local state (array), String literal
+  // flagged in annotation
   @Pure
   public static @PolyDet("down") boolean fnIsPermutation(int[] a) {
     // In the common case we expect to succeed, so use as few loops as possible
-    @PolyDet boolean @PolyDet [] see = new @PolyDet boolean @PolyDet [a.length];
+    @PolyDet("down") boolean @PolyDet("down") [] see =
+        new @PolyDet("down") boolean @PolyDet("down") [a.length];
     for (int i = 0; i < a.length; i++) {
       int n = a[i];
       if (n < 0 || n >= a.length || see[n]) {
