@@ -324,7 +324,7 @@ public final class ArraysPlume {
       resultMin = Math.min(resultMin, a[i]);
       resultMax = Math.max(resultMax, a[i]);
     }
-    return new @PolyDet int @PolyDet [] {resultMin, resultMax};
+    return new @PolyDet("down") int @PolyDet("down") [] {resultMin, resultMax};
   }
 
   /**
@@ -347,7 +347,7 @@ public final class ArraysPlume {
       resultMin = Math.min(resultMin, a[i]);
       resultMax = Math.max(resultMax, a[i]);
     }
-    return new @PolyDet long @PolyDet [] {resultMin, resultMax};
+    return new @PolyDet("down") long @PolyDet("down") [] {resultMin, resultMax};
   }
 
   /**
@@ -359,13 +359,14 @@ public final class ArraysPlume {
    */
   @Pure
   @StaticallyExecutable
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyDet("down") int elementRange(int[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(int[])");
     }
     @SuppressWarnings("purity.not.deterministic.call") // use deterministic parts of object
     // TODO: shouldn't the array be @PolyDet("down") rather than @PolyDat?
-    @PolyDet int @PolyDet [] minAndMax = minAndMax(a);
+    @PolyDet("down") int @PolyDet("down") [] minAndMax = minAndMax(a);
     return minAndMax[1] - minAndMax[0];
   }
 
@@ -378,12 +379,13 @@ public final class ArraysPlume {
    */
   @Pure
   @StaticallyExecutable
+  @SuppressWarnings("determinism") // bug, String literal flagged in annotation
   public static @PolyDet("down") long elementRange(long[] a) {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(long[])");
     }
     @SuppressWarnings("purity.not.deterministic.call") // use deterministic parts of object
-    @PolyDet long @PolyDet [] minAndMax = minAndMax(a);
+    @PolyDet("down") long @PolyDet("down") [] minAndMax = minAndMax(a);
     return minAndMax[1] - minAndMax[0];
   }
 
@@ -548,6 +550,7 @@ public final class ArraysPlume {
    * @see java.util.List#indexOf(java.lang.Object)
    */
   @Pure
+  @SuppressWarnings("determinism") // indexOfEq is @NonDet, but only used when elt is null
   public static @PolyDet("up") int indexOf(
       List<? extends @PolyNull Object> a,
       @Nullable Object elt,
@@ -622,7 +625,7 @@ public final class ArraysPlume {
    */
   @Pure
   // TODO: Why is the result of indexOfEq @PolyDet("up") for lists but @NonDet for arrays?
-  public static @PolyDet("up") int indexOfEq(
+  public static @NonDet int indexOfEq(
       List<? extends @PolyNull @NonDet Object> a, @Nullable Object elt) {
     for (int i = 0; i < a.size(); i++) {
       if (elt == a.get(i)) {
@@ -645,7 +648,7 @@ public final class ArraysPlume {
    * @see java.util.ArrayList#indexOf(java.lang.Object)
    */
   @Pure
-  public static @PolyDet("up") int indexOfEq(
+  public static @NonDet int indexOfEq(
       List<? extends @PolyNull Object> a,
       @Nullable Object elt,
       @IndexFor("#1") @NonNegative int minindex,
@@ -824,7 +827,7 @@ public final class ArraysPlume {
   // TODO: You removed a @PolyAll annotation here.  Why?  I'm concerned that will affect other
   // clients.  If you write an explicit annotation for the Determinism Checker, then @PolyAll does
   // not apply to the Determinism Checker.
-  public static @PolyDet("up") int indexOf(Object[] a, Object[] sub) {
+  public static @PolyDet("up") int indexOf(@PolyAll Object[] a, Object[] sub) {
     int aIndexMax = a.length - sub.length + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarray(a, sub, i)) {
@@ -850,7 +853,7 @@ public final class ArraysPlume {
   // be indexOfEq(@PolyAll(1) Object[], @PolyAll(2) Object[]), but the
   // @PolyAll qualifier does not yet take an argument.
   @Pure
-  public static @PolyDet("up") int indexOfEq(@PolyAll Object[] a, @PolyAll Object[] sub) {
+  public static @NonDet int indexOfEq(@PolyAll Object[] a, @PolyAll Object[] sub) {
     int aIndexMax = a.length - sub.length + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarrayEq(a, sub, i)) {
@@ -894,7 +897,7 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  public static @PolyDet("up") int indexOfEq(List<?> a, @PolyAll Object[] sub) {
+  public static @NonDet int indexOfEq(List<?> a, @PolyAll Object[] sub) {
     int aIndexMax = a.size() - sub.length + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarrayEq(a, sub, i)) {
@@ -938,7 +941,7 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  public static @PolyDet("up") int indexOfEq(@PolyAll Object[] a, List<?> sub) {
+  public static @NonDet int indexOfEq(@PolyAll Object[] a, List<?> sub) {
     int aIndexMax = a.length - sub.size() + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarrayEq(a, sub, i)) {
@@ -982,7 +985,7 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  public static @PolyDet("up") int indexOfEq(List<?> a, List<?> sub) {
+  public static @NonDet int indexOfEq(List<?> a, List<?> sub) {
     int aIndexMax = a.size() - sub.size() + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarrayEq(a, sub, i)) {
@@ -3375,6 +3378,7 @@ public final class ArraysPlume {
    * @return true iff some element of a is null (false if a is zero-sized)
    */
   @Pure
+  @SuppressWarnings("determinism") // indexOfEq called, but only called with null here
   public static @PolyDet("down") boolean anyNull(List<?> a) {
     if (a.size() == 0) {
       return false;
