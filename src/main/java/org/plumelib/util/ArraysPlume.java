@@ -1106,8 +1106,7 @@ public final class ArraysPlume {
       @PolyAll Object[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyAll @PolyDet("up") Object @PolyDet("up") [] result =
-        new @PolyAll @PolyDet("up") Object @PolyDet("up") [length];
+    @PolyAll @PolyDet("up") Object @PolyDet("up") [] result = new @PolyAll @PolyDet("up") Object @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1143,8 +1142,7 @@ public final class ArraysPlume {
       @PolyAll String[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyAll @PolyDet("up") String @PolyDet("up") [] result =
-        new @PolyAll @PolyDet("up") String @PolyDet("up") [length];
+    @PolyAll @PolyDet("up") String @PolyDet("up") [] result = new @PolyAll @PolyDet("up") String @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1184,8 +1182,7 @@ public final class ArraysPlume {
       boolean[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet("up") boolean @PolyDet("up") [] result =
-        new @PolyDet("up") boolean @PolyDet("up") [length];
+    @PolyDet("up") boolean @PolyDet("up") [] result = new @PolyDet("up") boolean @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1225,8 +1222,7 @@ public final class ArraysPlume {
       double[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet("up") double @PolyDet("up") [] result =
-        new @PolyDet("up") double @PolyDet("up") [length];
+    @PolyDet("up") double @PolyDet("up") [] result = new @PolyDet("up") double @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1246,8 +1242,7 @@ public final class ArraysPlume {
       float[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet("up") float @PolyDet("up") [] result =
-        new @PolyDet("up") float @PolyDet("up") [length];
+    @PolyDet("up") float @PolyDet("up") [] result = new @PolyDet("up") float @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1307,8 +1302,7 @@ public final class ArraysPlume {
       short[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @PolyDet("up") short @PolyDet("up") [] result =
-        new @PolyDet("up") short @PolyDet("up") [length];
+    @PolyDet("up") short @PolyDet("up") [] result = new @PolyDet("up") short @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -2654,8 +2648,7 @@ public final class ArraysPlume {
   @Pure
   public static @PolyDet("down") boolean fnIsPermutation(int[] a) {
     // In the common case we expect to succeed, so use as few loops as possible
-    @PolyDet("down") boolean @PolyDet("down") [] see =
-        new @PolyDet("down") boolean @PolyDet("down") [a.length];
+    @PolyDet("down") boolean @PolyDet("down") [] see = new @PolyDet("down") boolean @PolyDet("down") [a.length];
     for (int i = 0; i < a.length; i++) {
       int n = a[i];
       if (n < 0 || n >= a.length || see[n]) {

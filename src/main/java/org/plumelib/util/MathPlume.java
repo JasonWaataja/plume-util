@@ -1512,8 +1512,7 @@ public final class MathPlume {
    * @param nums the list of operands
    * @return a (remainder, modulus) pair that fails to match elements of nums
    */
-  public static int @Nullable @ArrayLen(2) [] nonmodulusStrictInt(
-      @Det Iterator<Integer> nums) {
+  public static int @Nullable @ArrayLen(2) [] nonmodulusStrictInt(@Det Iterator<Integer> nums) {
     return nonmodulusStrictIntInternal(new MissingNumbersIteratorInt(nums, true));
   }
 
