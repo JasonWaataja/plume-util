@@ -72,16 +72,16 @@ public class RandomSelector<T> {
   private int observed = -1;
 
   /** The Random instance to use (for reproducibility). */
-  private @NonDet Random generator;
+  private Random generator;
 
   /** The values chosen. */
-  private @NonDet ArrayList<T> values = new ArrayList<T>();
+  private ArrayList<T> values = new ArrayList<T>();
 
   /**
    * @param numElts the number of elements intended to be selected from the input elements
    *     <p>Sets 'numElts' = numElts
    */
-  public RandomSelector(@Det int numElts) {
+  public @NonDet RandomSelector(int numElts) {
     this(numElts, new Random());
   }
 
@@ -90,7 +90,8 @@ public class RandomSelector<T> {
    * @param r the seed to give for random number generation.
    *     <p>Sets 'numElts' = numElts.
    */
-  public RandomSelector(@Det int numElts, @NonDet Random r) {
+  @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+  public RandomSelector(int numElts, Random r) {
     coinTossMode = false;
     this.numElts = numElts;
     observed = 0;
@@ -102,7 +103,8 @@ public class RandomSelector<T> {
    *     Iteration
    * @param r the seed to give for random number generation
    */
-  public RandomSelector(@Det double keepProbability, @NonDet Random r) {
+  @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+  public RandomSelector(double keepProbability, Random r) {
     coinTossMode = true;
     this.keepProbability = keepProbability;
     generator = r;
@@ -152,9 +154,9 @@ public class RandomSelector<T> {
    *
    * @return values
    */
-  public @NonDet List<T> getValues() {
+  public List<T> getValues() {
     // avoid concurrent mod errors and rep exposure
-    @NonDet ArrayList<T> ret = new @NonDet ArrayList<T>();
+    ArrayList<T> ret = new ArrayList<T>();
     ret.addAll(values);
     return ret;
   }

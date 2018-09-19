@@ -241,9 +241,9 @@ public final class CollectionsPlume {
    * @param objs list of elements to create combinations of
    * @return list of lists of length dims, each of which combines elements from objs
    */
-  @SuppressWarnings("determinism") // need to annotate local variable simply as @PolyDet, see
+  @SuppressWarnings("determinism") // several instances of needing to do declarations,
   // https://github.com/t-rasmud/checker-framework/issues/32
-  public static <T> List<List<T>> createCombinations(
+  public static <T> @PolyDet("up") List<@PolyDet("up") List<T>> createCombinations(
       @Positive int dims, @NonNegative int start, List<T> objs) {
 
     if (dims < 1) {
@@ -300,7 +300,7 @@ public final class CollectionsPlume {
    * @return list of lists of length arity, each of which combines integers from start to cnt
    */
   @SuppressWarnings("determinism") // adding to a local collection
-  public static ArrayList<ArrayList<Integer>> createCombinations(
+  public static ArrayList<@PolyDet ArrayList<@PolyDet Integer>> createCombinations(
       int arity, @NonNegative int start, int cnt) {
 
     long numResults = choose(cnt + arity - 1, arity);
@@ -308,7 +308,8 @@ public final class CollectionsPlume {
       throw new Error("Do you really want to create more than 100 million lists?");
     }
 
-    ArrayList<ArrayList<Integer>> results = new ArrayList<ArrayList<Integer>>();
+    ArrayList<@PolyDet ArrayList<@PolyDet Integer>> results =
+        new ArrayList<@PolyDet ArrayList<@PolyDet Integer>>();
 
     // Return a list with one zero length element if arity is zero
     if (arity == 0) {
@@ -684,12 +685,12 @@ public final class CollectionsPlume {
    * @param random the Random instance to use to make selections
    * @return list of numElts elements from itor
    */
-  public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int numElts, Random random) {
+  public static <T> @PolyDet("up") List<T> randomElements(
+      Iterator<T> itor, int numElts, Random random) {
     // The elements are chosen with the following probabilities,
     // where n == numElts:
     //   n n/2 n/3 n/4 n/5 ...
 
-    @SuppressWarnings("determinism") // passing @PolyDet to constructors
     RandomSelector<T> rs = new RandomSelector<T>(numElts, random);
 
     while (itor.hasNext()) {
@@ -732,7 +733,7 @@ public final class CollectionsPlume {
    * @return the old value, before it was incremented
    * @throws Error if the key is in the Map but maps to a non-Integer
    */
-  public static <K> @Nullable Integer incrementMap(Map<K, Integer> m, K key) {
+  public static <K> @Nullable Integer incrementMap(Map<K, @PolyDet Integer> m, K key) {
     return incrementMap(m, key, 1);
   }
 
@@ -747,8 +748,8 @@ public final class CollectionsPlume {
    * @return the old value, before it was incremented
    * @throws Error if the key is in the Map but maps to a non-Integer
    */
-  @SuppressWarnings("determinism") // adding to a collection
-  public static <K> @Nullable Integer incrementMap(Map<K, Integer> m, K key, int count) {
+  public static <K> @Nullable @PolyDet Integer incrementMap(
+      Map<K, @PolyDet Integer> m, K key, int count) {
     Integer old = m.get(key);
     Integer newTotal;
     if (old == null) {
@@ -756,7 +757,9 @@ public final class CollectionsPlume {
     } else {
       newTotal = old.intValue() + count;
     }
-    return m.put(key, newTotal);
+    @SuppressWarnings("determinism") // accessing a @PolyDet map should be @PolyDet
+    @PolyDet Integer result = m.put(key, newTotal);
+    return result;
   }
 
   /**

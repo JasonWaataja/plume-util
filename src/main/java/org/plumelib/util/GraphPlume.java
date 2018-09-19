@@ -55,7 +55,6 @@ public final class GraphPlume {
    * @param predecessors a graph, represented as a predecessor map
    * @return a map from each node to a list of its pre-dominators
    */
-  @SuppressWarnings("determinism") // adding to a local collection (map)
   public static <T> Map<T, List<T>> dominators(Map<T, List<@KeyFor("#1") T>> predecessors) {
 
     // Map<@KeyFor({"preds","dom"}) T,List<@KeyFor({"preds","dom"}) T>> dom
@@ -76,12 +75,14 @@ public final class GraphPlume {
       if (preds.get(node).isEmpty()) {
         // This is a root.  Its only dominator is itself.
         Set<T> set = Collections.singleton(node);
-        dom.put(node, new ArrayList<T>(set));
+        @SuppressWarnings("determinism") // adding to a local collection (map)
+        List<T> ignored = dom.put(node, new ArrayList<T>(set));
         roots.add(node);
       } else {
         // Initially, set all nodes as dominators;
         // will later remove nodes that aren't dominators.
-        dom.put(node, new ArrayList<T>(nodes));
+        @SuppressWarnings("determinism") // adding to a local collection (map)
+        List<T> ignored = dom.put(node, new ArrayList<T>(nodes));
         nonRoots.add(node);
       }
     }

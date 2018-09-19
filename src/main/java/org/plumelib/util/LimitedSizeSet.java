@@ -54,17 +54,17 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    *
    * @param maxValues the maximum number of values this set will be able to hold; must be positive
    */
-  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
-  public LimitedSizeSet(@Det @Positive int maxValues) {
+  public LimitedSizeSet(@Positive int maxValues) {
     if (assertsEnabled && !(maxValues > 0)) {
       throw new IllegalArgumentException("maxValues should be positive, is " + maxValues);
     }
     // this.maxValues = maxValues;
     @SuppressWarnings({
       "unchecked",
-      "value" // https://github.com/kelloggm/checker-framework/issues/174
+      "value", // https://github.com/kelloggm/checker-framework/issues/174
+      "determinism", // https://github.com/t-rasmud/checker-framework/issues/40
     })
-    @Nullable T @Det @MinLen(1) [] newValuesArray = (@Nullable T[]) new @Nullable Object[maxValues];
+    @Nullable T @MinLen(1) [] newValuesArray = (@Nullable T[]) new @Nullable Object[maxValues];
     values = newValuesArray;
     numValues = 0;
   }
@@ -95,7 +95,6 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    *
    * @param s the elements to add to this set
    */
-  @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
   public void addAll(LimitedSizeSet<? extends T> s) {
     @SuppressWarnings("interning") // optimization; not a subclass of Collection, though
     boolean sameObject = (this == s);
@@ -117,6 +116,7 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
             "Arg is rep-nulled, so we don't know its values and can't add them to this.");
       }
     }
+    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     // TODO: s.values isn't modified by the call to add.  Use a local variable until
     // https://tinyurl.com/cfissue/984 is fixed.
     @Nullable T @SameLen("s.values") [] svalues = s.values;

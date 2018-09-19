@@ -171,12 +171,13 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
      * @param filename filename in which the entry was found
      * @param lineNumber line number of first line of entry
      */
+    @SuppressWarnings("determinism") // assigning @PolyDet args to @Det fields in constructors
     Entry(
-        @Det String firstLine,
-        @Det String body,
-        @Det String filename,
-        @Det long lineNumber,
-        @Det boolean shortEntry) {
+        String firstLine,
+        String body,
+        String filename,
+        long lineNumber,
+        boolean shortEntry) {
       this.firstLine = firstLine;
       this.body = body;
       this.filename = filename;
@@ -731,8 +732,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         putback(line);
       }
 
-      @SuppressWarnings("determinism") // passing @PolyDet to constructors
-      @PolyDet Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, false);
+      Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, false);
       entry = newEntry;
 
     } else { // blank-separated entry
@@ -752,7 +752,6 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         putback(line);
       }
 
-      @SuppressWarnings("determinism") // passing @PolyDet to constructors
       Entry newEntry = new Entry(description, body.toString(), filename, lineNumber, true);
       entry = newEntry;
     }

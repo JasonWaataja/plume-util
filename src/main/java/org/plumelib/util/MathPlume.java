@@ -1597,7 +1597,7 @@ public final class MathPlume {
    * @param nums numbers to be excluded; length &gt; 0; may contain duplicates
    * @return the set: [min(nums)..max(nums)] - nums
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // adding to a local collection
+  @SuppressWarnings({"purity", "lock"})
   @Pure
   @StaticallyExecutable
   public static long[] missingNumbers(long @MinLen(1) [] nums) {
@@ -1611,7 +1611,8 @@ public final class MathPlume {
     long val = min;
     for (int i = 0; i < nums.length; i++) {
       while (val < nums[i]) {
-        resultList.add(val);
+        @SuppressWarnings("determinism") // adding to a local collection
+        boolean ignored = resultList.add(val);
         val++;
       }
       if (val == nums[i]) {
@@ -1657,10 +1658,11 @@ public final class MathPlume {
      * @param nums a non-empty array
      * @param addEnds if true, include the bracketing endpoints
      */
-    MissingNumbersIteratorLong(@Det long @MinLen(1) @Det [] nums, @Det boolean addEnds) {
+    @SuppressWarnings("determinism") // setting @Det fields to @PolyDet arguments in a constructor
+    MissingNumbersIteratorLong(long @MinLen(1) [] nums, boolean addEnds) {
       this.addEnds = addEnds;
       { // avoid modifying parameter
-        @Det long @Det [] numsCopy = new @Det long @Det [nums.length];
+        long [] numsCopy = new long [nums.length];
         System.arraycopy(nums, 0, numsCopy, 0, nums.length);
         nums = numsCopy;
       }
@@ -1681,7 +1683,8 @@ public final class MathPlume {
      * @param numsItor a non-empty array; must return longs in sorted order
      * @param addEnds if true, include the bracketing endpoints
      */
-    MissingNumbersIteratorLong(@Det Iterator<Long> numsItor, @Det boolean addEnds) {
+    @SuppressWarnings("determinism") // setting @Det fields to @PolyDet arguments in a constructor
+    MissingNumbersIteratorLong(Iterator<Long> numsItor, boolean addEnds) {
       this.addEnds = addEnds;
       if (!numsItor.hasNext()) {
         throw new Error("No elements in numsItor");
@@ -1775,7 +1778,7 @@ public final class MathPlume {
    * @param nums the list of operands
    * @return a (remainder, modulus) pair that fails to match elements of nums
    */
-  @SuppressWarnings({"purity", "lock", "determinism"}) // passing @PolyDet to constructors
+  @SuppressWarnings({"purity", "lock"})
   @Pure
   @StaticallyExecutable
   public static long @Nullable @ArrayLen(2) [] nonmodulusStrict(long[] nums) {

@@ -553,13 +553,14 @@ public final class UtilPlume {
    * @return the contents of {@code filename}, one string per line
    * @throws IOException if there was a problem reading the file
    */
-  @SuppressWarnings("determinism") // adding to a local collection
   public static List<String> fileLines(String filename) throws IOException {
     List<String> textList = new ArrayList<String>();
     try (LineNumberReader reader = UtilPlume.lineNumberFileReader(filename)) {
       String line;
       while ((line = reader.readLine()) != null) {
-        textList.add(line);
+        @SuppressWarnings("determinism") // adding to a local collection, should be fixed by
+        // https://github.com/t-rasmud/checker-framework/issues/32
+        boolean ignored = textList.add(line);
       }
     }
     return textList;
@@ -791,7 +792,7 @@ public final class UtilPlume {
      *
      * @param wildcard a string that must contain exactly one "*"
      */
-    @SuppressWarnings("determinism") // passing @PolyDet to constructors
+    @SuppressWarnings("determinism") // assigning @PolyDet values to @Det fields in constructors
     public WildcardFilter(String wildcard) {
       int astloc = wildcard.indexOf('*');
       if (astloc == -1) {
@@ -1405,14 +1406,15 @@ public final class UtilPlume {
    * @param delim delimiter to split the string on
    * @return array of length at least 1, containing s split on delimiter
    */
-  @SuppressWarnings("determinism") // adding to a local collection
   public static String[] split(String s, char delim) {
     ArrayList<String> resultList = new ArrayList<String>();
     for (int delimpos = s.indexOf(delim); delimpos != -1; delimpos = s.indexOf(delim)) {
-      resultList.add(s.substring(0, delimpos));
+      @SuppressWarnings("determinism") // adding a local collection
+      boolean ignored = resultList.add(s.substring(0, delimpos));
       s = s.substring(delimpos + 1);
     }
-    resultList.add(s);
+    @SuppressWarnings("determinism") // adding a local collection
+    boolean ignored = resultList.add(s);
     String[] result = resultList.toArray(new @NonNull String[resultList.size()]);
     return result;
   }
@@ -1431,7 +1433,6 @@ public final class UtilPlume {
    * @param delim delimiter to split the string on
    * @return array of length at least 1, containing s split on delimiter
    */
-  @SuppressWarnings("determinism") // adding to a local collection
   public static String[] split(String s, String delim) {
     int delimlen = delim.length();
     if (delimlen == 0) {
@@ -1439,10 +1440,12 @@ public final class UtilPlume {
     }
     ArrayList<String> resultList = new ArrayList<String>();
     for (int delimpos = s.indexOf(delim); delimpos != -1; delimpos = s.indexOf(delim)) {
-      resultList.add(s.substring(0, delimpos));
+      @SuppressWarnings("determinism") // adding to a local collection
+      boolean ignored = resultList.add(s.substring(0, delimpos));
       s = s.substring(delimpos + delimlen);
     }
-    resultList.add(s);
+    @SuppressWarnings("determinism") // adding to a local collection
+    boolean ignored = resultList.add(s);
     String[] result = resultList.toArray(new @NonNull String[resultList.size()]);
     return result;
   }

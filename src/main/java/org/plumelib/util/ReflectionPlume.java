@@ -267,8 +267,6 @@ public final class ReflectionPlume {
    * @throws ClassNotFoundException if the class is not found
    * @throws NoSuchMethodException if the method is not found
    */
-  @SuppressWarnings("determinism") // modifying @Det field args_seen with @PolyDet arguments, same
-  // issue as with constructors
   public static Method methodForName(String method)
       throws ClassNotFoundException, NoSuchMethodException, SecurityException {
 
@@ -316,7 +314,9 @@ public final class ReflectionPlume {
       @SuppressWarnings("cast")
       Class<?>[] argclasses_res = (@NonNull Class<?>[]) argclasses_tmp;
       argclasses = argclasses_res;
-      args_seen.put(all_argnames, argclasses_res);
+      @SuppressWarnings("determinism") // modifying @Det field with @PolyDet arguments,
+      // same issue as with constructors
+      Class<?>[] ignored = args_seen.put(all_argnames, argclasses_res);
     }
     return methodForName(classname, methodname, argclasses);
   }

@@ -110,10 +110,10 @@ public class OrderedPairIterator<T extends @NonDet Object>
    *
    * @return an element of the first iterator, paired with null
    */
-  @SuppressWarnings("determinism") // expressions below resolve to @NonDet, but should be fine since
-  // they were the result of calls on @PolyDet next method in other Iterators
   private @Det Pair<@Nullable T, @Nullable T> return1(@GuardSatisfied OrderedPairIterator<T> this) {
-    Pair<@Nullable T, @Nullable T> result =
+    @SuppressWarnings("determinism") // this resolves to @NonDet, but should be fine since
+    // they were the result of calls on @PolyDet next method in other Iterators
+    @Det Pair<@Nullable T, @Nullable T> result =
         Pair.<@Nullable T, @Nullable T>of(next1, (@Nullable T) null);
     setnext1();
     return result;
@@ -123,10 +123,10 @@ public class OrderedPairIterator<T extends @NonDet Object>
    *
    * @return a pair of null and an element of the second iterator
    */
-  @SuppressWarnings("determinism") // expressions below resolve to @NonDet, but should be fine since
-  // they were the result of calls on @PolyDet next method in other Iterators
   private @Det Pair<@Nullable T, @Nullable T> return2(@GuardSatisfied OrderedPairIterator<T> this) {
-    Pair<@Nullable T, @Nullable T> result =
+    @SuppressWarnings("determinism") // this resolves to @NonDet, but should be fine since
+    // they were the result of calls on @PolyDet next method in other Iterators
+    @Det Pair<@Nullable T, @Nullable T> result =
         Pair.<@Nullable T, @Nullable T>of((@Nullable T) null, next2);
     setnext2();
     return result;
@@ -136,11 +136,11 @@ public class OrderedPairIterator<T extends @NonDet Object>
    *
    * @return a pair containing an element from each iterator
    */
-  @SuppressWarnings("determinism") // expressions below resolve to @NonDet, but should be fine since
-  // they were the result of calls on @PolyDet next method in other Iterators
   private @Det Pair<@Nullable T, @Nullable T> returnboth(
       @GuardSatisfied OrderedPairIterator<T> this) {
-    Pair<@Nullable T, @Nullable T> result = Pair.<@Nullable T, @Nullable T>of(next1, next2);
+    @SuppressWarnings("determinism") // expressions below resolve to @NonDet, but should be fine
+    // since they were the result of calls on @PolyDet next method in other Iterators
+    @Det Pair<@Nullable T, @Nullable T> result = Pair.<@Nullable T, @Nullable T>of(next1, next2);
     setnext1();
     setnext2();
     return result;
