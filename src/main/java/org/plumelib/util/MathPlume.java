@@ -1661,7 +1661,7 @@ public final class MathPlume {
     MissingNumbersIteratorLong(long @MinLen(1) [] nums, boolean addEnds) {
       this.addEnds = addEnds;
       { // avoid modifying parameter
-        long [] numsCopy = new long [nums.length];
+        long[] numsCopy = new long[nums.length];
         System.arraycopy(nums, 0, numsCopy, 0, nums.length);
         nums = numsCopy;
       }

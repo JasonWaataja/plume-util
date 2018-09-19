@@ -1109,8 +1109,7 @@ public final class ArraysPlume {
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
     @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
-    @PolyAll @PolyDet("up") Object @PolyDet("up") [] result =
-        new @PolyAll @PolyDet("up") Object @PolyDet("up") [length];
+    @PolyAll @PolyDet("up") Object @PolyDet("up") [] result = new @PolyAll @PolyDet("up") Object @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1146,8 +1145,7 @@ public final class ArraysPlume {
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
     @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
-    @PolyAll @PolyDet("up") String @PolyDet("up") [] result =
-        new @PolyAll @PolyDet("up") String @PolyDet("up") [length];
+    @PolyAll @PolyDet("up") String @PolyDet("up") [] result = new @PolyAll @PolyDet("up") String @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1187,8 +1185,7 @@ public final class ArraysPlume {
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
     @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
-    @PolyDet("up") boolean @PolyDet("up") [] result =
-        new @PolyDet("up") boolean @PolyDet("up") [length];
+    @PolyDet("up") boolean @PolyDet("up") [] result = new @PolyDet("up") boolean @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1228,8 +1225,7 @@ public final class ArraysPlume {
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
     @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
-    @PolyDet("up") double @PolyDet("up") [] result =
-        new @PolyDet("up") double @PolyDet("up") [length];
+    @PolyDet("up") double @PolyDet("up") [] result = new @PolyDet("up") double @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1249,8 +1245,7 @@ public final class ArraysPlume {
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
     @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
-    @PolyDet("up") float @PolyDet("up") [] result =
-        new @PolyDet("up") float @PolyDet("up") [length];
+    @PolyDet("up") float @PolyDet("up") [] result = new @PolyDet("up") float @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -1310,8 +1305,7 @@ public final class ArraysPlume {
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
     @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
-    @PolyDet("up") short @PolyDet("up") [] result =
-        new @PolyDet("up") short @PolyDet("up") [length];
+    @PolyDet("up") short @PolyDet("up") [] result = new @PolyDet("up") short @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -2672,8 +2666,7 @@ public final class ArraysPlume {
   public static @PolyDet("down") boolean fnIsPermutation(int[] a) {
     // In the common case we expect to succeed, so use as few loops as possible
     @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
-    @PolyDet("down") boolean @PolyDet("down") [] see =
-        new @PolyDet("down") boolean @PolyDet("down") [a.length];
+    @PolyDet("down") boolean @PolyDet("down") [] see = new @PolyDet("down") boolean @PolyDet("down") [a.length];
     for (int i = 0; i < a.length; i++) {
       int n = a[i];
       if (n < 0 || n >= a.length || see[n]) {
@@ -3433,8 +3426,8 @@ public final class ArraysPlume {
    */
   @SuppressWarnings("determinism") // partitionInto resolves to the wrong type,
   // https://github.com/t-rasmud/checker-framework/issues/32
-  public static <T extends @NonNull @NonDet Object> @PolyDet("up") List<@PolyDet("up") Partitioning<T>> partitionInto(
-      Collection<T> elts, @NonNegative int k) {
+  public static <T extends @NonNull @NonDet Object>
+      @PolyDet("up") List<@PolyDet("up") Partitioning<T>> partitionInto(Collection<T> elts, @NonNegative int k) {
     return partitionInto(new ArrayDeque<T>(elts), k);
   }
 
@@ -3474,11 +3467,12 @@ public final class ArraysPlume {
   //  and p.size() = numNonemptyParts + numEmptyParts, both of which are non-negative.
   @SuppressWarnings("determinism") // several issues in this method, come from
   // https://github.com/t-rasmud/checker-framework/issues/32 and adding to a local collection
-  public static <T extends @NonNull @NonDet Object> @PolyDet("up") List<@PolyDet("up") Partitioning<T>> partitionIntoHelper(
-      Queue<T> elts,
-      @PolyDet("up") List</*@ LengthIs("#3")*/ @PolyDet("up") Partitioning<T>> resultSoFar,
-      @NonNegative int numEmptyParts,
-      @NonNegative int numNonemptyParts) {
+  public static <T extends @NonNull @NonDet Object>
+      @PolyDet("up") List<@PolyDet("up") Partitioning<T>> partitionIntoHelper(
+          Queue<T> elts,
+          @PolyDet("up") List</*@ LengthIs("#3")*/ @PolyDet("up") Partitioning<T>> resultSoFar,
+          @NonNegative int numEmptyParts,
+          @NonNegative int numNonemptyParts) {
 
     if (numEmptyParts > elts.size()) {
       throw new IllegalArgumentException(numEmptyParts + " > " + elts.size());
