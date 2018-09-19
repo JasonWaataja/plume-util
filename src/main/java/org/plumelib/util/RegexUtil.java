@@ -74,7 +74,8 @@ public final class RegexUtil {
      *
      * @param pse the PatternSyntaxException to be wrapped
      */
-    public CheckedPatternSyntaxException(@Det PatternSyntaxException pse) {
+    @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+    public CheckedPatternSyntaxException(PatternSyntaxException pse) {
       this.pse = pse;
     }
 

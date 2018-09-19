@@ -40,7 +40,8 @@ public class StringBuilderDelimited implements Appendable, CharSequence {
    *
    * @param delimiter the delimiter to be put between strings that are appended to this
    */
-  public StringBuilderDelimited(@Det String delimiter) {
+  @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+  public StringBuilderDelimited(String delimiter) {
     this.delimiter = delimiter;
   }
 

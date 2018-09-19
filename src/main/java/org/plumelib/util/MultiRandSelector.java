@@ -36,7 +36,7 @@ public class MultiRandSelector<T> {
   /** Likelihood to select each element. -1.0 if coinTossMode=false. */
   private double keepProbability = -1.0;
   /** The Random instance to use. Is not a seed. Gets side-effected. */
-  private @NonDet Random r;
+  private Random r;
 
   /** Partioner that determines how to partition the objects. */
   private Partitioner<T, T> eq;
@@ -50,7 +50,7 @@ public class MultiRandSelector<T> {
    * @param numElts the number of elements to select from each bucket
    * @param eq partioner that determines how to partition the objects
    */
-  public MultiRandSelector(@Det int numElts, @Det Partitioner<T, T> eq) {
+  public @NonDet MultiRandSelector(int numElts, Partitioner<T, T> eq) {
     this(numElts, new Random(), eq);
   }
 
@@ -60,7 +60,7 @@ public class MultiRandSelector<T> {
    * @param keepProbability the likelihood to select each element.
    * @param eq partioner that determines how to partition the objects
    */
-  public MultiRandSelector(@Det double keepProbability, @Det Partitioner<T, T> eq) {
+  public @NonDet MultiRandSelector(double keepProbability, Partitioner<T, T> eq) {
     this(keepProbability, new Random(), eq);
   }
 
@@ -72,7 +72,8 @@ public class MultiRandSelector<T> {
    * @param r the Random instance to use for making random choices
    * @param eq partioner that determines how to partition the objects
    */
-  public MultiRandSelector(@Det int numElts, @NonDet Random r, @Det Partitioner<T, T> eq) {
+  @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+  public MultiRandSelector(int numElts, Random r, Partitioner<T, T> eq) {
     this(r, eq);
     this.coinTossMode = false;
     this.numElts = numElts;
@@ -86,8 +87,8 @@ public class MultiRandSelector<T> {
    * @param r the Random instance to use for making random choices
    * @param eq partioner that determines how to partition the objects
    */
-  public MultiRandSelector(
-      @Det double keepProbability, @NonDet Random r, @Det Partitioner<T, T> eq) {
+  @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+  public MultiRandSelector(double keepProbability, Random r, Partitioner<T, T> eq) {
     this(r, eq);
     this.coinTossMode = true;
     this.keepProbability = keepProbability;
@@ -99,7 +100,8 @@ public class MultiRandSelector<T> {
    * @param r the Random instance to use for making random choices
    * @param eq partioner that determines how to partition the objects
    */
-  private MultiRandSelector(@NonDet Random r, @Det Partitioner<T, T> eq) {
+  @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+  private MultiRandSelector(Random r, Partitioner<T, T> eq) {
     this.r = r;
     this.eq = eq;
   }

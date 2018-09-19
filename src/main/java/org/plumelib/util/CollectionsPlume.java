@@ -375,8 +375,8 @@ public final class CollectionsPlume {
      *
      * @param e the Enumeration to make into an Iterator
      */
-    // TODO: Why does this require the argument to be @Det, rather than making it @PolyDet?
-    public EnumerationIterator(@Det Enumeration<T> e) {
+    @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+    public EnumerationIterator(Enumeration<T> e) {
       this.e = e;
     }
 
@@ -407,7 +407,8 @@ public final class CollectionsPlume {
      *
      * @param itor the Iterator to make an Enumeration from
      */
-    public IteratorEnumeration(@Det Iterator<T> itor) {
+    @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+    public IteratorEnumeration(Iterator<T> itor) {
       this.itor = itor;
     }
 
@@ -440,7 +441,8 @@ public final class CollectionsPlume {
      * @param itor1 an Iterator
      * @param itor2 another Iterator
      */
-    public MergedIterator2(@Det Iterator<T> itor1, @Det Iterator<T> itor2) {
+    @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+    public MergedIterator2(Iterator<T> itor1, Iterator<T> itor2) {
       this.itor1 = itor1;
       this.itor2 = itor2;
     }
@@ -483,7 +485,8 @@ public final class CollectionsPlume {
      * @param itorOfItors an iterator whose elements are iterators; this MergedIterator will merge
      *     them all
      */
-    public MergedIterator(@Det Iterator<Iterator<T>> itorOfItors) {
+    @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+    public MergedIterator(Iterator<Iterator<T>> itorOfItors) {
       this.itorOfItors = itorOfItors;
     }
 

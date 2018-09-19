@@ -52,7 +52,7 @@ public class FuzzyFloat {
    *
    * @param relativeRatio the relative diff to use; see {@link #setRelativeRatio}
    */
-  public FuzzyFloat(@Det double relativeRatio) {
+  public FuzzyFloat(double relativeRatio) {
     setRelativeRatio(relativeRatio);
   }
 
@@ -63,8 +63,9 @@ public class FuzzyFloat {
    *     which requires exact matching rather than permitting fuzzy matching)
    * @see #FuzzyFloat
    */
-  public void setRelativeRatio(
-      @UnknownInitialization @Raw FuzzyFloat this, @Det double relativeRatio) {
+  @SuppressWarnings("determinism") // modifying @Det field with @PolyDet arg, same issue as with
+  // constructors
+  public void setRelativeRatio(@UnknownInitialization @Raw FuzzyFloat this, double relativeRatio) {
     minRatio = 1 - relativeRatio;
     maxRatio = 1 + relativeRatio;
     exactComparisons = (relativeRatio == 0.0);

@@ -71,7 +71,9 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
    *
    * @param elt the element to add to this set
    */
-  public void add(@Det int elt) {
+  @SuppressWarnings("determinism") // modifying @Det field with @PolyDet arg, same issue as with
+  // constructors
+  public void add(int elt) {
     if (repNulled()) {
       return;
     }

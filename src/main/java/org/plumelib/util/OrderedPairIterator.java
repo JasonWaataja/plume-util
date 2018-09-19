@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import org.checkerframework.checker.determinism.qual.Det;
 import org.checkerframework.checker.determinism.qual.NonDet;
+import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -65,7 +66,8 @@ public class OrderedPairIterator<T extends @NonDet Object>
    */
   // For this constructor, the arg type is actually Iterator<T extends
   // Comparable<T>>, but T is already bound above and can't be changed.
-  public OrderedPairIterator(@Det Iterator<T> itor1, @Det Iterator<T> itor2) {
+  @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+  public OrderedPairIterator(Iterator<T> itor1, Iterator<T> itor2) {
     this.itor1 = itor1;
     this.itor2 = itor2;
     setnext1();
@@ -80,8 +82,8 @@ public class OrderedPairIterator<T extends @NonDet Object>
    * @param itor2 iterator for second elements of pairs
    * @param comparator determines whether two elements are equal and should be paired together
    */
-  public OrderedPairIterator(
-      @Det Iterator<T> itor1, @Det Iterator<T> itor2, @Det Comparator<T> comparator) {
+  @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+  public OrderedPairIterator(Iterator<T> itor1, Iterator<T> itor2, Comparator<T> comparator) {
     this(itor1, itor2);
     this.comparator = comparator;
   }
@@ -101,8 +103,8 @@ public class OrderedPairIterator<T extends @NonDet Object>
   // }
   @Override
   @SuppressWarnings("determinism") // expressions below resolve to @NonDet, but should be fine since
-  // they were the result of calls on @PolyDet next method in other Iterators
-  public boolean hasNext(@GuardSatisfied OrderedPairIterator<T> this) {
+  // they were the result of calls on @PolyDet("down") hasNext methods in itor1 and itor2
+  public @PolyDet("down") boolean hasNext(@GuardSatisfied OrderedPairIterator<T> this) {
     return ((next1 != null) || (next2 != null));
   }
   /**
@@ -110,10 +112,11 @@ public class OrderedPairIterator<T extends @NonDet Object>
    *
    * @return an element of the first iterator, paired with null
    */
-  private @Det Pair<@Nullable T, @Nullable T> return1(@GuardSatisfied OrderedPairIterator<T> this) {
+  private @PolyDet("up") Pair<@Nullable T, @Nullable T> return1(
+      @GuardSatisfied OrderedPairIterator<T> this) {
     @SuppressWarnings("determinism") // this resolves to @NonDet, but should be fine since
-    // they were the result of calls on @PolyDet next method in other Iterators
-    @Det Pair<@Nullable T, @Nullable T> result =
+    // they were the result of calls on @PolyDet("up") next method in itor1 and itor2
+    @PolyDet("up") Pair<@Nullable T, @Nullable T> result =
         Pair.<@Nullable T, @Nullable T>of(next1, (@Nullable T) null);
     setnext1();
     return result;
@@ -123,10 +126,11 @@ public class OrderedPairIterator<T extends @NonDet Object>
    *
    * @return a pair of null and an element of the second iterator
    */
-  private @Det Pair<@Nullable T, @Nullable T> return2(@GuardSatisfied OrderedPairIterator<T> this) {
+  private @PolyDet("up") Pair<@Nullable T, @Nullable T> return2(
+      @GuardSatisfied OrderedPairIterator<T> this) {
     @SuppressWarnings("determinism") // this resolves to @NonDet, but should be fine since
-    // they were the result of calls on @PolyDet next method in other Iterators
-    @Det Pair<@Nullable T, @Nullable T> result =
+    // they were the result of calls on @PolyDet("up") next method in itor1 and itor2
+    @PolyDet("up") Pair<@Nullable T, @Nullable T> result =
         Pair.<@Nullable T, @Nullable T>of((@Nullable T) null, next2);
     setnext2();
     return result;
@@ -136,17 +140,21 @@ public class OrderedPairIterator<T extends @NonDet Object>
    *
    * @return a pair containing an element from each iterator
    */
-  private @Det Pair<@Nullable T, @Nullable T> returnboth(
+  private @PolyDet("up") Pair<@Nullable T, @Nullable T> returnboth(
       @GuardSatisfied OrderedPairIterator<T> this) {
-    @SuppressWarnings("determinism") // expressions below resolve to @NonDet, but should be fine
-    // since they were the result of calls on @PolyDet next method in other Iterators
-    @Det Pair<@Nullable T, @Nullable T> result = Pair.<@Nullable T, @Nullable T>of(next1, next2);
+    @SuppressWarnings("determinism") // this resolves to @NonDet, but should be fine since
+    // they were the result of calls on @PolyDet("up") next method in itor1 and itor2
+    @PolyDet("up") Pair<@Nullable T, @Nullable T> result = Pair.<@Nullable T, @Nullable T>of(next1, next2);
     setnext1();
     setnext2();
     return result;
   }
 
   @Override
+  @SuppressWarnings("determinism") // there are errors on all return statements because they are
+  // calls on @PolyDet("up") methods, which is what the return type of the method should be, return
+  // type is forced to be @Det because of fix for
+  // https://github.com/t-rasmud/checker-framework/issues/14
   public @Det Pair<@Nullable T, @Nullable T> next(@GuardSatisfied OrderedPairIterator<T> this) {
     if (next1 == null) {
       if (next2 == null) {

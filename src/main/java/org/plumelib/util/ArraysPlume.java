@@ -1760,10 +1760,6 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  // TODO: I don't understand the comment.  The discussion of polymorphism in constructor
-  // invocations (currently in the "Default annotations" section of the manual, though that's not
-  // where it belongs) is about suppressing warnings on constructor definitions.  Here, the
-  // @SuppressWarnings is on a construrctor invocation.  Can you please clarify?
   public static <T> T[] concat(T @Nullable [] a, T @Nullable [] b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }

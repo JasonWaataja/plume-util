@@ -1124,7 +1124,8 @@ public final class Intern {
      * @param start the start index
      * @param end the end index
      */
-    public Subsequence(T seq, @Det @NonNegative int start, @Det int end) {
+    @SuppressWarnings("determinism") // assigning @PolyDet arg to @Det field in constructors
+    public Subsequence(T seq, @NonNegative int start, int end) {
       if (assertsEnabled && !Intern.isInterned(seq)) {
         throw new IllegalArgumentException();
       }
