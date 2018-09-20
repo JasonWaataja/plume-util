@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import org.checkerframework.checker.determinism.qual.Det;
 import org.checkerframework.checker.determinism.qual.NonDet;
+import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.index.qual.IndexFor;
 import org.checkerframework.checker.index.qual.LTLengthOf;
 import org.checkerframework.checker.index.qual.LessThan;
@@ -220,8 +221,8 @@ public final class Intern {
       // "Arrays.equals" considers +0.0 != -0.0.
       // Also, it gives inconsistent results (on different JVMs/classpaths?).
       // return Arrays.equals((double[])a1, (double[])a2);
-      double[] da1 = (double[]) a1;
-      double[] da2 = (double[]) a2;
+      @PolyDet double @PolyDet [] da1 = (double[]) a1;
+      @PolyDet double @PolyDet [] da2 = (double[]) a2;
       if (da1.length != da2.length) {
         return false;
       }
@@ -235,7 +236,7 @@ public final class Intern {
 
     @Override
     public @NonDet int hashCode(Object o) {
-      double[] a = (double[]) o;
+      @PolyDet double @PolyDet [] a = (double[]) o;
       // Not Arrays.hashCode(a), for consistency with equals method
       // immediately above.
       double running = 0;

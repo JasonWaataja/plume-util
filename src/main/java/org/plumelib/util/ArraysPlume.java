@@ -363,8 +363,8 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(int[])");
     }
-    @SuppressWarnings({"purity.not.deterministic.call", "determinism"}) // use deterministic parts
-    // of object, also https://github.com/t-rasmud/checker-framework/issues/40
+    @SuppressWarnings({"purity.not.deterministic.call"}) // use deterministic parts
+    // of object
     @PolyDet("down") int @PolyDet("down") [] minAndMax = minAndMax(a);
     return minAndMax[1] - minAndMax[0];
   }
@@ -382,8 +382,8 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to elementRange(long[])");
     }
-    @SuppressWarnings({"purity.not.deterministic.call", "determinism"}) // use deterministic parts
-    // of object, also https://github.com/t-rasmud/checker-framework/issues/40
+    @SuppressWarnings({"purity.not.deterministic.call"}) // use deterministic parts
+    // of object
     @PolyDet("down") long @PolyDet("down") [] minAndMax = minAndMax(a);
     return minAndMax[1] - minAndMax[0];
   }
@@ -1108,7 +1108,6 @@ public final class ArraysPlume {
       @PolyAll Object[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyAll @PolyDet("up") Object @PolyDet("up") [] result = new @PolyAll @PolyDet("up") Object @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1144,7 +1143,6 @@ public final class ArraysPlume {
       @PolyAll String[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyAll @PolyDet("up") String @PolyDet("up") [] result = new @PolyAll @PolyDet("up") String @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1164,7 +1162,6 @@ public final class ArraysPlume {
       byte[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyDet("up") byte @PolyDet("up") [] result = new @PolyDet("up") byte @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1184,7 +1181,6 @@ public final class ArraysPlume {
       boolean[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyDet("up") boolean @PolyDet("up") [] result = new @PolyDet("up") boolean @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1204,7 +1200,6 @@ public final class ArraysPlume {
       char[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyDet("up") char @PolyDet("up") [] result = new @PolyDet("up") char @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1224,7 +1219,6 @@ public final class ArraysPlume {
       double[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyDet("up") double @PolyDet("up") [] result = new @PolyDet("up") double @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1244,7 +1238,6 @@ public final class ArraysPlume {
       float[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyDet("up") float @PolyDet("up") [] result = new @PolyDet("up") float @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1264,7 +1257,6 @@ public final class ArraysPlume {
       int[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyDet("up") int @PolyDet("up") [] result = new @PolyDet("up") int @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1284,7 +1276,6 @@ public final class ArraysPlume {
       long[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyDet("up") long @PolyDet("up") [] result = new @PolyDet("up") long @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -1304,7 +1295,6 @@ public final class ArraysPlume {
       short[] a,
       @NonNegative int startindex,
       @NonNegative @LTLengthOf(value = "#1", offset = "#2 - 1") int length) {
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyDet("up") short @PolyDet("up") [] result = new @PolyDet("up") short @PolyDet("up") [length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
@@ -2661,7 +2651,6 @@ public final class ArraysPlume {
   @Pure
   public static @PolyDet("down") boolean fnIsPermutation(int[] a) {
     // In the common case we expect to succeed, so use as few loops as possible
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     @PolyDet("down") boolean @PolyDet("down") [] see = new @PolyDet("down") boolean @PolyDet("down") [a.length];
     for (int i = 0; i < a.length; i++) {
       int n = a[i];
