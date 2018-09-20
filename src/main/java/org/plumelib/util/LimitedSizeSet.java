@@ -115,7 +115,6 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
             "Arg is rep-nulled, so we don't know its values and can't add them to this.");
       }
     }
-    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/40
     // TODO: s.values isn't modified by the call to add.  Use a local variable until
     // https://tinyurl.com/cfissue/984 is fixed.
     @Nullable T @SameLen("s.values") [] svalues = s.values;
