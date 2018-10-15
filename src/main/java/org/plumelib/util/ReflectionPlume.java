@@ -451,7 +451,8 @@ public final class ReflectionPlume {
    * @param <T> the (inferred) least upper bound of the arguments
    * @return the least upper bound of all the given classes
    */
-  public static <T> @Nullable Class<T> leastUpperBound(@Nullable Class<T>[] classes) {
+  public static <T> @Nullable @PolyDet("down") Class<T> leastUpperBound(
+      @Nullable Class<T>[] classes) {
     Class<T> result = null;
     for (Class<T> clazz : classes) {
       result = leastUpperBound(result, clazz);
@@ -467,7 +468,8 @@ public final class ReflectionPlume {
    * @return the least upper bound of the classes of the given objects, or null if all arguments are
    *     null
    */
-  public static <T> @Nullable Class<T> leastUpperBound(@PolyNull Object[] objects) {
+  public static <T> @Nullable @PolyDet("down") Class<T> leastUpperBound(
+      @PolyNull Object[] objects) {
     Class<T> result = null;
     for (Object obj : objects) {
       if (obj != null) {
@@ -485,7 +487,7 @@ public final class ReflectionPlume {
    * @return the least upper bound of the classes of the given objects, or null if all arguments are
    *     null
    */
-  public static <T> @Nullable Class<T> leastUpperBound(
+  public static <T> @Nullable @PolyDet("down") Class<T> leastUpperBound(
       List<? extends @Nullable @NonDet Object> objects) {
     Class<T> result = null;
     for (Object obj : objects) {

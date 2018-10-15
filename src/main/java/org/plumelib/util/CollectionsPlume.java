@@ -55,7 +55,7 @@ public final class CollectionsPlume {
    * @param l a list to sort
    * @param c a sorted version of the list
    */
-  public static <T> List<T> sortList(List<T> l, Comparator<? super T> c) {
+  public static <T extends @PolyDet Object> List<T> sortList(List<T> l, Comparator<? super T> c) {
     List<T> result = new ArrayList<T>(l);
     Collections.sort(result, c);
     return result;
@@ -70,7 +70,7 @@ public final class CollectionsPlume {
    * @param l a list to remove duplicates from
    * @return a copy of the list with duplicates removed
    */
-  public static <T> List<T> removeDuplicates(List<T> l) {
+  public static <T extends @PolyDet("use") Object> List<T> removeDuplicates(List<T> l) {
     HashSet<T> hs = new LinkedHashSet<T>(l);
     List<T> result = new ArrayList<T>(hs);
     return result;
@@ -95,15 +95,19 @@ public final class CollectionsPlume {
    * @param o2 second value to compare
    * @return true iff o1 and o2 are deeply equal
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to static field deepEqualsUnderway
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to static field
+  // deepEqualsUnderway, also, there's a conditional in the last for loop where wee need to pass
+  // @PolyDet("down"), but @Det is required.
   @Pure
-  public static boolean deepEquals(@Nullable Object o1, @Nullable Object o2) {
-    @SuppressWarnings("interning")
-    boolean sameObject = (o1 == o2);
+  public static @PolyDet("up") boolean deepEquals(@Nullable Object o1, @Nullable Object o2) {
+    @SuppressWarnings({"interning", "determinism"}) // need to pass @PolyDet to a conditional
+    @Det boolean sameObject = (o1 == o2);
     if (sameObject) {
       return true;
     }
-    if (o1 == null || o2 == null) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp1 = (o1 == null || o2 == null);
+    if (tmp1) {
       return false;
     }
 
@@ -143,10 +147,12 @@ public final class CollectionsPlume {
       return Arrays.deepEquals((Object[]) o1, (Object[]) o2);
     }
 
-    if (o1 instanceof List<?> && o2 instanceof List<?>) {
-      List<?> l1 = (List<?>) o1;
-      List<?> l2 = (List<?>) o2;
-      if (l1.size() != l2.size()) {
+    if (o1 instanceof @NonDet List<?> && o2 instanceof @NonDet List<?>) {
+      List<?> l1 = (List<? extends @PolyDet Object>) o1;
+      List<?> l2 = (List<? extends @PolyDet Object>) o2;
+      @SuppressWarnings("determinism") // need to pass @PolyDet("down") to conditional
+      @Det boolean tmp2 = (l1.size() != l2.size());
+      if (tmp2) {
         return false;
       }
       try {
@@ -179,10 +185,16 @@ public final class CollectionsPlume {
    * @param e an enumeration to convert to a ArrayList
    * @return a vector containing the elements of the enumeration
    */
-  public static <T> ArrayList<T> makeArrayList(Enumeration<T> e) {
+  @SuppressWarnings("determinism") // result needs to be @PolyDet causing errors on its creation
+  // and on adding to it, https://github.com/t-rasmud/checker-framework/issues/32
+  public static <T extends @PolyDet("use") Object> ArrayList<T> makeArrayList(Enumeration<T> e) {
     ArrayList<T> result = new ArrayList<T>();
     while (e.hasMoreElements()) {
-      result.add(e.nextElement());
+      @SuppressWarnings("determinism") // if e is @OrderNonDet, then e.nextElement is
+      // @NonDet, but every element is accessed once so adding to result creates an @OrderNonDet
+      // result
+      @PolyDet T elt = e.nextElement();
+      result.add(elt);
     }
     return result;
   }
@@ -199,16 +211,22 @@ public final class CollectionsPlume {
    * @return n choose k, or Long.MAX_VALUE if the value would overflow
    */
   private static long choose(int n, int k) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to conditional
+    @Det boolean tmp1 = (n < k);
     // From https://stackoverflow.com/questions/2201113/combinatoric-n-choose-r-in-java-math
-    if (n < k) {
+    if (tmp1) {
       return 0;
     }
-    if (k == 0 || k == n) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to conditional
+    @Det boolean tmp2 = (k == 0 || k == n);
+    if (tmp2) {
       return 1;
     }
     long a = choose(n - 1, k - 1);
     long b = choose(n - 1, k);
-    if (a < 0 || a == Long.MAX_VALUE || b < 0 || b == Long.MAX_VALUE || a + b < 0) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to conditional
+    @Det boolean tmp3 = (a < 0 || a == Long.MAX_VALUE || b < 0 || b == Long.MAX_VALUE || a + b < 0);
+    if (tmp3) {
       return Long.MAX_VALUE;
     } else {
       return a + b;
@@ -345,8 +363,11 @@ public final class CollectionsPlume {
    * @param <T> the element type
    * @return source, converted to Iterable
    */
-  public static <T> Iterable<T> iteratorToIterable(final Iterator<T> source) {
-    if (source == null) {
+  public static <T extends @PolyDet("use") Object> Iterable<T> iteratorToIterable(
+      final Iterator<T> source) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = (source == null);
+    if (tmp) {
       throw new NullPointerException();
     }
     return new Iterable<T>() {
@@ -366,7 +387,7 @@ public final class CollectionsPlume {
   // their arguments into a scope that Java was happy with.
 
   /** Converts an Enumeration into an Iterator. */
-  public static final class EnumerationIterator<T> implements Iterator<T> {
+  public static final class EnumerationIterator<T> implements @NonDet Iterator<T> {
     /** The enumeration that this object wraps. */
     Enumeration<T> e;
 
@@ -381,12 +402,12 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public boolean hasNext(@GuardSatisfied EnumerationIterator<T> this) {
+    public @PolyDet("down") boolean hasNext(@GuardSatisfied EnumerationIterator<T> this) {
       return e.hasMoreElements();
     }
 
     @Override
-    public T next(@GuardSatisfied EnumerationIterator<T> this) {
+    public @PolyDet("up") T next(@GuardSatisfied EnumerationIterator<T> this) {
       return e.nextElement();
     }
 
@@ -400,7 +421,8 @@ public final class CollectionsPlume {
   @SuppressWarnings("JdkObsolete")
   public static final class IteratorEnumeration<T> implements Enumeration<T> {
     /** The iterator that this object wraps. */
-    Iterator<T> itor;
+    // TODO: the @NonDet should be removed here once @ThisDet is implemented
+    @NonDet Iterator<T> itor;
 
     /**
      * Create an Enumeration that contains the elements returned by the given Iterator.
@@ -413,12 +435,16 @@ public final class CollectionsPlume {
     }
 
     @Override
+    @SuppressWarnings("determinism") // the true type of the expression is @PolyDet("down") but
+    // itor is marked as @NonDet until @ThisDet is implemented
     public @PolyDet("down") boolean hasMoreElements() {
       return itor.hasNext();
     }
 
     @Override
-    public T nextElement() {
+    @SuppressWarnings("determinism") // the true type of the expression is @PolyDet("up") but
+    // itor is marked as @NonDet until @ThisDet is implemented
+    public @PolyDet("up") T nextElement() {
       return itor.next();
     }
   }
@@ -429,11 +455,13 @@ public final class CollectionsPlume {
    * returned by its second argument. Like {@link MergedIterator}, but specialized for the case of
    * two arguments.
    */
-  public static final class MergedIterator2<T> implements Iterator<T> {
+  public static final class MergedIterator2<T> implements @NonDet Iterator<T> {
     /** The first of the two iterators that this object merges. */
-    Iterator<T> itor1;
+    // TODO: remove @NonDet once @ThisDet is implemented
+    @NonDet Iterator<T> itor1;
     /** The second of the two iterators that this object merges. */
-    Iterator<T> itor2;
+    // TODO: remove @NonDet once @ThisDet is implemented
+    @NonDet Iterator<T> itor2;
 
     /**
      * Create an iterator that returns the elements of {@code itor1} then those of {@code itor2}.
@@ -448,12 +476,16 @@ public final class CollectionsPlume {
     }
 
     @Override
+    @SuppressWarnings("determinism") // the true type of the expression is @PolyDet("down") but
+    // itor is marked as @NonDet until @ThisDet is implemented
     public @PolyDet("down") boolean hasNext(@GuardSatisfied MergedIterator2<T> this) {
       return (itor1.hasNext() || itor2.hasNext());
     }
 
     @Override
-    public T next(@GuardSatisfied MergedIterator2<T> this) {
+    @SuppressWarnings("determinism") // the true type of the expression is @PolyDet("up") but
+    // itor is marked as @NonDet until @ThisDet is implemented
+    public @PolyDet("up") T next(@GuardSatisfied MergedIterator2<T> this) {
       if (itor1.hasNext()) {
         return itor1.next();
       } else if (itor2.hasNext()) {
@@ -475,9 +507,9 @@ public final class CollectionsPlume {
    * is an Iterator of Iterators. Like {@link MergedIterator2}, but generalized to arbitrary number
    * of iterators.
    */
-  public static final class MergedIterator<T> implements Iterator<T> {
+  public static final class MergedIterator<T> implements @NonDet Iterator<T> {
     /** The iterators that this object merges. */
-    Iterator<Iterator<T>> itorOfItors;
+    @NonDet Iterator<@NonDet Iterator<T>> itorOfItors;
 
     /**
      * Create an iterator that returns the elements of the given iterators, in turn.
@@ -492,9 +524,15 @@ public final class CollectionsPlume {
 
     /** The current iterator (from {@link #itorOfItors}) that is being iterated over. */
     // Initialize to an empty iterator to prime the pump.
-    Iterator<T> current = new ArrayList<T>().iterator();
+    // TODO: remove @NonDet once @ThisDet is implemented
+    @SuppressWarnings("determinism") // the ArrayList is type refined to @Det when it should be
+    // @NonDet causing an invalid type, https://github.com/t-rasmud/checker-framework/issues/32
+    @NonDet Iterator<T> current = new ArrayList<T>().iterator();
 
     @Override
+    @SuppressWarnings("determinism") // the types of these expressions should be @PolyDet("down")
+    // but currently @NonDet due to field declaration, also need to pass this to conditional,
+    // required to be @Det
     public @PolyDet("down") boolean hasNext(@GuardSatisfied MergedIterator<T> this) {
       while ((!current.hasNext()) && (itorOfItors.hasNext())) {
         current = itorOfItors.next();
@@ -503,7 +541,9 @@ public final class CollectionsPlume {
     }
 
     @Override
-    public T next(@GuardSatisfied MergedIterator<T> this) {
+    @SuppressWarnings("determinism") // the true type of the expression is @PolyDet("up") but
+    // itor is marked as @NonDet until @ThisDet is implemented
+    public @PolyDet("up") T next(@GuardSatisfied MergedIterator<T> this) {
       hasNext(); // for side effect
       return current.next();
     }
@@ -515,10 +555,13 @@ public final class CollectionsPlume {
   }
 
   /** An iterator that only returns elements that match the given Filter. */
-  @SuppressWarnings("assignment.type.incompatible") // problems in DFF branch
-  public static final class FilteredIterator<T> implements Iterator<T> {
+  @SuppressWarnings({"assignment.type.incompatible", "determinism"}) // problems in DFF branch,
+  // because T extends @NonDet, all arguments that take a @PolyDet collection of T are invalid.
+  // Should remove once @ThisDet is implemented.
+  public static final class FilteredIterator<T> implements @NonDet Iterator<T> {
     /** The iterator that this object is filtering. */
-    Iterator<T> itor;
+    // TODO: remove @NonDet once @ThisDet is implemented
+    @NonDet Iterator<T> itor;
     /** The predicate that determines which elements to retain. */
     Filter<T> filter;
 
@@ -546,6 +589,8 @@ public final class CollectionsPlume {
     boolean currentValid = false;
 
     @Override
+    @SuppressWarnings("determinism") // the true type of the expression is @PolyDet("up") but
+    // itor is marked as @NonDet until @ThisDet is implemented
     public @PolyDet("down") boolean hasNext(@GuardSatisfied FilteredIterator<T> this) {
       while ((!currentValid) && itor.hasNext()) {
         current = itor.next();
@@ -556,7 +601,9 @@ public final class CollectionsPlume {
 
     @Override
     public T next(@GuardSatisfied FilteredIterator<T> this) {
-      if (hasNext()) {
+      @SuppressWarnings("determinism") // need to pass @PolyDet("down") to conditional
+      @Det boolean tmp = hasNext();
+      if (tmp) {
         currentValid = false;
         @SuppressWarnings("interning")
         boolean ok = (current != invalidT);
@@ -577,10 +624,13 @@ public final class CollectionsPlume {
    * Returns an iterator just like its argument, except that the first and last elements are
    * removed. They can be accessed via the {@link #getFirst} and {@link #getLast} methods.
    */
-  @SuppressWarnings("assignment.type.incompatible") // problems in DFF branch
-  public static final class RemoveFirstAndLastIterator<T> implements Iterator<T> {
+  /** An iterator that only returns elements that match the given Filter. */
+  @SuppressWarnings({"assignment.type.incompatible", "determinism"}) // problems in DFF branch,
+  // because T extends @NonDet, all arguments that take a @PolyDet collection of T are invalid.
+  // Should remove once @ThisDet is implemented.
+  public static final class RemoveFirstAndLastIterator<T> implements @NonDet Iterator<T> {
     /** The wrapped iterator. */
-    Iterator<T> itor;
+    @NonDet Iterator<T> itor;
     /** A marker object, distinct from any object that the iterator can return. */
     @SuppressWarnings("unchecked")
     T nothing = (T) new Object();
@@ -670,7 +720,7 @@ public final class CollectionsPlume {
    * @param numElts number of elements to select
    * @return list of numElts elements from itor
    */
-  public static <T> @NonDet List<T> randomElements(Iterator<T> itor, int numElts) {
+  public static <T> @NonDet List<T> randomElements(@NonDet Iterator<T> itor, @NonDet int numElts) {
     return randomElements(itor, numElts, r);
   }
 
@@ -688,8 +738,10 @@ public final class CollectionsPlume {
    * @param random the Random instance to use to make selections
    * @return list of numElts elements from itor
    */
-  public static <T> @PolyDet("up") List<T> randomElements(
-      Iterator<T> itor, int numElts, Random random) {
+  @SuppressWarnings("determinism") // rs is @Det, causing an error when accepting
+  // https://github.com/t-rasmud/checker-framework/issues/58
+  public static <T extends @PolyDet("use") Object> @PolyDet("up") List<T> randomElements(
+      @PolyDet("use") Iterator<T> itor, int numElts, Random random) {
     // The elements are chosen with the following probabilities,
     // where n == numElts:
     //   n n/2 n/3 n/4 n/5 ...
@@ -736,7 +788,8 @@ public final class CollectionsPlume {
    * @return the old value, before it was incremented
    * @throws Error if the key is in the Map but maps to a non-Integer
    */
-  public static <K> @Nullable Integer incrementMap(Map<K, @PolyDet Integer> m, K key) {
+  public static <K extends @PolyDet("use") Object> @Nullable Integer incrementMap(
+      Map<K, @PolyDet Integer> m, K key) {
     return incrementMap(m, key, 1);
   }
 
@@ -751,11 +804,13 @@ public final class CollectionsPlume {
    * @return the old value, before it was incremented
    * @throws Error if the key is in the Map but maps to a non-Integer
    */
-  public static <K> @Nullable @PolyDet Integer incrementMap(
+  public static <K extends @PolyDet Object> @Nullable @PolyDet Integer incrementMap(
       Map<K, @PolyDet Integer> m, K key, int count) {
     Integer old = m.get(key);
     Integer newTotal;
-    if (old == null) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = (old == null);
+    if (tmp) {
       newTotal = count;
     } else {
       newTotal = old.intValue() + count;
@@ -827,7 +882,7 @@ public final class CollectionsPlume {
    * @param comparator the Comparator to use for sorting
    * @return a sorted version of m.keySet()
    */
-  public static <K, V> Collection<@KeyFor("#1") K> sortedKeySet(
+  public static <K extends @PolyDet("use") Object, V extends @PolyDet("use") Object> Collection<@KeyFor("#1") K> sortedKeySet(
       Map<K, V> m, Comparator<K> comparator) {
     ArrayList<@KeyFor("#1") K> theKeys = new ArrayList<@KeyFor("#1") K>(m.keySet());
     Collections.sort(theKeys, comparator);
@@ -846,13 +901,20 @@ public final class CollectionsPlume {
    * @param key the value to look up in the set
    * @return the object in this set that is equal to key, or null
    */
-  public static @Nullable Object getFromSet(Set<?> set, Object key) {
-    if (key == null) {
+  public static @Nullable Object getFromSet(Set<? extends @PolyDet("use") Object> set, Object key) {
+    @SuppressWarnings("determinism")
+    @Det boolean tmp1 = (key == null);
+    if (tmp1) {
       return null;
     }
     for (Object elt : set) {
-      if (key.equals(elt)) {
-        return elt;
+      @SuppressWarnings("determinism") // key.equals(elt) has type @PolyDet("up") but because we
+      // proccess each element of the set in an order-insensitive way we can make this @PolyDet
+      @PolyDet Object tmp2 = elt;
+      @SuppressWarnings("determinism") // Need to pass @PolyDet to conditional
+      @Det boolean tmp3 = key.equals(tmp2);
+      if (tmp3) {
+        return tmp2;
       }
     }
     return null;

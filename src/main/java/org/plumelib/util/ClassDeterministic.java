@@ -171,8 +171,8 @@ public class ClassDeterministic {
    * @param <T> the element type
    * @return the sorted list of elements of the given array
    */
-  private <T> @Det List<T> toSortedList(T @OrderNonDet [] array, @Det Comparator<T> comparator) {
-    List<T> list = new ArrayList<>();
+  private <T> @Det List<@Det T> toSortedList(T @OrderNonDet [] array, @Det Comparator<T> comparator) {
+    List<@Det T> list = new ArrayList<>();
     Collections.addAll(list, array);
     Collections.sort(list, comparator);
     return list;
@@ -231,7 +231,9 @@ public class ClassDeterministic {
           : "@AssumeAssertion(index): difference of lengths is 0; https://github.com/kelloggm/checker-framework/issues/231";
       for (int i = 0; i < ptypes1.length; i++) {
         result = classComparator.compare(ptypes1[i], ptypes2[i]);
-        if (result != 0) {
+        @SuppressWarnings("determinism") // need to use @PolyDet in conditional
+        @Det boolean tmp = (result != 0);
+        if (tmp) {
           return result;
         }
       }
@@ -266,7 +268,9 @@ public class ClassDeterministic {
     @Override
     public int compare(Constructor<?> c1, Constructor<?> c2) {
       int result = classComparator.compare(c1.getDeclaringClass(), c2.getDeclaringClass());
-      if (result != 0) {
+      @SuppressWarnings("determinism") // need to use @PolyDet in conditional
+      @Det boolean tmp1 = (result != 0);
+      if (tmp1) {
         return result;
       }
       @PolyDet Class<?> @PolyDet [] ptypes1 = c1.getParameterTypes();
@@ -278,8 +282,13 @@ public class ClassDeterministic {
       assert ptypes1.length == ptypes2.length
           : "@AssumeAssertion(index): difference of lengths is 0; https://github.com/kelloggm/checker-framework/issues/231";
       for (int i = 0; i < ptypes1.length; i++) {
-        result = classComparator.compare(ptypes1[i], ptypes2[i]);
-        if (result != 0) {
+        @SuppressWarnings("determinism") // these are @PolyDet("up") but that's irrelevant because
+        // they come from c1 and c2 which can't be @OrderNonDeterministic
+        @PolyDet int tmp2 = classComparator.compare(ptypes1[i], ptypes2[i]);
+        result = tmp2;
+        @SuppressWarnings("determinism") // need to use @PolyDet in conditional
+        @Det boolean tmp3 = (result != 0);
+        if (tmp3) {
           return result;
         }
       }
@@ -295,7 +304,8 @@ public class ClassDeterministic {
 
     @Override
     public int compare(Field f1, Field f2) {
-      int result = classComparator.compare(f1.getDeclaringClass(), f2.getDeclaringClass());
+      @SuppressWarnings("determinism") // need to use @PolyDet in conditional
+      @Det int result = classComparator.compare(f1.getDeclaringClass(), f2.getDeclaringClass());
       if (result != 0) {
         return result;
       }

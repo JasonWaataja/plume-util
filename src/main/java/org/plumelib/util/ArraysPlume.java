@@ -64,9 +64,16 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(int[])");
     }
-    int result = a[0];
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") int result = a[0];
     for (int i = 1; i < a.length; i++) {
-      result = Math.min(result, a[i]);
+			@SuppressWarnings("determinism") // Every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker. Also error with
+			// https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("down") int elt = a[i];
+      result = Math.min(result, elt);
     }
     return result;
   }
@@ -83,9 +90,16 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(long[])");
     }
-    long result = a[0];
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") long result = a[0];
     for (int i = 1; i < a.length; i++) {
-      result = Math.min(result, a[i]);
+			@SuppressWarnings("determinism") // Every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker. Also error with
+			// https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("down") long elt = a[i];
+      result = Math.min(result, elt);
     }
     return result;
   }
@@ -102,9 +116,16 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(double[])");
     }
-    double result = a[0];
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") double result = a[0];
     for (int i = 1; i < a.length; i++) {
-      result = Math.min(result, a[i]);
+			@SuppressWarnings("determinism") // Every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker. Also error with
+			// https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("down") double elt = a[i];
+      result = Math.min(result, elt);
     }
     return result;
   }
@@ -121,11 +142,17 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Integer[])");
     }
-    Integer result = a[0]; // to return a value actually in the array
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") Integer result = a[0]; // to return a value actually in the array
     int resultInt = result.intValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-      if (a[i].intValue() < resultInt) {
-        result = a[i];
+			@SuppressWarnings("determinism") // every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker
+      @PolyDet("down") Integer elt = a[i];
+      if (elt.intValue() < resultInt) {
+        result = elt;
         resultInt = result.intValue();
       }
     }
@@ -144,11 +171,17 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Long[])");
     }
-    Long result = a[0]; // to return a value actually in the array
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") Long result = a[0]; // to return a value actually in the array
     long resultLong = result.longValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-      if (a[i].longValue() < resultLong) {
-        result = a[i];
+			@SuppressWarnings("determinism") // every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker
+      @PolyDet("down") Long elt = a[i];
+      if (elt.longValue() < resultLong) {
+        result = elt;
         resultLong = result.longValue();
       }
     }
@@ -167,11 +200,17 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to min(Double[])");
     }
-    Double result = a[0]; // to return a value actually in the array
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") Double result = a[0]; // to return a value actually in the array
     int resultInt = result.intValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-      if (a[i].intValue() < resultInt) {
-        result = a[i];
+			@SuppressWarnings("determinism") // every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker
+      @PolyDet("down") Double elt = a[i];
+      if (elt.intValue() < resultInt) {
+        result = elt;
         resultInt = result.intValue();
       }
     }
@@ -190,9 +229,16 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(int[])");
     }
-    int result = a[0];
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") int result = a[0];
     for (int i = 1; i < a.length; i++) {
-      result = Math.max(result, a[i]);
+			@SuppressWarnings("determinism") // Every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker. Also error with
+			// https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("down") int elt = a[i];
+      result = Math.max(result, elt);
     }
     return result;
   }
@@ -209,9 +255,16 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(long[])");
     }
-    long result = a[0];
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") long result = a[0];
     for (int i = 1; i < a.length; i++) {
-      result = Math.max(result, a[i]);
+			@SuppressWarnings("determinism") // Every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker. Also error with
+			// https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("down") long elt = a[i];
+      result = Math.min(result, elt);
     }
     return result;
   }
@@ -228,9 +281,16 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(double[])");
     }
-    double result = a[0];
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") double result = a[0];
     for (int i = 1; i < a.length; i++) {
-      result = Math.max(result, a[i]);
+			@SuppressWarnings("determinism") // Every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker. Also error with
+			// https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("down") double elt = a[i];
+      result = Math.min(result, elt);
     }
     return result;
   }
@@ -247,11 +307,16 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Integer[])");
     }
-    Integer result = a[0]; // to return a value actually in the array
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") Integer result = a[0]; // to return a value actually in the array
     int resultInt = result.intValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-      if (a[i].intValue() > resultInt) {
-        result = a[i];
+      @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+      // create a @PolyDet("down") result
+      @PolyDet("down") Integer elt = a[i];
+      if (elt.intValue() > resultInt) {
+        result = elt;
         resultInt = result.intValue();
       }
     }
@@ -270,11 +335,18 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Long[])");
     }
-    Long result = a[0]; // to return a value actually in the array
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") Long result = a[0]; // to return a value actually in the array
     long resultLong = result.longValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-      if (a[i].longValue() > resultLong) {
-        result = a[i];
+			@SuppressWarnings("determinism") // Every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker. Also error with
+			// https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("down") Long elt = a[i];
+      if (elt.longValue() > resultLong) {
+        result = elt;
         resultLong = result.longValue();
       }
     }
@@ -293,11 +365,18 @@ public final class ArraysPlume {
     if (a.length == 0) {
       throw new ArrayIndexOutOfBoundsException("Empty array passed to max(Double[])");
     }
-    Double result = a[0]; // to return a value actually in the array
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") Double result = a[0]; // to return a value actually in the array
     int resultInt = result.intValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-      if (a[i].intValue() > resultInt) {
-        result = a[i];
+			@SuppressWarnings("determinism") // Every element is accessed exactly
+			// once and combined in an order-insensitive way, can't be verified by the
+			// checker. Also error with
+			// https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("down") Double elt = a[i];
+      if (elt.intValue() > resultInt) {
+        result = elt;
         resultInt = result.intValue();
       }
     }
@@ -321,10 +400,19 @@ public final class ArraysPlume {
     int resultMin = a[0];
     int resultMax = a[0];
     for (int i = 1; i < a.length; i++) {
-      resultMin = Math.min(resultMin, a[i]);
-      resultMax = Math.max(resultMax, a[i]);
+			// @PolyDet("up") not accepted when accessed directly from the array,
+			// https://github.com/t-rasmud/checker-framework/issues/48
+			@PolyDet("up") int tmp1 = a[i];
+      resultMin = Math.min(resultMin, tmp1);
+			// @PolyDet("up") not accepted when accessed directly from the array,
+			// https://github.com/t-rasmud/checker-framework/issues/48
+			@PolyDet("up") int tmp2 = a[i];
+      resultMax = Math.max(resultMax, tmp2);
     }
-    return new @PolyDet("down") int @PolyDet("down") [] {resultMin, resultMax};
+    @SuppressWarnings("determinism")
+    @PolyDet("down") int @PolyDet("down") [] result =
+        new @PolyDet("down") int @PolyDet("down") [] {resultMin, resultMax};
+    return result;
   }
 
   /**
@@ -344,10 +432,19 @@ public final class ArraysPlume {
     long resultMin = a[0];
     long resultMax = a[0];
     for (int i = 1; i < a.length; i++) {
-      resultMin = Math.min(resultMin, a[i]);
-      resultMax = Math.max(resultMax, a[i]);
+			// @PolyDet("up") not accepted when accessed directly from the array,
+			// https://github.com/t-rasmud/checker-framework/issues/48
+			@PolyDet("up") long tmp1 = a[i];
+      resultMin = Math.min(resultMin, tmp1);
+			// @PolyDet("up") not accepted when accessed directly from the array,
+			// https://github.com/t-rasmud/checker-framework/issues/48
+			@PolyDet("up") long tmp2 = a[i];
+      resultMax = Math.max(resultMax, tmp2);
     }
-    return new @PolyDet("down") long @PolyDet("down") [] {resultMin, resultMax};
+    @SuppressWarnings("determinism")
+    @PolyDet("down") long @PolyDet("down") [] result =
+        new @PolyDet("down") long @PolyDet("down") [] {resultMin, resultMax};
+		return result;
   }
 
   /**
@@ -403,7 +500,10 @@ public final class ArraysPlume {
   public static @PolyDet("down") int sum(int[] a) {
     int sum = 0;
     for (int i = 0; i < a.length; i++) {
-      sum += a[i];
+      @SuppressWarnings("determinism") // every element is accessed exactly once and combined in an
+      // order-insensitive way, can't be verified by the checker.
+      @PolyDet("down") int elt = a[i];
+      sum += elt;
     }
     return sum;
   }
@@ -420,7 +520,10 @@ public final class ArraysPlume {
     int sum = 0;
     for (int i = 0; i < a.length; i++) {
       for (int j = 0; j < a[i].length; j++) {
-        sum += a[i][j];
+        @SuppressWarnings("determinism") // each element is accessed exactly once and combine in an
+        // order-insensitive way, can't be verified by the checker
+        @PolyDet("down") int elt = a[i][j];
+        sum += elt;
       }
     }
     return sum;
@@ -437,7 +540,10 @@ public final class ArraysPlume {
   public static @PolyDet("down") double sum(double[] a) {
     double sum = 0;
     for (int i = 0; i < a.length; i++) {
-      sum += a[i];
+      @SuppressWarnings("determinism") // every element is accessed exactly once and combined in an
+      // order-insensitive way, can't be verified by the checker.
+      @PolyDet("down") double elt = a[i];
+      sum += elt;
     }
     return sum;
   }
@@ -454,7 +560,10 @@ public final class ArraysPlume {
     double sum = 0;
     for (int i = 0; i < a.length; i++) {
       for (int j = 0; j < a[i].length; j++) {
-        sum += a[i][j];
+        @SuppressWarnings("determinism") // each element is accessed exactly once and combine in an
+        // order-insensitive way, can't be verified by the checker
+        @PolyDet("down") double elt = a[i][j];
+        sum += elt;
       }
     }
     return sum;
@@ -627,7 +736,7 @@ public final class ArraysPlume {
    */
   @Pure
   public static @NonDet int indexOfEq(
-      List<? extends @PolyNull @NonDet Object> a, @Nullable Object elt) {
+      List<? extends @PolyNull @PolyDet("use") Object> a, @Nullable Object elt) {
     for (int i = 0; i < a.size(); i++) {
       if (elt == a.get(i)) {
         return i;
@@ -873,7 +982,8 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  public static @PolyDet("up") int indexOf(List<?> a, @PolyAll Object[] sub) {
+  public static @PolyDet("up") int indexOf(
+      List<? extends @PolyDet("use") Object> a, @PolyAll Object[] sub) {
     int aIndexMax = a.size() - sub.length + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarray(a, sub, i)) {
@@ -895,7 +1005,8 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  public static @NonDet int indexOfEq(List<?> a, @PolyAll Object[] sub) {
+  public static @NonDet int indexOfEq(
+      List<? extends @PolyDet("use") Object> a, @PolyAll Object[] sub) {
     int aIndexMax = a.size() - sub.length + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarrayEq(a, sub, i)) {
@@ -917,7 +1028,8 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  public static @PolyDet("up") int indexOf(@PolyAll Object[] a, List<?> sub) {
+  public static @PolyDet("up") int indexOf(
+      @PolyAll Object[] a, List<? extends @PolyDet("use") Object> sub) {
     int aIndexMax = a.length - sub.size() + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarray(a, sub, i)) {
@@ -939,7 +1051,8 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  public static @NonDet int indexOfEq(@PolyAll Object[] a, List<?> sub) {
+  public static @NonDet int indexOfEq(
+      @PolyAll Object[] a, List<? extends @PolyDet("use") Object> sub) {
     int aIndexMax = a.length - sub.size() + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarrayEq(a, sub, i)) {
@@ -961,7 +1074,8 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  public static @PolyDet("up") int indexOf(List<?> a, List<?> sub) {
+  public static @PolyDet("up") int indexOf(
+      List<? extends @PolyDet("use") Object> a, List<? extends @PolyDet("use") Object> sub) {
     int aIndexMax = a.size() - sub.size() + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarray(a, sub, i)) {
@@ -983,7 +1097,8 @@ public final class ArraysPlume {
    * @see java.lang.String#indexOf(java.lang.String)
    */
   @Pure
-  public static @NonDet int indexOfEq(List<?> a, List<?> sub) {
+  public static @NonDet int indexOfEq(
+      List<? extends @PolyDet("use") Object> a, List<? extends @PolyDet("use") Object> sub) {
     int aIndexMax = a.size() - sub.size() + 1;
     for (int i = 0; i <= aIndexMax; i++) {
       if (isSubarrayEq(a, sub, i)) {
@@ -1124,7 +1239,9 @@ public final class ArraysPlume {
    * @return a sublist of the given list
    */
   @SideEffectFree
-  public static <T> @PolyDet("up") List<T> subarray(
+  @SuppressWarnings("determinism") // @PolyDet("use") upper bound is dropped on call to sublist,
+  // https://github.com/t-rasmud/checker-framework/issues/50
+  public static <T extends @PolyDet("use") Object> @PolyDet("up") List<T> subarray(
       List<T> a, @IndexFor("#1") int startindex, @IndexOrHigh("#1") int length) {
     return a.subList(startindex, startindex + length);
   }
@@ -1321,7 +1438,13 @@ public final class ArraysPlume {
       return false;
     }
     for (int i = 0; i < sub.length; i++) {
-      if (!Objects.equals(sub[i], a[aOffset + i])) {
+			// @PolyDet("up") not accepted when accessed directly from the array,
+      @SuppressWarnings("determinism")
+      @PolyDet("up") Object elt1 = sub[i];
+			// @PolyDet("up") not accepted when accessed directly from the array,
+      @SuppressWarnings("determinism")
+      @PolyDet("up") Object elt2 = a[aOffset + i];
+      if (!Objects.equals(elt1, elt2)) {
         return false;
       }
     }
@@ -1365,7 +1488,7 @@ public final class ArraysPlume {
    */
   @Pure
   public static @PolyDet("up") boolean isSubarray(
-      @PolyAll Object[] a, List<?> sub, @NonNegative int aOffset) {
+      @PolyAll Object[] a, List<? extends @PolyDet("use") Object> sub, @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.length) {
       return false;
     }
@@ -1389,7 +1512,7 @@ public final class ArraysPlume {
    */
   @Pure
   public static @NonDet boolean isSubarrayEq(
-      @PolyAll Object[] a, List<?> sub, @NonNegative int aOffset) {
+      @PolyAll Object[] a, List<? extends @PolyDet("use") Object> sub, @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.length) {
       return false;
     }
@@ -1414,7 +1537,7 @@ public final class ArraysPlume {
    */
   @Pure
   public static @PolyDet("up") boolean isSubarray(
-      List<?> a, @PolyAll Object[] sub, @NonNegative int aOffset) {
+      List<? extends @PolyDet("use") Object> a, @PolyAll Object[] sub, @NonNegative int aOffset) {
     if (aOffset + sub.length > a.size()) {
       return false;
     }
@@ -1438,7 +1561,7 @@ public final class ArraysPlume {
    */
   @Pure
   public static @NonDet boolean isSubarrayEq(
-      List<?> a, @PolyAll Object[] sub, @NonNegative int aOffset) {
+      List<? extends @PolyDet("use") Object> a, @PolyAll Object[] sub, @NonNegative int aOffset) {
     if (aOffset + sub.length > a.size()) {
       return false;
     }
@@ -1463,7 +1586,9 @@ public final class ArraysPlume {
    */
   @Pure
   public static @PolyDet("up") boolean isSubarray(
-      List<?> a, List<?> sub, @NonNegative int aOffset) {
+      List<? extends @PolyDet("use") Object> a,
+      List<? extends @PolyDet("use") Object> sub,
+      @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.size()) {
       return false;
     }
@@ -1486,7 +1611,10 @@ public final class ArraysPlume {
    * @return true iff sub is a contiguous subarray of a
    */
   @Pure
-  public static @NonDet boolean isSubarrayEq(List<?> a, List<?> sub, @NonNegative int aOffset) {
+  public static @NonDet boolean isSubarrayEq(
+      List<? extends @PolyDet("use") Object> a,
+      List<? extends @PolyDet("use") Object> sub,
+      @NonNegative int aOffset) {
     if (aOffset + sub.size() > a.size()) {
       return false;
     }
@@ -1606,7 +1734,7 @@ public final class ArraysPlume {
    * @param lst the list to convert to an array
    * @return the result of lst.toArray, casted to a more precise type than Object[]
    */
-  private static <T> T[] toTArray(List<T> lst) {
+  private static <T extends @PolyDet("use") Object> T[] toTArray(List<T> lst) {
     @SuppressWarnings("unchecked")
     T[] asArray = (T[]) lst.toArray();
     return asArray;
@@ -1621,7 +1749,9 @@ public final class ArraysPlume {
     /** The array that this object wraps, or null. */
     T @Nullable [] theArray = null;
     /** The list that this object wraps, or null. */
-    @Nullable List<T> theList = null;
+    // TODO: remove @NonDet once @ThisDet is implemented, @NonDet is currently required because it
+    // must match the upper bound of the type parameter T.
+    @Nullable @NonDet List<T> theList = null;
 
     /**
      * Creates a ListOrArray that wraps an array.
@@ -1648,6 +1778,7 @@ public final class ArraysPlume {
      *
      * @return true if this represents a null value
      */
+    @SuppressWarnings("determinism") // the true type of theList is @ThisDet, not yet implemented
     boolean isNull() {
       return theArray == null && theList == null;
     }
@@ -1661,7 +1792,10 @@ public final class ArraysPlume {
       if (theArray != null) {
         return theArray.length;
       } else if (theList != null) {
-        return theList.size();
+        @SuppressWarnings("determinism") // the true type of theList is @ThisDet, not yet
+        // implemented
+        @PolyDet int size = theList.size();
+        return size;
       } else {
         throw new Error("both fields are null");
       }
@@ -1676,7 +1810,10 @@ public final class ArraysPlume {
       if (theArray != null) {
         return theArray.length == 0;
       } else if (theList != null) {
-        return theList.isEmpty();
+        @SuppressWarnings("determinism") // the true type of theList is @ThisDet, not yet
+        // implemented
+        @PolyDet boolean isEmpty = theList.isEmpty();
+        return isEmpty;
       } else {
         throw new Error("both fields are null");
       }
@@ -1691,7 +1828,10 @@ public final class ArraysPlume {
       if (theArray != null) {
         return theArray;
       } else if (theList != null) {
-        return toTArray(theList);
+        @SuppressWarnings("determinism") // the true type of theList is @ThisDet, not yet
+        // implemented
+        T @PolyDet [] arr = toTArray(theList);
+        return arr;
       } else {
         throw new Error("both fields are null");
       }
@@ -1703,7 +1843,9 @@ public final class ArraysPlume {
      * @param dest the destination array
      * @param destPos the index at which to start overwriting elements of {@code dest}
      */
-    @SuppressWarnings("index") // TODO: annotate for Index Checker
+    @SuppressWarnings({"index", "determinism"}) // true type of theList is @ThisDet, not yet
+    // implemented
+    // TODO: annotate for Index Checker
     void copyInto(@PolyDet("use") ListOrArray<T> this, T[] dest, @PolyDet("use") int destPos) {
       if (theArray != null) {
         System.arraycopy(theArray, 0, dest, destPos, theArray.length);
@@ -1730,10 +1872,9 @@ public final class ArraysPlume {
         @PolyDet Class<?> result = ReflectionPlume.leastUpperBound(theArray);
         return result;
       } else if (theList != null) {
-        @SuppressWarnings("determinism") // Because the list field is @Det, there's an extra
-        // requirement on this call that T extend @Det Object. The field essentially has the same
-        // determinism as the Object it's a part of, so this can be ignored.
-        Class<?> result = ReflectionPlume.leastUpperBound(theList);
+        @SuppressWarnings("determinism") // the true type of theList is @ThisDet, not yet
+        // implemented
+        @PolyDet Class<?> result = ReflectionPlume.leastUpperBound(theList);
         return result;
       } else {
         throw new Error("both fields are null");
@@ -1750,7 +1891,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  public static <T> T[] concat(T @Nullable [] a, T @Nullable [] b) {
+  public static <T extends @PolyDet("use") Object> T[] concat(T @Nullable [] a, T @Nullable [] b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
 
@@ -1763,7 +1904,8 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  public static <T> T[] concat(T @Nullable [] a, @Nullable List<T> b) {
+  public static <T extends @PolyDet("use") Object> T[] concat(
+      T @Nullable [] a, @Nullable List<T> b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
 
@@ -1776,7 +1918,8 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  public static <T> T[] concat(@Nullable List<T> a, T @Nullable [] b) {
+  public static <T extends @PolyDet("use") Object> T[] concat(
+      @Nullable List<T> a, T @Nullable [] b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
 
@@ -1788,7 +1931,8 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  public static <T> T[] concat(@Nullable List<T> a, @Nullable List<T> b) {
+  public static <T extends @PolyDet("use") Object> T[] concat(
+      @Nullable List<T> a, @Nullable List<T> b) {
     return concat(new ListOrArray<T>(a), new ListOrArray<T>(b));
   }
 
@@ -1800,7 +1944,8 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  private static <T> T[] concat(ListOrArray<T> a, ListOrArray<T> b) {
+  private static <T extends @PolyDet("use") Object> T[] concat(
+      ListOrArray<T> a, ListOrArray<T> b) {
     if (a.isNull() && b.isNull()) {
       @SuppressWarnings("unchecked")
       T[] result = (T[]) new Object[0];

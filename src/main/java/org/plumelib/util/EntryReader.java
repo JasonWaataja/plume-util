@@ -195,13 +195,16 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
      * @return a substring that matches re
      */
     public String getDescription(@Nullable Pattern re) {
-
-      if (re == null) {
+      @SuppressWarnings("determinism") // need to pass @PolyDet to conditional
+      @Det boolean tmp1 = (re == null);
+      if (tmp1) {
         return firstLine;
       }
 
       Matcher descr = re.matcher(body);
-      if (descr.find()) {
+      @SuppressWarnings("determinism") // need to pass @PolyDet to conditional
+      @Det boolean tmp2 = descr.find();
+      if (tmp2) {
         return descr.group();
       } else {
         return firstLine;
@@ -532,6 +535,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @return the string that was read, or null at end of file
    */
   @Override
+  @SuppressWarnings("determinism") // each conditional is passed @PolyDet but expects @Det, which is
+  // too strong
   public @Nullable String readLine(@GuardSatisfied EntryReader this) throws IOException {
 
     // System.out.printf ("Entering size = %d%n", readers.size());
@@ -619,8 +624,11 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @return whether there is another line to read
    */
   @Override
-  public boolean hasNext(@GuardSatisfied EntryReader this) {
-    if (pushbackLine != null) {
+  public @PolyDet("down") boolean hasNext(@GuardSatisfied EntryReader this) {
+    @SuppressWarnings("determinism") // this expression is @NonDet but superclass requires this to
+    // be @PolyDet("down") in order to overriden, @Det is also required on all conditionals
+    @Det boolean tmp1 = (pushbackLine != null);
+    if (tmp1) {
       return true;
     }
 
@@ -631,7 +639,9 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       throw new Error("unexpected IOException: ", e);
     }
 
-    if (line == null) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to conditionals
+    @Det boolean tmp2 = (line == null);
+    if (tmp2) {
       return false;
     }
 
@@ -676,6 +686,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
    * @return the next entry (paragraph) in the file
    * @throws IOException if there is a problem reading the file
    */
+  @SuppressWarnings("determinism") // need to pass @PolyDet to loops and conditionals in this method
   public @Nullable Entry getEntry(@GuardSatisfied EntryReader this) throws IOException {
 
     // Skip any preceding blank lines
