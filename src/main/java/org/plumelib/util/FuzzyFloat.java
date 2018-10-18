@@ -86,6 +86,7 @@ public class FuzzyFloat {
    * @return true if d1 and d2 are considered equal, false otherwise
    */
   @Pure
+  @SuppressWarnings("determinism") /// need to pass @PolyDet to conditionals in this method
   public boolean eq(double d1, double d2) {
 
     // NaNs are not considered equal.
@@ -207,7 +208,10 @@ public class FuzzyFloat {
   @Pure
   public @PolyDet("up") int indexOf(double[] a, double elt) {
     for (int i = 0; i < a.length; i++) {
-      if (eq(elt, a[i])) {
+      @SuppressWarnings("determinism") // need to pass @PolyDet to conditional, also cannot pass
+      // a[i] directly because of https://github.com/t-rasmud/checker-framework/issues/48
+      @Det boolean tmp = eq(elt, a[i]);
+      if (tmp) {
         return i;
       }
     }
@@ -233,7 +237,10 @@ public class FuzzyFloat {
     outer:
     for (int i = 0; i <= aIndexMax; i++) {
       for (int j = 0; j < sub.length; j++) {
-        if (ne(a[i + j], sub[j])) {
+        @SuppressWarnings("determinism") // need to pass @PolyDet to conditional, also cannot access
+        // array directly because of https://github.com/t-rasmud/checker-framework/issues/48
+        @Det boolean tmp = (ne(a[i + j], sub[j]));
+        if (tmp) {
           continue outer;
         }
       }
@@ -253,9 +260,11 @@ public class FuzzyFloat {
    * @param a2 the second set to compare
    * @return true if a1 and a2 are set equivalent, false otherwise
    */
-  @SuppressWarnings({"purity", "lock"}) // side effect to local state (arrays)
+  @SuppressWarnings({"purity", "lock", "determinism"}) // side effect to local state (arrays),
+  // several instances https://github.com/t-rasmud/checker-framework/issues/48 and passing @PolyDet
+  // to conditionals
   @Pure
-  public @PolyDet("down") boolean isElemMatch(double[] a1, double[] a2) {
+  public @PolyDet("down") boolean isElemMatch(@Det double @PolyDet [] a1, @Det double @PolyDet [] a2) {
 
     // don't change our parameters
     a1 = a1.clone();
@@ -347,13 +356,21 @@ public class FuzzyFloat {
     @Pure
     @Override
     public int compare(double[] a1, double[] a2) {
-      if (a1 == a2) {
+      @SuppressWarnings("determinism") // need to pass @PolyDet to conditionals
+      @Det boolean tmp1 = (a1 == a2);
+      if (tmp1) {
         return 0;
       }
       int len = Math.min(a1.length, a2.length);
       for (int i = 0; i < len; i++) {
-        if (ne(a1[i], a2[i])) {
-          return ((a1[i] > a2[i]) ? 1 : -1);
+        @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional, also can't
+        // pass array elements directly, https://github.com/t-rasmud/checker-framework/issues/48
+        @Det boolean tmp2 = ne(a1[i], a2[i]);
+        if (tmp2) {
+          @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional, also can't
+          // pass array elements directly, https://github.com/t-rasmud/checker-framework/issues/48
+          @Det boolean tmp3 = (a1[i] > a2[i]);
+          return ((tmp3) ? 1 : -1);
         }
       }
       return a1.length - a2.length;
@@ -373,7 +390,7 @@ public class FuzzyFloat {
    */
   @SuppressWarnings({"purity", "lock"}) // side effect to local state (arrays)
   @Pure
-  public @PolyDet("down") boolean isSubset(double[] smaller, double[] bigger) {
+  public @PolyDet("down") boolean isSubset(@Det double[] smaller, @Det double[] bigger) {
 
     // don't change our parameters
     smaller = smaller.clone();
@@ -388,11 +405,19 @@ public class FuzzyFloat {
     for (int i = 0; i < smaller.length; i++) {
       double val = smaller[i];
       for (int j = start; j < bigger.length; j++) {
-        if (eq(val, bigger[j])) {
+				@SuppressWarnings("determinism") // need to pass @PolyDet("down") to a
+				// conditional, can't access arrays directly because of //
+				// https://github.com/t-rasmud/checker-framework/issues/48, and correct type
+				// refinement // isn't implemented on sorted arrays yet
+				// https://github.com/t-rasmud/checker-framework/issues/59
+				@Det boolean tmp1 = eq(val, bigger[j]);
+        if (tmp1) {
           start = j;
           continue outer1;
         }
-        if (val < bigger[j]) {
+        @SuppressWarnings("determinism") // same reasons as for tmp1 above
+        @Det boolean tmp2 = (val < bigger[j]);
+        if (tmp2) {
           return (false);
         }
       }

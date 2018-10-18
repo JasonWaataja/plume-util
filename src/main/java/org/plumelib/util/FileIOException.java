@@ -304,7 +304,9 @@ public class FileIOException extends IOException {
    * @return the line number of {@code reader}, or -1 if {@code reader} is null
    */
   private static int getLineNumber(@Nullable LineNumberReader reader) {
-    if (reader != null) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to conditional
+    @Det boolean tmp = (reader != null);
+    if (tmp) {
       return reader.getLineNumber();
     } else {
       return -1;
