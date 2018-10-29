@@ -1,6 +1,7 @@
 package org.plumelib.util;
 
 import org.checkerframework.checker.determinism.qual.NonDet;
+import org.checkerframework.checker.determinism.qual.PolyDet;
 
 /**
  * Hasher is intended to work like Comparable: it is an optional argument to a hashing data
@@ -35,5 +36,5 @@ public interface Hasher {
    * @param o2 the second value to test for equality
    * @return whether o1 equals o2
    */
-  boolean equals(Object o1, Object o2);
+  @PolyDet("up") boolean equals(Object o1, Object o2);
 }

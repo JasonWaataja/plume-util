@@ -55,7 +55,9 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    * @param maxValues the maximum number of values this set will be able to hold; must be positive
    */
   public LimitedSizeSet(@Positive int maxValues) {
-    if (assertsEnabled && !(maxValues > 0)) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = assertsEnabled && !(maxValues > 0);
+    if (tmp) {
       throw new IllegalArgumentException("maxValues should be positive, is " + maxValues);
     }
     // this.maxValues = maxValues;
@@ -74,11 +76,15 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    * @param elt the element to add to this set
    */
   public void add(T elt) {
-    if (repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp1 = repNulled();
+    if (tmp1) {
       return;
     }
 
-    if (contains(elt)) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp2 = contains(elt);
+    if (tmp2) {
       return;
     }
     if (numValues == values.length) {
@@ -95,19 +101,26 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    * @param s the elements to add to this set
    */
   public void addAll(LimitedSizeSet<? extends T> s) {
-    @SuppressWarnings("interning") // optimization; not a subclass of Collection, though
-    boolean sameObject = (this == s);
+    @SuppressWarnings({"interning", "determinism"}) // optimization; not a subclass of Collection,
+    // though. Also need to pass @polyDet to a conditional.
+    @Det boolean sameObject = (this == s);
     if (sameObject) {
       return;
     }
-    if (repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp1 = repNulled();
+    if (tmp1) {
       return;
     }
-    if (s.repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp2 = s.repNulled();
+    if (tmp2) {
       // We don't know whether the elements of this and the argument were
       // disjoint.  There might be anywhere from max(size(), s.size()) to
       // (size() + s.size()) elements in the resulting set.
-      if (s.size() > values.length) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+      @Det boolean tmp3 = s.size() > values.length;
+      if (tmp3) {
         nullRep();
         return;
       } else {
@@ -118,11 +131,15 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
     // TODO: s.values isn't modified by the call to add.  Use a local variable until
     // https://tinyurl.com/cfissue/984 is fixed.
     @Nullable T @SameLen("s.values") [] svalues = s.values;
-    for (int i = 0; i < s.size(); i++) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a loop test
+    @Det int size = s.size();
+    for (int i = 0; i < size; i++) {
       // This implies that the set cannot hold null.
       assert svalues[i] != null : "@AssumeAssertion(nullness): used portion of array";
       add(svalues[i]);
-      if (repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+      @Det boolean tmp4 = repNulled();
+      if (tmp4) {
         return; // optimization, not necessary for correctness
       }
     }
@@ -137,11 +154,15 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
   @SuppressWarnings("deterministic") // pure wrt equals() but not ==: throws a new exception
   @Pure
   public boolean contains(T elt) {
-    if (repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp1 = repNulled();
+    if (tmp1) {
       throw new UnsupportedOperationException();
     }
     for (int i = 0; i < numValues; i++) {
-      if (Objects.equals(values[i], elt)) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp2 = Objects.equals(values[i], elt);
+      if (tmp2) {
         return true;
       }
     }
@@ -168,7 +189,9 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
   @SuppressWarnings(
       "lowerbound") // https://tinyurl.com/cfissue/1606: nulling the rep leaves numValues positive
   public @Positive int maxSize() {
-    if (repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = repNulled();
+    if (tmp) {
       return numValues;
     } else {
       return values.length + 1;
@@ -194,7 +217,9 @@ public class LimitedSizeSet<T> implements Serializable, Cloneable {
    */
   @SuppressWarnings("upperbound") // nulling the rep: after which no indexing will occur
   private void nullRep() {
-    if (repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = repNulled();
+    if (tmp) {
       return;
     }
     numValues = values.length + 1;

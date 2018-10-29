@@ -58,7 +58,9 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
    * @param maxValues the maximum number of values this set will be able to hold; must be positive
    */
   public LimitedSizeIntSet(@Positive int maxValues) {
-    if (assertsEnabled && !(maxValues > 0)) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = assertsEnabled && !(maxValues > 0);
+    if (tmp) {
       throw new IllegalArgumentException("maxValues should be positive, is " + maxValues);
     }
     // this.maxValues = maxValues;
@@ -95,19 +97,26 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
    * @param s the elements to add to this set
    */
   public void addAll(LimitedSizeIntSet s) {
-    @SuppressWarnings("interning") // optimization; not a subclass of Collection, though
-    boolean sameObject = (this == s);
+    @SuppressWarnings({"interning", "determinism"}) // optimization; not a subclass of Collection,
+    // though. Also need to pass @PolyDet to a conditional
+    @Det boolean sameObject = (this == s);
     if (sameObject) {
       return;
     }
-    if (repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp1 = repNulled();
+    if (tmp1) {
       return;
     }
-    if (s.repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp2 = s.repNulled();
+    if (tmp2) {
       // We don't know whether the elements of this and the argument were
       // disjoint.  There might be anywhere from max(size(), s.size()) to
       // (size() + s.size()) elements in the resulting set.
-      if (s.size() > values.length) {
+      @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+      @Det boolean tmp3 = s.size() > values.length;
+      if (tmp3) {
         nullRep();
         return;
       } else {
@@ -118,12 +127,16 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
     // TODO: s.values isn't modified by the call to add.  Use a local variable until
     // https://tinyurl.com/cfissue/984 is fixed.
     int[] svalues = s.values;
-    for (int i = 0; i < s.size(); i++) {
+    @SuppressWarnings("determinism") // need to use @PolyDet in loop test
+    @Det int size = s.size();
+    for (int i = 0; i < size; i++) {
       @SuppressWarnings(
           "index") // svalues is the internal rep of s, and s.size() <= s.values.length
       @IndexFor("svalues") int index = i;
       add(svalues[index]);
-      if (repNulled()) {
+      @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+      @Det boolean tmp4 = repNulled();
+      if (tmp4) {
         return; // optimization, not necessary for correctness
       }
     }
@@ -138,11 +151,15 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
   @SuppressWarnings("deterministic") // pure wrt equals() but not ==: throws a new exception
   @Pure
   public boolean contains(int elt) {
-    if (repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp1 = repNulled();
+    if (tmp1) {
       throw new UnsupportedOperationException();
     }
     for (int i = 0; i < numValues; i++) {
-      if (values[i] == elt) {
+      @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+      @Det boolean tmp2 = (values[i] == elt);
+      if (tmp2) {
         return true;
       }
     }
@@ -169,7 +186,9 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
   @SuppressWarnings(
       "lowerbound") // https://tinyurl.com/cfissue/1606: nulling the rep leaves numValues positive
   public @Positive int maxSize() {
-    if (repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = repNulled();
+    if (tmp) {
       return numValues;
     } else {
       return values.length + 1;
@@ -195,7 +214,9 @@ public class LimitedSizeIntSet implements Serializable, Cloneable {
    */
   @SuppressWarnings("upperbound") // nulling the rep: after which no indexing will occur
   private void nullRep() {
-    if (repNulled()) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = repNulled();
+    if (tmp) {
       return;
     }
     numValues = values.length + 1;

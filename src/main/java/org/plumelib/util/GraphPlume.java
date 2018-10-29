@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.checkerframework.checker.determinism.qual.Det;
+import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -55,11 +56,13 @@ public final class GraphPlume {
    * @param predecessors a graph, represented as a predecessor map
    * @return a map from each node to a list of its pre-dominators
    */
-  public static <T> Map<T, List<T>> dominators(Map<T, List<@KeyFor("#1") T>> predecessors) {
+	@SuppressWarnings("determinism") // several instances of
+  // https://github.com/t-rasmud/checker-framework/issues/32
+  public static <T extends @PolyDet("use") Object> Map<T, @PolyDet List<T>> dominators(Map<T, @PolyDet List<@KeyFor("#1") T>> predecessors) {
 
     // Map<@KeyFor({"preds","dom"}) T,List<@KeyFor({"preds","dom"}) T>> dom
     //   = new HashMap<@KeyFor({"preds","dom"}) T,List<@KeyFor({"preds","dom"}) T>>();
-    Map<T, List<T>> dom = new HashMap<T, List<T>>();
+    Map<T, @PolyDet List<T>> dom = new HashMap<T, @PolyDet List<T>>();
 
     @SuppressWarnings("keyfor") // every element of pred's value will be a key for dom
     Map<T, List<@KeyFor({"dom"}) T>> preds = predecessors;

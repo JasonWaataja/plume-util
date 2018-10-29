@@ -56,7 +56,8 @@ public final class Intern {
    * @return an interned version of a
    * @see String#intern
    */
-  @SuppressWarnings("interning") // side-effects the array in place (dangerous, but convenient)
+  @SuppressWarnings({"interning", "determinism"}) // side-effects the array in place (dangerous, but
+  // convenient), also need to pass @PolyDet to conditionals
   public static @Interned String @PolyValue @SameLen("#1") [] internStrings(
       String @PolyValue [] a) {
     for (int i = 0; i < a.length; i++) {
@@ -80,7 +81,9 @@ public final class Intern {
   @SuppressWarnings({"interning", "lock"}) // interning implementation
   @Pure
   public static boolean isInterned(@Nullable Object value) {
-    if (value == null) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = (value == null);
+    if (tmp) {
       // nothing to do
       return true;
     } else if (value instanceof String) {
@@ -158,7 +161,7 @@ public final class Intern {
    */
   private static final class IntArrayHasher implements Hasher {
     @Override
-    public boolean equals(Object a1, Object a2) {
+    public @PolyDet("up") boolean equals(Object a1, Object a2) {
       return Arrays.equals((int[]) a1, (int[]) a2);
     }
 
@@ -176,7 +179,7 @@ public final class Intern {
    */
   private static final class LongArrayHasher implements Hasher {
     @Override
-    public boolean equals(Object a1, Object a2) {
+    public @PolyDet("up") boolean equals(Object a1, Object a2) {
       return Arrays.equals((long[]) a1, (long[]) a2);
     }
 
@@ -215,6 +218,8 @@ public final class Intern {
    * @see Hasher
    * @see Arrays#equals(Object[],Object[])
    */
+  @SuppressWarnings("determinism") // need to pass @PolyDet to conditionals, also cannot pass
+  // da1[i] directly in args because of https://github.com/t-rasmud/checker-framework/issues/48
   private static final class DoubleArrayHasher implements Hasher {
     @Override
     public boolean equals(Object a1, Object a2) {
@@ -258,7 +263,7 @@ public final class Intern {
    */
   private static final class StringArrayHasher implements Hasher {
     @Override
-    public boolean equals(Object a1, Object a2) {
+    public @PolyDet("up") boolean equals(Object a1, Object a2) {
       return Arrays.equals((String[]) a1, (String[]) a2);
     }
 
@@ -276,7 +281,7 @@ public final class Intern {
    */
   private static final class ObjectArrayHasher implements Hasher {
     @Override
-    public boolean equals(Object a1, Object a2) {
+    public @PolyDet("up") boolean equals(Object a1, Object a2) {
       return Arrays.equals((@Nullable Object[]) a1, (@Nullable Object[]) a2);
     }
 
@@ -545,8 +550,11 @@ public final class Intern {
   @SuppressWarnings("lock")
   public static @Interned @PolyNull @PolyValue @SameLen("#1") String intern(
       @PolyNull @PolyValue String a) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = (a == null);
     // Checker Framework cannot typecheck:  return (a == null) ? null : a.intern();
-    if (a == null) {
+    if (tmp) {
+
       return null;
     }
     return a.intern();
@@ -909,7 +917,9 @@ public final class Intern {
   @SuppressWarnings("purity") // defensive coding: throw exception when argument is invalid
   @Pure
   public static @Interned @PolyNull Object intern(@PolyNull Object a) {
-    if (a == null) {
+    @SuppressWarnings("determinism") // need to pass @PolyDet to a conditional
+    @Det boolean tmp = (a == null);
+    if (tmp) {
       return null;
     } else if (a instanceof String) {
       return intern((String) a);
