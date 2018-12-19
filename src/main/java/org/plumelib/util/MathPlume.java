@@ -605,9 +605,14 @@ public final class MathPlume {
     if (a.length == 0) {
       return 0;
     }
-    int result = a[0];
+    @SuppressWarnings("determinism") // result will be combined with rest of elements to create
+    // @PolyDet("down") result
+    @PolyDet("down") int result = a[0];
     for (int i = 1; i < a.length; i++) {
-      result = gcd(a[i], result);
+      @SuppressWarnings("determinism") // each element is accessed once and combined in an
+      // order-insensitive way
+      @PolyDet("down") int elt = a[i];
+      result = gcd(elt, result);
       if ((result == 1) || (result == 0)) {
         return result;
       }
@@ -624,14 +629,19 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static @PolyDet("up") int gcdDifferences(int[] a) {
+  public static @PolyDet("down") int gcdDifferences(int[] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;
     }
-    int result = a[1] - a[0];
+    @SuppressWarnings("determinism") // result will be combined with rest of elements for
+    // @PolyDet("down") result
+    @PolyDet("down") int result = a[1] - a[0];
     for (int i = 2; i < a.length; i++) {
-      result = gcd(a[i] - a[i - 1], result);
+      @SuppressWarnings("determinism") // each element accessed twice and combined in
+      // order-insensitive way
+      @PolyDet("down") int diff = a[i] - a[i - 1];
+      result = gcd(diff, result);
       if ((result == 1) || (result == 0)) {
         return result;
       }
@@ -679,9 +689,14 @@ public final class MathPlume {
     if (a.length == 0) {
       return 0;
     }
-    long result = a[0];
+    @SuppressWarnings("determinism") // result will be combined with rest of elements to create a
+    // @PolyDet("down") result
+    @PolyDet("down") long result = a[0];
     for (int i = 1; i < a.length; i++) {
-      result = gcd(a[i], result);
+      @SuppressWarnings("determinism") // each element is accessed once and combined in an
+      // order-insensitive way
+      @PolyDet("down") long elt = a[i];
+      result = gcd(elt, result);
       if ((result == 1) || (result == 0)) {
         return result;
       }
@@ -698,14 +713,19 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static @PolyDet("up") long gcdDifferences(long[] a) {
+  public static @PolyDet("down") long gcdDifferences(long[] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;
     }
-    long result = a[1] - a[0];
+    @SuppressWarnings("determinism") // result will be combined with rest of elements for
+    // @PolyDet("down") result
+    @PolyDet("down") long result = a[1] - a[0];
     for (int i = 2; i < a.length; i++) {
-      result = gcd(a[i] - a[i - 1], result);
+      @SuppressWarnings("determinism") // each element accessed twice and combined in
+      // order-insensitive way
+      @PolyDet("down") long diff = a[i] - a[i - 1];
+      result = gcd(diff, result);
       if ((result == 1) || (result == 0)) {
         return result;
       }
@@ -760,9 +780,14 @@ public final class MathPlume {
     if (a.length == 0) {
       return 0;
     }
-    double result = a[0];
+    @SuppressWarnings("determinism") // result will be combined with rest of elements for
+    // @PolyDet("down") result
+    @PolyDet("down") double result = a[0];
     for (int i = 1; i < a.length; i++) {
-      result = gcd(a[i], result);
+      @SuppressWarnings("determinism") // each element processed once and combined in an
+      // order-insensitive way
+      @PolyDet("down") double elt = a[i];
+      result = gcd(elt, result);
       if ((result == 1) || (result == 0)) {
         return result;
       }
@@ -779,14 +804,19 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static @PolyDet("up") double gcdDifferences(double[] a) {
+  public static @PolyDet("down") double gcdDifferences(double[] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;
     }
-    double result = a[1] - a[0];
+    @SuppressWarnings("determinism") // result will be combined with rest of elements for
+    // @PolyDet("down") result
+    @PolyDet("down") double result = a[1] - a[0];
     for (int i = 2; i < a.length; i++) {
-      result = gcd(a[i] - a[i - 1], result);
+      @SuppressWarnings("determinism") // each element is accessed twice and combined in an
+      // order-insensitive way
+      @PolyDet("down") double diff = a[i] - a[i - 1];
+      result = gcd(diff, result);
       if ((result == 1) || (result == 0)) {
         return result;
       }
