@@ -878,7 +878,8 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static int @Nullable @ArrayLen(2) [] modulus(int[] nums) {
+  public static @PolyDet("down") int @Nullable @ArrayLen(2) @PolyDet("down") [] modulus(
+      int[] nums) {
     if (nums.length < 3) {
       return null;
     }
@@ -888,12 +889,13 @@ public final class MathPlume {
       return null;
     }
 
-    int remainder = nums[0] % modulus;
+    @SuppressWarnings("determinism") // this should work with any element, not just the first
+    @PolyDet("down") int remainder = nums[0] % modulus;
     if (remainder < 0) {
       remainder += modulus;
     }
 
-    return new int @PolyDet [] {remainder, modulus};
+    return new @PolyDet("down") int @PolyDet("down") [] {remainder, modulus};
   }
 
   /**
@@ -906,7 +908,8 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulus(int[])
    */
-  public static int @Nullable @ArrayLen(2) [] modulusInt(Iterator<Integer> itor) {
+  public static @PolyDet("down") int @Nullable @ArrayLen(2) @PolyDet("down") [] modulusInt(
+      Iterator<Integer> itor) {
     if (!itor.hasNext()) {
       return null;
     }
@@ -933,7 +936,10 @@ public final class MathPlume {
     if (count < 3) {
       return null;
     }
-    return new int @PolyDet [] {MathPlume.modPositive(avalue, modulus), modulus};
+    @SuppressWarnings("determinism") // uses an order-insensitive algorithm
+    @PolyDet("down") int @PolyDet("down") [] result =
+        new int @PolyDet [] {MathPlume.modPositive(avalue, modulus), modulus};
+    return result;
   }
 
   /**
@@ -957,7 +963,8 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static int @Nullable @ArrayLen(2) [] modulusStrict(int[] nums, boolean nonstrictEnds) {
+  public static @PolyDet("down") int @Nullable @ArrayLen(2) @PolyDet("down") [] modulusStrict(
+      int[] nums, boolean nonstrictEnds) {
     if (nums.length < 3) {
       return null;
     }
@@ -986,7 +993,9 @@ public final class MathPlume {
       }
     }
 
-    int r = modPositive(nums[firstIndex], modulus);
+    // can't pass array elements directly https://github.com/t-rasmud/checker-framework/issues/48
+    @PolyDet("up") int elt = nums[firstIndex];
+    int r = modPositive(elt, modulus);
     if (nonstrictEnds) {
       if ((r != modPositive(firstNonstrict, modulus))
           || (r != modPositive(lastNonstrict, modulus))) {
@@ -994,7 +1003,9 @@ public final class MathPlume {
       }
     }
 
-    return new @PolyDet int @PolyDet [] {r, modulus};
+    @SuppressWarnings("determinism") // uses an order-insensitive algorithm
+    @PolyDet("down") int @PolyDet("down") [] result = new @PolyDet("down") int @PolyDet("down") [] {r, modulus};
+    return result;
   }
 
   /**
@@ -1010,7 +1021,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulusStrict(int[], boolean)
    */
-  public static int @Nullable @ArrayLen(2) [] modulusStrictInt(
+  public static @PolyDet("down") int @Nullable @ArrayLen(2) @PolyDet("down") [] modulusStrictInt(
       Iterator<Integer> itor, boolean nonstrictEnds) {
     if (!itor.hasNext()) {
       return null;
@@ -1057,7 +1068,9 @@ public final class MathPlume {
       }
     }
 
-    return new int @PolyDet [] {r, modulus};
+    @SuppressWarnings("determinism") // uses an order-insensitive algorithm
+    @PolyDet("down") int @PolyDet("down") [] result = new @PolyDet("down") int @PolyDet("down") [] {r, modulus};
+    return result;
   }
 
   /// modulus for long (as opposed to int) values
@@ -1112,7 +1125,8 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static long @Nullable @ArrayLen(2) [] modulus(long[] nums) {
+  public static @PolyDet("down") long @Nullable @ArrayLen(2) @PolyDet("down") [] modulus(
+      long[] nums) {
     if (nums.length < 3) {
       return null;
     }
@@ -1122,12 +1136,13 @@ public final class MathPlume {
       return null;
     }
 
-    long remainder = nums[0] % modulus;
+    @SuppressWarnings("determinism") // this should work with any element, not just the first
+    @PolyDet("down") long remainder = nums[0] % modulus;
     if (remainder < 0) {
       remainder += modulus;
     }
 
-    return new long @PolyDet [] {remainder, modulus};
+    return new long @PolyDet("down") [] {remainder, modulus};
   }
 
   /**
@@ -1140,7 +1155,8 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulus(long[])
    */
-  public static @PolyDet long @Nullable @ArrayLen(2) [] modulusLong(Iterator<Long> itor) {
+  public static @PolyDet("down") long @Nullable @ArrayLen(2) @PolyDet("down") [] modulusLong(
+      Iterator<Long> itor) {
     if (!itor.hasNext()) {
       return null;
     }
@@ -1167,7 +1183,12 @@ public final class MathPlume {
     if (count < 3) {
       return null;
     }
-    return new long @PolyDet [] {MathPlume.modPositive(avalue, modulus), modulus};
+    @SuppressWarnings("determinism") // uses order-insensitive algorithm
+    @PolyDet("down") long @PolyDet("down") [] result =
+        new @PolyDet("down") long @PolyDet("down") [] {
+          MathPlume.modPositive(avalue, modulus), modulus
+        };
+    return result;
   }
 
   /**
@@ -1191,7 +1212,8 @@ public final class MathPlume {
    */
   @Pure
   @StaticallyExecutable
-  public static long @Nullable @ArrayLen(2) [] modulusStrict(long[] nums, boolean nonstrictEnds) {
+  public static @PolyDet("down") long @Nullable @ArrayLen(2) @PolyDet("down") [] modulusStrict(
+      long[] nums, boolean nonstrictEnds) {
     if (nums.length < 3) {
       return null;
     }
@@ -1220,7 +1242,9 @@ public final class MathPlume {
       }
     }
 
-    long r = modPositive(nums[firstIndex], modulus);
+    // can't pass array elements directly https://github.com/t-rasmud/checker-framework/issues/48
+    @PolyDet("up") long elt = nums[firstIndex];
+    long r = modPositive(elt, modulus);
     if (nonstrictEnds) {
       if ((r != modPositive(firstNonstrict, modulus))
           || (r != modPositive(lastNonstrict, modulus))) {
@@ -1228,7 +1252,9 @@ public final class MathPlume {
       }
     }
 
-    return new @PolyDet long @PolyDet [] {r, modulus};
+    @SuppressWarnings("determinism") // uses order-insensitive algorithm
+    @PolyDet("down") long @PolyDet("down") [] result = new @PolyDet("down") long @PolyDet("down") [] {r, modulus};
+    return result;
   }
 
   /**
@@ -1244,7 +1270,7 @@ public final class MathPlume {
    *     null if no such exists or the iterator contains fewer than 3 elements
    * @see #modulusStrict(int[], boolean)
    */
-  public static @PolyDet long @Nullable @ArrayLen(2) [] modulusStrictLong(
+  public static @PolyDet("down") long @Nullable @ArrayLen(2) @PolyDet("down") [] modulusStrictLong(
       Iterator<Long> itor, boolean nonstrictEnds) {
     if (!itor.hasNext()) {
       return null;
@@ -1291,7 +1317,9 @@ public final class MathPlume {
       }
     }
 
-    return new long @PolyDet [] {r, modulus};
+    @SuppressWarnings("determinism") // uses order-insensitive algorithm
+    @PolyDet("down") long @PolyDet("down") [] result = new @PolyDet("down") long @PolyDet("down") [] {r, modulus};
+    return result;
   }
 
   ///
@@ -1309,15 +1337,16 @@ public final class MathPlume {
   @SuppressWarnings({"purity", "lock"})
   @Pure
   @StaticallyExecutable
-  public static int[] missingNumbers(int @MinLen(1) [] nums) {
+  public static @PolyDet("down") int @PolyDet("down") [] missingNumbers(int @MinLen(1) [] nums) {
     // avoid modifying parameter
     nums = nums.clone();
     Arrays.sort(nums);
     int min = nums[0];
     int max = nums[nums.length - 1];
     int sizeEstimate = max - min + 1 - nums.length;
-    List<@PolyDet Integer> resultList =
-        new ArrayList<@PolyDet Integer>(sizeEstimate < 1 ? 1 : sizeEstimate);
+    @SuppressWarnings("determinism") // https://github.com/t-rasmud/checker-framework/issues/32
+    @PolyDet("up") List<@PolyDet("up") Integer> resultList =
+        new ArrayList<@PolyDet("up") Integer>(sizeEstimate < 1 ? 1 : sizeEstimate);
     int val = min;
     for (int i = 0; i < nums.length; i++) {
       while (val < nums[i]) {
@@ -1328,11 +1357,13 @@ public final class MathPlume {
         val++;
       }
     }
-    @PolyDet int @PolyDet [] resultArray = new @PolyDet int @PolyDet [resultList.size()];
+    @PolyDet("up") int @PolyDet("up") [] resultArray = new @PolyDet("up") int @PolyDet("up") [resultList.size()];
     for (int i = 0; i < resultArray.length; i++) {
       resultArray[i] = resultList.get(i).intValue();
     }
-    return resultArray;
+    @SuppressWarnings("determinism") // uses order-insensitive algorithm
+    @PolyDet("down") int @PolyDet("down") [] result = resultArray;
+    return result;
   }
 
   /**
@@ -1408,7 +1439,7 @@ public final class MathPlume {
     }
 
     @Override
-    public boolean hasNext(@GuardSatisfied MissingNumbersIteratorInt this) {
+    public @PolyDet("down") boolean hasNext(@GuardSatisfied MissingNumbersIteratorInt this) {
       if (currentMissing < currentNonmissing) {
         return true;
       }
@@ -1487,7 +1518,8 @@ public final class MathPlume {
   @SuppressWarnings({"purity", "lock"})
   @Pure
   @StaticallyExecutable
-  public static int @Nullable @ArrayLen(2) [] nonmodulusStrict(int @Det [] nums) {
+  public static @PolyDet("down") int @Nullable @ArrayLen(2) @PolyDet("down") [] nonmodulusStrict(
+      int @Det [] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
     // instead of all at once.
@@ -1507,8 +1539,9 @@ public final class MathPlume {
    * @param missing the missing integers
    * @return value to be returned by {@link #nonmodulusStrict(int[])}
    */
-  private static int @Nullable @ArrayLen(2) [] nonmodulusStrictIntInternal(
-      Iterator<Integer> missing) {
+  @SuppressWarnings("determinism") // uses an order-insensitive algorithm
+  private static @PolyDet("down") int @Nullable @ArrayLen(2) @PolyDet("down") []
+      nonmodulusStrictIntInternal(Iterator<Integer> missing) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulusStrict({1,2,3,5,6,7,9,11}) => {0,2}.  Thus, use
     // modulusStrict.
@@ -1542,7 +1575,8 @@ public final class MathPlume {
    * @param nums the list of operands
    * @return a (remainder, modulus) pair that fails to match elements of nums
    */
-  public static int @Nullable @ArrayLen(2) [] nonmodulusStrictInt(@Det Iterator<Integer> nums) {
+  public static @PolyDet("down") int @Nullable @ArrayLen(2) @PolyDet("down") [] nonmodulusStrictInt(
+      @Det Iterator<Integer> nums) {
     return nonmodulusStrictIntInternal(new MissingNumbersIteratorInt(nums, true));
   }
 
@@ -1579,7 +1613,8 @@ public final class MathPlume {
   @SuppressWarnings("purity")
   @Pure
   @StaticallyExecutable
-  public static int @Nullable @ArrayLen(2) [] nonmodulusNonstrict(int[] nums) {
+  public static @PolyDet("down") int @Nullable @ArrayLen(2) @PolyDet("down") [] nonmodulusNonstrict(
+      int[] nums) {
     if (nums.length < 4) {
       return null;
     }
@@ -1595,7 +1630,9 @@ public final class MathPlume {
       @PolyDet boolean @PolyDet [] hasModulus = new @PolyDet boolean @PolyDet [m]; // initialized to false?
       int numNonmodulus = m;
       for (int i = 0; i < nums.length; i++) {
-        @IndexFor("hasModulus") int rem = modPositive(nums[i], m);
+        // can't pass array element directly https://github.com/t-rasmud/checker-framework/issues/48
+        @PolyDet("up") int elt = nums[i];
+        @IndexFor("hasModulus") int rem = modPositive(elt, m);
         if (!hasModulus[rem]) {
           hasModulus[rem] = true;
           numNonmodulus--;
@@ -1610,7 +1647,12 @@ public final class MathPlume {
       }
       // System.out.println("For m=" + m + ", numNonmodulus=" + numNonmodulus);
       if (numNonmodulus == 1) {
-        return new @PolyDet int @PolyDet [] {ArraysPlume.indexOf(hasModulus, false), m};
+        @SuppressWarnings("determinism") // uses an order-insensitive algorithm
+        @PolyDet("down") int @PolyDet("down") [] result =
+            new @PolyDet("down") int @PolyDet("down") [] {
+              ArraysPlume.indexOf(hasModulus, false), m
+            };
+        return result;
       }
     }
     return null;
@@ -1629,7 +1671,7 @@ public final class MathPlume {
   @SuppressWarnings({"purity", "lock"})
   @Pure
   @StaticallyExecutable
-  public static long[] missingNumbers(long @MinLen(1) [] nums) {
+  public static @PolyDet("down") long @PolyDet("down") [] missingNumbers(long @MinLen(1) [] nums) {
     // avoid modifying parameter
     nums = nums.clone();
     Arrays.sort(nums);
@@ -1648,9 +1690,13 @@ public final class MathPlume {
         val++;
       }
     }
-    @PolyDet long @PolyDet [] resultArray = new @PolyDet long @PolyDet [resultList.size()];
+    @PolyDet("down") long @PolyDet("down") [] resultArray =
+        new @PolyDet("down") long @PolyDet("down") [resultList.size()];
     for (int i = 0; i < resultArray.length; i++) {
-      resultArray[i] = resultList.get(i).longValue();
+      @SuppressWarnings("determinism") // Arrays.sort doesn't refine to @PolyDet("down") long
+      // @PolyDet("down"), but it would be sound in this case.
+      @PolyDet("down") long elt = resultList.get(i).longValue();
+      resultArray[i] = elt;
     }
     return resultArray;
   }
@@ -1731,7 +1777,7 @@ public final class MathPlume {
     }
 
     @Override
-    public boolean hasNext(@GuardSatisfied MissingNumbersIteratorLong this) {
+    public @PolyDet("down") boolean hasNext(@GuardSatisfied MissingNumbersIteratorLong this) {
       if (currentMissing < currentNonmissing) {
         return true;
       }
@@ -1810,7 +1856,8 @@ public final class MathPlume {
   @SuppressWarnings({"purity", "lock"})
   @Pure
   @StaticallyExecutable
-  public static long @Nullable @ArrayLen(2) [] nonmodulusStrict(long[] nums) {
+  public static @PolyDet("down") long @Nullable @ArrayLen(2) @PolyDet("down") [] nonmodulusStrict(
+      long[] nums) {
     // This implementation is particularly inefficient; find a better way to
     // compute this.  Perhaps obtain the new modulus numbers incrementally
     // instead of all at once.
@@ -1830,8 +1877,9 @@ public final class MathPlume {
    * @param missing the missing integers
    * @return value to be returned by {@link #nonmodulusStrict(long[])}
    */
-  private static long @Nullable @ArrayLen(2) [] nonmodulusStrictLongInternal(
-      Iterator<Long> missing) {
+  @SuppressWarnings("determinism") // uses an order-insensitive algorithm
+  private static @PolyDet("down") long @Nullable @ArrayLen(2) @PolyDet("down") []
+      nonmodulusStrictLongInternal(Iterator<Long> missing) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulusStrict({1,2,3,5,6,7,9,11}) => {0,2}.  Thus, use
     // modulusStrict.
@@ -1898,7 +1946,8 @@ public final class MathPlume {
   @SuppressWarnings("purity")
   @Pure
   @StaticallyExecutable
-  public static long @Nullable @ArrayLen(2) [] nonmodulusNonstrict(long[] nums) {
+  public static @PolyDet("down") long @Nullable @ArrayLen(2) @PolyDet("down") []
+      nonmodulusNonstrict(long[] nums) {
     if (nums.length < 4) {
       return null;
     }
@@ -1914,7 +1963,10 @@ public final class MathPlume {
       @PolyDet boolean @PolyDet [] hasModulus = new @PolyDet boolean @PolyDet [m]; // initialized to false?
       int numNonmodulus = m;
       for (int i = 0; i < nums.length; i++) {
-        @IndexFor("hasModulus") int rem = ((int) (modPositive(nums[i], m)));
+        // can't pass array elements directly,
+        // https://github.com/t-rasmud/checker-framework/issues/48
+        @PolyDet("up") long elt = nums[i];
+        @IndexFor("hasModulus") int rem = ((int) (modPositive(elt, m)));
         if (!hasModulus[rem]) {
           hasModulus[rem] = true;
           numNonmodulus--;
@@ -1929,7 +1981,12 @@ public final class MathPlume {
       }
       // System.out.println("For m=" + m + ", numNonmodulus=" + numNonmodulus);
       if (numNonmodulus == 1) {
-        return new @PolyDet long @PolyDet [] {ArraysPlume.indexOf(hasModulus, false), m};
+        @SuppressWarnings("determinism") // uses an order-insensitive algorithm
+        @PolyDet("down") long @PolyDet("down") [] result =
+            new @PolyDet("down") long @PolyDet("down") [] {
+              ArraysPlume.indexOf(hasModulus, false), m
+            };
+        return result;
       }
     }
     return null;

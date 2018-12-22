@@ -1198,11 +1198,14 @@ public final class UtilPlume {
    * @return a hash of the arguments
    */
   public static @NonDet int hash(@Nullable String @Nullable [] a) {
-    long result = 17;
+    @NonDet long result = 17;
     if (a != null) {
       result = result * 37 + a.length;
       for (int i = 0; i < a.length; i++) {
-        result = result * 37 + hash(a[i]);
+        // can't pass array elements directly
+        // https://github.com/t-rasmud/checker-framework/issues/48
+        @PolyDet("up") String elt = a[i];
+        result = result * 37 + hash(elt);
       }
     }
     return hash(result);
@@ -1481,12 +1484,16 @@ public final class UtilPlume {
     if (a.length == 0) {
       return "";
     }
+    // can't pass array elements directly https://github.com/t-rasmud/checker-framework/issues/48
+    @PolyDet("up") Object elt = a[0];
     if (a.length == 1) {
-      return String.valueOf(a[0]);
+      return String.valueOf(elt);
     }
-    StringBuilder sb = new StringBuilder(String.valueOf(a[0]));
+    StringBuilder sb = new StringBuilder(String.valueOf(elt));
     for (int i = 1; i < a.length; i++) {
-      sb.append(delim).append(a[i]);
+      // can't pass array elements directly https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("up") Object elt2 = a[i];
+      sb.append(delim).append(elt2);
     }
     return sb.toString();
   }
@@ -1498,7 +1505,7 @@ public final class UtilPlume {
    * @param a array of values to concatenate
    * @return the concatenation of the string representations of the values, each on its own line
    */
-  public static String joinLines(Object... a) {
+  public static @PolyDet("up") String joinLines(Object... a) {
     return join(a, lineSep);
   }
 
@@ -1608,7 +1615,9 @@ public final class UtilPlume {
       case '\r':
         return "\\r";
       default:
-        return new String(new @PolyDet char @PolyDet [] {c});
+        @SuppressWarnings("determinism") // a single element array cannot be @OrderNonDet
+        @PolyDet String result = new String(new @PolyDet char @PolyDet [] {c});
+        return result;
     }
   }
 
@@ -1650,7 +1659,9 @@ public final class UtilPlume {
     } else if (c == '\t') {
       return "\\t";
     } else if (c >= ' ' && c <= '~') {
-      return new String(new @PolyDet char @PolyDet [] {c});
+      @SuppressWarnings("determinism") // one element array can't be @OrderNonDet
+      @PolyDet String result = new String(new @PolyDet char @PolyDet [] {c});
+      return result;
     } else if (c < 256) {
       String octal = Integer.toOctalString(c);
       while (octal.length() < 3) {
@@ -1965,7 +1976,9 @@ public final class UtilPlume {
       // Don't compare output of hashCode() because it is non-deterministic from run to run.
       String s1 = o1.toString();
       String s2 = o2.toString();
-      return s1.compareTo(s2);
+      @SuppressWarnings("determinism") // actually @PolyDet("up") but interface requires @PolyDet
+      @PolyDet int result = s1.compareTo(s2);
+      return result;
     }
   }
 

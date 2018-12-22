@@ -11,7 +11,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
-import org.checkerframework.checker.determinism.qual.NonDet;
 import org.checkerframework.checker.determinism.qual.PolyDet;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -453,9 +452,14 @@ public final class ReflectionPlume {
    */
   public static <T> @Nullable @PolyDet("down") Class<T> leastUpperBound(
       @Nullable Class<T>[] classes) {
-    Class<T> result = null;
+    @SuppressWarnings("determinism") // result will be compared with the rest of the elements to
+    // create a @PolyDet("down") result
+    @PolyDet("down") Class<T> result = null;
     for (Class<T> clazz : classes) {
-      result = leastUpperBound(result, clazz);
+      @SuppressWarnings("determinism") // every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the checker
+      @PolyDet("down") Class<T> elt = clazz;
+      result = leastUpperBound(result, elt);
     }
     return result;
   }
@@ -473,7 +477,10 @@ public final class ReflectionPlume {
     Class<T> result = null;
     for (Object obj : objects) {
       if (obj != null) {
-        result = leastUpperBound(result, (Class<T>) obj.getClass());
+        @SuppressWarnings(
+            "determinism") // each element examined once and examined in an order-insensitive way.
+        @PolyDet("down") Class<T> lub = leastUpperBound(result, (Class<T>) obj.getClass());
+        result = lub;
       }
     }
     return result;
@@ -488,11 +495,13 @@ public final class ReflectionPlume {
    *     null
    */
   public static <T> @Nullable @PolyDet("down") Class<T> leastUpperBound(
-      List<? extends @Nullable @NonDet Object> objects) {
+      List<? extends @Nullable @PolyDet("use") Object> objects) {
     Class<T> result = null;
     for (Object obj : objects) {
       if (obj != null) {
-        result = leastUpperBound(result, (Class<T>) obj.getClass());
+        @SuppressWarnings("determinism") // elements combined in order-insensitive way
+        @PolyDet("down") Class<T> lub = leastUpperBound(result, (Class<T>) obj.getClass());
+        result = lub;
       }
     }
     return result;

@@ -320,7 +320,7 @@ public class ClassDeterministic {
   private static class ToStringComparator implements Comparator<Object> {
 
     @Override
-    public int compare(Object o1, Object o2) {
+    public @PolyDet("up") int compare(Object o1, Object o2) {
       return o1.toString().compareTo(o2.toString());
     }
   }

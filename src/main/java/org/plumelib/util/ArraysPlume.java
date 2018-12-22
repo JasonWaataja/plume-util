@@ -68,10 +68,10 @@ public final class ArraysPlume {
     // create a @PolyDet("down") result
     @PolyDet("down") int result = a[0];
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // Every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker. Also error with
-			// https://github.com/t-rasmud/checker-framework/issues/48
+      @SuppressWarnings("determinism") // Every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker. Also error with
+      // https://github.com/t-rasmud/checker-framework/issues/48
       @PolyDet("down") int elt = a[i];
       result = Math.min(result, elt);
     }
@@ -94,10 +94,10 @@ public final class ArraysPlume {
     // create a @PolyDet("down") result
     @PolyDet("down") long result = a[0];
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // Every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker. Also error with
-			// https://github.com/t-rasmud/checker-framework/issues/48
+      @SuppressWarnings("determinism") // Every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker. Also error with
+      // https://github.com/t-rasmud/checker-framework/issues/48
       @PolyDet("down") long elt = a[i];
       result = Math.min(result, elt);
     }
@@ -120,10 +120,10 @@ public final class ArraysPlume {
     // create a @PolyDet("down") result
     @PolyDet("down") double result = a[0];
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // Every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker. Also error with
-			// https://github.com/t-rasmud/checker-framework/issues/48
+      @SuppressWarnings("determinism") // Every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker. Also error with
+      // https://github.com/t-rasmud/checker-framework/issues/48
       @PolyDet("down") double elt = a[i];
       result = Math.min(result, elt);
     }
@@ -147,9 +147,9 @@ public final class ArraysPlume {
     @PolyDet("down") Integer result = a[0]; // to return a value actually in the array
     int resultInt = result.intValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker
+      @SuppressWarnings("determinism") // every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker
       @PolyDet("down") Integer elt = a[i];
       if (elt.intValue() < resultInt) {
         result = elt;
@@ -176,9 +176,9 @@ public final class ArraysPlume {
     @PolyDet("down") Long result = a[0]; // to return a value actually in the array
     long resultLong = result.longValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker
+      @SuppressWarnings("determinism") // every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker
       @PolyDet("down") Long elt = a[i];
       if (elt.longValue() < resultLong) {
         result = elt;
@@ -205,9 +205,9 @@ public final class ArraysPlume {
     @PolyDet("down") Double result = a[0]; // to return a value actually in the array
     int resultInt = result.intValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker
+      @SuppressWarnings("determinism") // every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker
       @PolyDet("down") Double elt = a[i];
       if (elt.intValue() < resultInt) {
         result = elt;
@@ -233,10 +233,10 @@ public final class ArraysPlume {
     // create a @PolyDet("down") result
     @PolyDet("down") int result = a[0];
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // Every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker. Also error with
-			// https://github.com/t-rasmud/checker-framework/issues/48
+      @SuppressWarnings("determinism") // Every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker. Also error with
+      // https://github.com/t-rasmud/checker-framework/issues/48
       @PolyDet("down") int elt = a[i];
       result = Math.max(result, elt);
     }
@@ -259,10 +259,10 @@ public final class ArraysPlume {
     // create a @PolyDet("down") result
     @PolyDet("down") long result = a[0];
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // Every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker. Also error with
-			// https://github.com/t-rasmud/checker-framework/issues/48
+      @SuppressWarnings("determinism") // Every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker. Also error with
+      // https://github.com/t-rasmud/checker-framework/issues/48
       @PolyDet("down") long elt = a[i];
       result = Math.min(result, elt);
     }
@@ -285,10 +285,10 @@ public final class ArraysPlume {
     // create a @PolyDet("down") result
     @PolyDet("down") double result = a[0];
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // Every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker. Also error with
-			// https://github.com/t-rasmud/checker-framework/issues/48
+      @SuppressWarnings("determinism") // Every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker. Also error with
+      // https://github.com/t-rasmud/checker-framework/issues/48
       @PolyDet("down") double elt = a[i];
       result = Math.min(result, elt);
     }
@@ -340,10 +340,10 @@ public final class ArraysPlume {
     @PolyDet("down") Long result = a[0]; // to return a value actually in the array
     long resultLong = result.longValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // Every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker. Also error with
-			// https://github.com/t-rasmud/checker-framework/issues/48
+      @SuppressWarnings("determinism") // Every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker. Also error with
+      // https://github.com/t-rasmud/checker-framework/issues/48
       @PolyDet("down") Long elt = a[i];
       if (elt.longValue() > resultLong) {
         result = elt;
@@ -370,10 +370,10 @@ public final class ArraysPlume {
     @PolyDet("down") Double result = a[0]; // to return a value actually in the array
     int resultInt = result.intValue(); // for faster comparison
     for (int i = 1; i < a.length; i++) {
-			@SuppressWarnings("determinism") // Every element is accessed exactly
-			// once and combined in an order-insensitive way, can't be verified by the
-			// checker. Also error with
-			// https://github.com/t-rasmud/checker-framework/issues/48
+      @SuppressWarnings("determinism") // Every element is accessed exactly
+      // once and combined in an order-insensitive way, can't be verified by the
+      // checker. Also error with
+      // https://github.com/t-rasmud/checker-framework/issues/48
       @PolyDet("down") Double elt = a[i];
       if (elt.intValue() > resultInt) {
         result = elt;
@@ -400,13 +400,13 @@ public final class ArraysPlume {
     int resultMin = a[0];
     int resultMax = a[0];
     for (int i = 1; i < a.length; i++) {
-			// @PolyDet("up") not accepted when accessed directly from the array,
-			// https://github.com/t-rasmud/checker-framework/issues/48
-			@PolyDet("up") int tmp1 = a[i];
+      // @PolyDet("up") not accepted when accessed directly from the array,
+      // https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("up") int tmp1 = a[i];
       resultMin = Math.min(resultMin, tmp1);
-			// @PolyDet("up") not accepted when accessed directly from the array,
-			// https://github.com/t-rasmud/checker-framework/issues/48
-			@PolyDet("up") int tmp2 = a[i];
+      // @PolyDet("up") not accepted when accessed directly from the array,
+      // https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("up") int tmp2 = a[i];
       resultMax = Math.max(resultMax, tmp2);
     }
     @SuppressWarnings("determinism")
@@ -432,19 +432,19 @@ public final class ArraysPlume {
     long resultMin = a[0];
     long resultMax = a[0];
     for (int i = 1; i < a.length; i++) {
-			// @PolyDet("up") not accepted when accessed directly from the array,
-			// https://github.com/t-rasmud/checker-framework/issues/48
-			@PolyDet("up") long tmp1 = a[i];
+      // @PolyDet("up") not accepted when accessed directly from the array,
+      // https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("up") long tmp1 = a[i];
       resultMin = Math.min(resultMin, tmp1);
-			// @PolyDet("up") not accepted when accessed directly from the array,
-			// https://github.com/t-rasmud/checker-framework/issues/48
-			@PolyDet("up") long tmp2 = a[i];
+      // @PolyDet("up") not accepted when accessed directly from the array,
+      // https://github.com/t-rasmud/checker-framework/issues/48
+      @PolyDet("up") long tmp2 = a[i];
       resultMax = Math.max(resultMax, tmp2);
     }
     @SuppressWarnings("determinism")
     @PolyDet("down") long @PolyDet("down") [] result =
         new @PolyDet("down") long @PolyDet("down") [] {resultMin, resultMax};
-		return result;
+    return result;
   }
 
   /**
@@ -1438,10 +1438,10 @@ public final class ArraysPlume {
       return false;
     }
     for (int i = 0; i < sub.length; i++) {
-			// @PolyDet("up") not accepted when accessed directly from the array,
+      // @PolyDet("up") not accepted when accessed directly from the array,
       @SuppressWarnings("determinism")
       @PolyDet("up") Object elt1 = sub[i];
-			// @PolyDet("up") not accepted when accessed directly from the array,
+      // @PolyDet("up") not accepted when accessed directly from the array,
       @SuppressWarnings("determinism")
       @PolyDet("up") Object elt2 = a[aOffset + i];
       if (!Objects.equals(elt1, elt2)) {
@@ -1944,8 +1944,7 @@ public final class ArraysPlume {
    * @param b the second sequence to concatenate
    * @return an array that concatenates the arguments
    */
-  private static <T extends @PolyDet("use") Object> T[] concat(
-      ListOrArray<T> a, ListOrArray<T> b) {
+  private static <T extends @PolyDet("use") Object> T[] concat(ListOrArray<T> a, ListOrArray<T> b) {
     if (a.isNull() && b.isNull()) {
       @SuppressWarnings("unchecked")
       T[] result = (T[]) new Object[0];

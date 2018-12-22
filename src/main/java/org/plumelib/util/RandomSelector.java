@@ -47,7 +47,7 @@ import org.checkerframework.checker.determinism.qual.NonDet;
  *
  * @param <T> the type of elements being selected over
  */
-public class RandomSelector<T> {
+public class RandomSelector<T extends @Det Object> {
 
   // Rep Invariant: values != null && values.size() <= numElts &&
   //                ((numElts == -1 && coinTossMode == true) ||

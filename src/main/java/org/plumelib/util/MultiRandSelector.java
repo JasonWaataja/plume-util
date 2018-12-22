@@ -27,7 +27,7 @@ import org.checkerframework.checker.determinism.qual.NonDet;
  * @param <T> the type of elements to be selected among
  * @see RandomSelector
  */
-public class MultiRandSelector<T> {
+public class MultiRandSelector<T extends @Det Object> {
 
   /** Whether to toss a coin or select a given number of elements. */
   private boolean coinTossMode;
@@ -111,7 +111,7 @@ public class MultiRandSelector<T> {
    *
    * @param iter contains elements that are added to the pool to select from
    */
-  public void acceptIter(Iterator<T> iter) {
+  public void acceptIter(@Det Iterator<T> iter) {
     while (iter.hasNext()) {
       accept(iter.next());
     }
